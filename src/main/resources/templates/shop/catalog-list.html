@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<style>
+    .compare-result {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .product-info {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .product {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        max-width: 300px;
+        text-align: center;
+        flex: 0 0 calc(50% - 20px);
+    }
+
+    .product h3 {
+        margin-top: 0;
+    }
+
+    .product img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+<body>
+<div th:replace="fragment/header::header"></div>
+    <div class="site-branding-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="logo">
+                    <h1><a th:href="@{/index}"><img src="/resources/img/logo.png"></a></h1>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="shopping-item">
+                    <a th:href="@{/cart}">Cart<i class="fa fa-shopping-cart"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/index}">Home</a></li>
+                    <li><a th:href="@{/index/product}">Product</a></li>
+                    <li><a th:href="@{/cart}">Cart</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Others</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Shop</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="single-shop-product" th:each="product : ${showProductByIdCategory}">
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-upper">
+                        <img th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}" alt="">
+                    </div>
+                    <h2><a th:href="@{'/index/showProductSingle/'+${product.productID}}" th:text="${product.productName}"></a></h2>
+                    <div class="product-carousel-price">
+                        <ins th:text="${product.price}"></ins> <del>$999.00</del>
+                    </div>
+                    <div class="product-option-shop">
+                        <a class="add_to_cart_button procart" th:attr="data-productid=${product.productID}">
+                            Add to cart</a>
+                        <a class="btn btn-secondary compare-btn addToCompare" th:attr="data-productid=${product.productID}"> + </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        <ul class="pagination">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal fade" id="compareModal" tabindex="-1" role="dialog"
+         aria-labelledby="compareModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="compareModalLabel">Product Comparison</h4>
+                <a class="cmprBtn">Compare</a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="comparePan">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="modPos" style="display: none;">
+    </div>
+<footer th:replace="fragment/footer::footer"></footer>
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
+
+<script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
+<!---->
+<script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
+<!---->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<!---->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.procart').click(function (e) {
+            e.preventDefault();
+            console.log("---start function--");
+            var amount = 1;
+            var productID = $(this).data('productid');
+            $.post("/insertproduct", {
+                productID: productID,
+                amount: 1,
+            }, function (data, status) {
+                console.log(data);
+                console.log("success", status);
+                Toastify({
+                    text: 'Thêm sản phẩm vào giỏ hàng thành công!',
+                    duration: 1500,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'green',
+                    stopOnFocus: true,
+                }).showToast();
+            })
+                .fail(function (error) {
+                    console.log(error);
+                    Toastify({
+                        text: 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng',
+                        duration: 3000,
+                        gravity: 'top',
+                        position: 'right',
+                        backgroundColor: 'red',
+                        stopOnFocus: true,
+                    }).showToast();
+                });
+        });
+    });
+</script>
+
+<!--Nạp sản phẩm để so sánh -->
+<script type="text/javascript">
+    var listProduct = [];
+
+    var comparedProducts = [];
+
+    function addToComparison(id) {
+
+        var product = listProduct.find(item => item.id === id);
+
+        if (!product) {
+            console.log('Không tìm thấy sản phẩm id ' + id);
+            alert('Không tìm thấy sản phẩm cần so sánh.');
+            return;
+        }
+
+        var categoryID = product.categoryID;
+        
+        if (!compareProductTypes(categoryID)) {
+            console.log('Sản phẩm có id ' + id + ' không thuộc loại cần so sánh.');
+            return;
+        }
+	
+        if (comparedProducts.includes(id)) {
+            alert('Sản phẩm đã tồn tại trong danh sách so sánh.');
+            return;
+        }
+        
+        if (comparedProducts.length > 0) {
+            var firstProduct = listProduct.find(item => item.id === comparedProducts[0]);
+            if (firstProduct && firstProduct.categoryID !== categoryID) {
+                comparedProducts = [];
+            }
+        }
+        
+        comparedProducts.push(id);
+        $('#compareModal').modal('show');
+        displayComparedProducts();
+    }
+
+    function displayComparedProducts() {
+
+        var container = $('#compareModal .modal-content');
+        container.empty();
+
+        for (var i = 0; i < comparedProducts.length; i++) {
+            var id = comparedProducts[i];
+            var product = listProduct.find(item => item.id === id);
+            if (product) {
+                var html = '<div class="product">' +
+                    '<h2 class="product-name">' + product.name +
+                    '<img class="product-image" src="data:image/png;base64,' +
+                    product.imageBase64 + '" alt="Product Image">' +
+                    '</h2>' +
+                    '</div>';
+                container.append(html);
+            }
+        }
+
+        if (comparedProducts.length === 2) {
+            var compareDiv = '<div class="compare-section">' +
+                '<button class="btn btn-primary cmprBtn compareTwoProducts"> So Sánh </button>' +
+                '</div>';
+            container.append(compareDiv);
+        }
+    }
+
+    function getProductDetailsFromAPI(id) {
+        $.ajax({
+            url: '/api/v1/product/' + id + '/get',
+            type: 'GET',
+            dataType: 'json',
+            success: function (product) {
+                if (product) {
+                    var categoryID = product.categoryID;
+
+                    var isExistInList = compareProductTypes(categoryID);
+
+                    if (isExistInList) {
+ 						if (listProduct.some(item => item.id === id)) {
+ 	                        addToComparison(id);
+ 	                    } else {
+ 	                        listProduct.push(product);
+ 	                        addToComparison(id);
+ 	                    }
+                    } else {
+                        console.log('Sản phẩm có ' + id + ' không thuộc loại cần so sánh.');
+                    }
+                } else {
+                    console.log('Không tìm thấy sản phẩm có id ' + id);
+                }
+            },
+            error: function () {
+                console.log('Đã xảy ra lỗi khi tìm nạp dữ liệu sản phẩm.');
+            }
+        });
+    }
+
+    function compareProductTypes(categoryID) {
+        var productTypes = [1, 2];
+        return true;
+    }
+
+
+    $(document).on('click', '.addToCompare', function() {
+        var id = $(this).data('productid');
+        getProductDetailsFromAPI(id);
+    });
+    
+</script>
+<script type="text/javascript">
+
+    function compareProducts() {
+        if (comparedProducts.length < 2) {
+            alert("Vui lòng chọn ít nhất 2 sản phẩm để so sánh.");
+            return;
+        }
+
+        var product1 = listProduct.find(item => item.id === comparedProducts[0]);
+        var product2 = listProduct.find(item => item.id === comparedProducts[1]);
+
+        if (!product1 || !product2) {
+            console.log("Không tìm thấy thông tin sản phẩm để so sánh.");
+            return;
+        }
+		
+        var compareHtml = '<div class="compare-result">' +
+            '<h2>So sánh hai sản phẩm</h2>' +
+            '<div class="product-info">' +
+            '<div class="product">' +
+            '<h3>' + product1.name + '</h3>' +
+            '<img class="product-image" src="data:image/png;base64,' +
+                product1.imageBase64 + '" alt="Product Image">' +
+            '<p>Giá: ' + product1.price + '</p>' +
+            '<p>Mô tả: ' + product1.description + '</p>' +
+            '<p>Loại: ' + product1.categoryname + '</p>' +
+            '<p>Sản Phẩm: ' + product1.tradeName + '</p>' +
+            '<h2>Product Details</h2>' +
+            '<p>Camera: ' + product1.productCamera + '</p>' +
+            '<p>Màn Hình: ' + product1.productScreen + '</p>' +
+            '<p>Wifi: ' + product1.productWifi + '</p>' +
+            '<p>Bluetooth: ' + product1.productBluetooth + '</p>' +
+            '<h2>Product Versions</h2>' +
+            '<p>Bộ Nhớ: ' + product1.memory + '</p>' +
+            '<p>Màu: ' + product1.color + '</p>' +
+            '</div>' +
+            '<div class="product">' +
+            '<h3>' + product2.name + '</h3>' +
+            '<img class="product-image" src="data:image/png;base64,' +
+                product2.imageBase64 + '" alt="Product Image">' +
+            '<p>Giá: ' + product2.price + '</p>' +
+            '<p>Mô tả: ' + product2.description + '</p>' +
+            '<p>Loại: ' + product2.categoryname + '</p>' +
+            '<p>Sản Phẩm: ' + product2.tradeName + '</p>' +
+            '<h2>Product Details</h2>' +
+            '<p>Camera: ' + product2.productCamera + '</p>' +
+            '<p>Màn Hình: ' + product2.productScreen + '</p>' +
+            '<p>Wifi: ' + product2.productWifi + '</p>' +
+            '<p>Bluetooth: ' + product2.productBluetooth + '</p>' +
+            '<h2>Product Versions</h2>' +
+            '<p>Bộ Nhớ: ' + product2.memory + '</p>' +
+            '<p>Màu: ' + product2.color + '</p>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+
+        $('#compareModal .modal-content').html(compareHtml);
+        $('#compareModal').modal('show');
+    }
+
+    $(document).on('click', '.cmprBtn', function () {
+        compareProducts();
+    });
+
+    /* $('#compareModal').on('hidden.bs.modal', function () {
+	    comparedProducts = [];
+	    $('#compareModal .modal-content').empty();
+	}); */
+    
+</script>
+</body>
+</html>

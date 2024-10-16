@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/font-awesome.min.css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <nav class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+         th:replace="manager/fragment/listNav_1::nav_1"></nav>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+                 th:replace="manager/fragment/listNav::nav"></nav>
+            <div class="container-fluid">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Thống Kê</h1>
+                </div>
+                <nav>
+                    <div class="row d-flex justify-content nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab"
+                           data-toggle="tab" href="#nav-home" role="tab"
+                           aria-controls="nav-home" aria-selected="true">Doanh Thu Theo Tháng
+                        </a>
+                        <a class="nav-item nav-link" id="nav-profile-tab"
+                           data-toggle="tab" href="#nav-profile" role="tab"
+                           aria-controls="nav-profile" aria-selected="false">Doanh Thu Theo Năm
+                        </a>
+                        <a class="nav-item nav-link"
+                           id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
+                           role="tab" aria-controls="nav-contact" aria-selected="false">Số Lượng Sản Phẩm
+                        </a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home"
+                         role="tabpanel" aria-labelledby="nav-home-tab">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tháng/Năm</th>
+                                    <th>Số Lượng Giao Dịch</th>
+                                    <th>Tổng Doanh Thu</th>
+                                    <th>Doanh Thu Thấp Nhất</th>
+                                    <th>Doanh Thu Cao Nhất</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="month : ${months}">
+                                    <td class="py-1" th:text="${month.Month + '/' + month.Year}">
+                                    <td th:text="${month.orderCount}"></td>
+                                    <td th:text="${month.total}"></td>
+                                    <td th:text="${month.minTotal}"></td>
+                                    <td th:text="${month.maxTotal}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <button class="btn btn-primary mr-2" id="btn1"><i class="fas fa-download fa-sm text-white-50"></i> Export Data Excel</button>
+                            <button class="btn btn-primary" id="btn2"><i class="fas fa-download fa-sm text-white-50"></i> Export Data PDF</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                         aria-labelledby="nav-profile-tab">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Năm</th>
+                                    <th>Số Lượng Giao Dịch</th>
+                                    <th>Tổng Danh Thu</th>
+                                    <th>Doanh Thu Thấp Nhất</th>
+                                    <th>Doanh Thu Cao Nhất</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="year : ${years}">
+                                <td class="py-1" th:text=${year.year}>
+                                <td th:text=${year.orderCount}></td>
+                                <td th:text=${year.total}></td>
+                                <td th:text=${year.minTotal}></td>
+                                <td th:text=${year.maxTotal}></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!--<i class="bi bi-file-excel-fill">-->
+                        <div>
+                            <button class="btn btn-primary mr-2" id="exportExcel"><i class="fas fa-download fa-sm text-white-50"></i> Export Data Excel</button>
+                            <button class="btn btn-primary" id="exportPDF"><i class="fas fa-download fa-sm text-white-50"></i> Export Data PDF</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-contact" role="tabpanel"
+                         aria-labelledby="nav-contact-tab">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Số Lượng</th>
+                                    <th>Tổng Tiền Thu Được</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product : ${products}">
+                                <td class="py-1" th:text="${product.name}">
+                                <td th:text="${product.quantitysold}"></td>
+                                <td th:text="${product.total}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <button class="btn btn-primary mr-2" id="exportExcelBtn"><i class="fas fa-download fa-sm text-white-50"></i> Export Data Excel</button>
+                            <button class="btn btn-primary" id="exportPdfBtn"><i class="fas fa-download fa-sm text-white-50"></i> Export Data PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/Excelproduct.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/Excelyear.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/Excelmonth.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/Pdfyear.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/Pdfproduct1.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/Pdfmonth1.js}"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+</html>

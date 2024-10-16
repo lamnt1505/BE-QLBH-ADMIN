@@ -1,0 +1,27 @@
+spring:
+  thymeleaf:
+    cache: false
+    check-template-location: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 215MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/mini-project-java?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 123456
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: update
+  server:
+    servlet:
+      context-path: /
+  logging:
+    level:
+      root: info
+      file:
+        name: log/dev.log

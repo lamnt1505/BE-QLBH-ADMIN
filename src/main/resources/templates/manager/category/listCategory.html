@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <nav class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+         th:replace="manager/fragment/listNav_1::nav_1"></nav>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+                 th:replace="manager/fragment/listNav::nav"></nav>
+            <div class="container-fluid">
+                <div th:if="${success}" class="row alert alert-success alert-dismissible"
+                     style="width: 850px; margin-left: 50px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <span th:text="${success}"></span>
+                </div>
+                <div th:if="${fail}" class="row alert alert-danger alert-dismissible"
+                     style="width: 850px; margin-left: 50px; color: red">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <span th:text="${fail}"></span>
+                </div>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Danh Sách Loại Sản Phẩm</h1>
+                </div>
+                <div class="row">
+                    <p class="card-description">
+                        <a class="btn btn-primary"
+                           th:href="@{/manager/addCategory}">
+                            <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Loại Sản Phẩm
+                        </a>
+                        <a class="btn btn-inverse-outline-danger" href="/api/v1/category/download" download="API-PRODUCT.xlsx">
+                            <i class="fas fa-download fa-sm text-white-50"></i> File Mẫu Excel Để Thêm Loại Sản Phẩm
+                        </a>
+                        <button type="button" id="btnOpenUploadExcelDialog" class="btn btn-secondary">
+                            <i class="fas fa-file-excel fa-sm text-white-50"></i> Upload Excel
+                        </button>
+                    </p>
+                    <table  class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="category-table"></tbody>
+                    </table>
+                    <ul class="pagination" style="margin-left: 40%; margin-top: 25px;">
+                        <li>
+                            <a class="page-link">First</a>
+                        </li>
+                        <il>
+                            <a class="page-link" aria-label="Previous" title='Go to previous page'>
+                                <span aria-hidden="true">«</span>
+                                <span class="sr-only"> Previous </span>
+                            </a>
+                        </il>
+                        <li>
+                            <a class="page-link">
+                                <span>1</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="page-link" aria-label="Next" title='Go to next page'>
+                                <span aria-hidden="true">»</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="page-link"> Last </a>
+                        </li>
+                    </ul>
+                    <!-- Modal -->
+                    <form id="update-category-form" enctype="multipart/form-data">
+                        <div class="modal fade" id="update-category-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Update Category</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" >
+                                        <div class="col-md-12">
+                                            <input type="hidden" class="form-control" id="id">
+                                            <div class="form-group">
+                                                <label for="name">Name</label>
+                                                <input type="name" class="form-control" id="name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button onclick="saveCategory()" type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form id="upload-excel-form" enctype="multipart/form-data">
+                        <div class="modal fade" id="upload-excel-dialog" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Upload Excel File</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="excelFile">Select Excel File:</label><br>
+                                                <input type="file" class="form-control" id="excelFile" name="excelFile"
+                                                       accept=".xlsx, .xls"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <i class="fas fa-info-circle"></i> Close
+                                        </button>
+                                        <button onclick="uploadExcelFile()" type="button" class="btn btn-primary">
+                                            <i class="fas fa-upload"></i> Upload File
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/listcate.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/datatables/dataTables.bootstrap4.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
+<script type="text/javascript">
+    async function showUpdateCategoryForm(id) {
+        try {
+            const urlGetCategoryDetail = "/api/v1/category/" + id + "/get";
+            const category = await doGetAjax(urlGetCategoryDetail);
+            console.log("category", category);
+            bindingCategoryToForm(category);
+            $('#update-category-dialog').modal('show');
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    }
+
+    function bindingCategoryToForm(category){
+        if (category) {
+            $('#id').val(category.id);
+            $('#name').val(category.name);
+        }
+    }
+
+    function saveCategory() {
+
+        const id = $('#id').val();
+        const name = $('#name').val();
+
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('name', name);
+
+        const url = '/api/v1/category/' + id + '/update';
+        doPostAjax(url, formData)
+            .then(response => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật danh mục thành công ✔️!',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    window.location.reload();
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Đã xảy ra lỗi khi cập nhật danh mục',
+                });
+            });
+    }
+
+    function renderTable() {
+        $.ajax({
+            url: "/api/v1/category/Listgetall",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var table = $("#category-table");
+                table.empty();
+                table.append("");
+                $.each(data, function (index, category) {
+                    table.append("<tr><td>" + category.name + "</td>" +
+                        "<td>" +
+                        "<button class='btn btn-info' onclick=\"showCategoryDetails(" + category.id + ")\">Chi tiết</button>" +
+                        "</td>" +
+                        "<td>" +
+                        "<button class='btn btn-primary' onclick=\"showUpdateCategoryForm(" + category.id + ")\">Cập nhật</button>" +
+                        "</td>" +
+                        "<td>" +
+                        "<button class='btn btn-danger' onclick=\"deleteCategory(" + category.id + ")\">Xóa</button>" +
+                        "</td>" +
+                        "</tr>");
+                });
+            },
+            error: function () {
+                alert("Error while retrieving categories.");
+            }
+        });
+    }
+
+    function deleteCategory(id) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Bạn có chắc muốn xóa danh mục này không?',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const url = '/api/v1/category/' + id + '/delete/';
+                doDeleteAjax(url)
+                    .then(response => {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Xóa danh mục thành công ✔️!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                renderTable();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: response.message
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
+            }
+        });
+    }
+
+    async function doDeleteAjax(url) {
+        return $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+        });
+    }
+
+    async function doPostAjax(url, formData) {
+        return $.ajax({
+            url: url,
+            type: 'PUT',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: formData
+        });
+    }
+
+    async function doGetAjax(url, params = {}) {
+        return $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            data: params
+        });
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#btnOpenUploadExcelDialog').click(function () {
+            $('#upload-excel-dialog').modal('show');
+        });
+    });
+
+    function uploadExcelFile() {
+
+        var excelFile = $('#excelFile')[0].files[0];
+
+        if (!excelFile) {
+            alert('Please select an Excel file.');
+            return;
+        }
+
+        showLoadingSpinner();
+
+        var formData = new FormData();
+        formData.append('file', excelFile);
+
+        $.ajax({
+            url: '/api/v1/category/import',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Import successful!',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#upload-excel-dialog').modal('hide');
+                        location.reload();
+                    }
+                });
+            },
+            error: function (error) {
+                console.error(error);
+
+                var errorMessage = error.responseText;
+
+                alert('Error during import: ' + errorMessage);
+            },
+            complete: function () {
+                hideLoadingSpinner();
+            }
+        });
+    }
+
+    function showLoadingSpinner() {
+        // Implement your logic to display a loading spinner
+        // For example, show a spinner inside a designated element
+        $('#loading-spinner').show();
+    }
+
+    function hideLoadingSpinner() {
+        // Implement your logic to hide the loading spinner
+        $('#loading-spinner').hide();
+    }
+
+
+</script>
+</body>
+</html>

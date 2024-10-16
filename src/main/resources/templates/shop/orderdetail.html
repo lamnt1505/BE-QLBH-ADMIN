@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="fragment/header::header"></div>
+    <div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/index}">Home</a></li>
+                    <li><a th:href="@{/index/product}">Product</a></li>
+                    <li class="active"><a th:href="@{/cart}">Cart</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Others</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- End mainmenu area -->
+    <div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2 th:href="@{/index}">Shopping Cart</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="cart-collaterals">
+        <form action="#">
+            <table cellspacing="0" class="shop_table cart">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Products</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Summ</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center" th:each="product : ${oldorders}">
+                    <td class="product-thumbnail">
+                        <a href="single-product.html">
+                            <img width="145" height="145" class="shop_thumbnail"
+                                 th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}">
+                        </a>
+                    </td>
+                    <td class="product-name">
+                        <a th:text="${product.productName}"></a>
+                    </td>
+                    <td class="product-price">
+                        <span class="price" th:text="${product.price}"></span>
+                    </td>
+                    <td class="cart-quantity">
+                        <input type="number" class="quantityinput" name="quantity" th:value="${product.amount}" readonly>
+                    </td>
+                    <td class="cart-summ">
+                        <span class="total" th:text="${product.price * product.amount}" readonly></span>
+                    </td>
+                </tbody>
+            </table>
+        </form>
+    </div>
+<footer th:replace="fragment/footer::footer"></footer>
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
+
+<script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+
+</body>
+</html>

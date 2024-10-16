@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="fragment/header::header"></div>
+    <div class="site-branding-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="logo">
+                    <h1><a th:href="@{/index}"><img src="/resources/img/logo.png"></a></h1>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="shopping-item">
+                    <a th:href="@{/cart}">Cart<i class="fa fa-shopping-cart"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End site branding area -->
+    <div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/index}">Home</a></li>
+                    <li><a th:href="@{/index/product}">Product</a></li>
+                    <li><a th:href="@{/cart}">Cart</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Others</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Shop</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="single-sidebar">
+                    <h2 class="sidebar-title">Search Products</h2>
+                    <form action="">
+                        <input type="text" placeholder="Search products...">
+                        <input type="submit" value="Search">
+                    </form>
+                </div>
+                <div class="single-sidebar">
+                    <h2 class="sidebar-title">Products</h2>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a href="">Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins> <del>$100.00</del>
+                        </div>
+                    </div>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a href="">Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins> <del>$100.00</del>
+                        </div>
+                    </div>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a href="">Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins> <del>$100.00</del>
+                        </div>
+                    </div>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a href="">Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins> <del>$100.00</del>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-sidebar">
+                    <h2 class="sidebar-title">Recent Posts</h2>
+                    <ul>
+                        <li><a href="">Sony Smart TV - 2015</a></li>
+                        <li><a href="">Sony Smart TV - 2015</a></li>
+                        <li><a href="">Sony Smart TV - 2015</a></li>
+                        <li><a href="">Sony Smart TV - 2015</a></li>
+                        <li><a href="">Sony Smart TV - 2015</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!---Single Product-->
+            <div class="col-md-8">
+                <div class="product-content-right">
+                    <div class="product-breadcroumb">
+                        <a href="">Home</a>
+                        <a href="">Category Name</a>
+                        <a href="">Sony Smart TV - 2015</a>
+                    </div>
+                    <div class="row" th:object="${showProductSingle}">
+                        <input id="productID" hidden=true th:value="*{productID}">
+                        <div class="col-sm-6" >
+                            <div class="product-images">
+                                <div class="product-main-img">
+                                    <img th:src="@{'data:image/png;base64,' + *{getImageBase64()}}" alt="">
+                                </div>
+                                <div class="product-gallery">
+                                    <img src="img/product-thumb-1.jpg" alt="">
+                                    <img src="img/product-thumb-2.jpg" alt="">
+                                    <img src="img/product-thumb-3.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="product-inner">
+                                <input hidden=true th:value="*{productID}">
+                                <h2 class="product-name" th:text="*{productName}"></h2>
+                                <div class="product-inner-price">
+                                    <ins th:text="*{price}"></ins> <del>$100.00</del>
+                                </div>
+                                <form action="" class="cart">
+                                    <div class="quantity">
+                                        <input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
+                                    </div>
+                                    <button class="add_to_cart_button procart" th:attr="data-productid=${productID}">Add to cart</button>
+                                </form>
+                                <div class="product-inner-category">
+                                    <p>Category: <a href="">Summer</a>. Tags: <a href="">awesome</a>, <a href="">best</a>, <a href="">sale</a>, <a href="">shoes</a>. </p>
+                                </div>
+                                <div role="tabpanel">
+                                    <ul class="product-tab" role="tablist">
+                                        <li role="presentation" class="active">
+                                            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Description</a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">VERSION</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" th:each="productversion : ${productversions}">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                            <h2 th:text="*{description}"></h2>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane fade" id="profile">
+                                            <table>
+                                                <tbody>
+                                                <tr>
+                                                    <td> SKU: </td>
+                                                    <td th:text=*{category.categoryName}></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>COLOR: </td>
+                                                    <td th:text="${productversion.color}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>MEMORY: </td>
+                                                    <td th:text="${productversion.memory}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="related-products-wrapper">
+                        <h2 class="related-products-title">Related Products</h2>
+                        <div class="related-products-carousel" th:each="p : ${showProductByCategory}">
+                            <div class="single-product">
+                                <input hidden=true th:value="*{productID}">
+                                <div class="product-f-image">
+                                    <img th:src="@{'data:image/png;base64,' + ${p.getImageBase64()}}" alt="" style="height: 250px">
+                                    <div class="product-hover">
+                                        <a href="" class="add-to-cart-link procart" th:attr="data-productid=${p.productID}"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                        <a class="view-details-link" th:href="@{'/index/showProductSingle/'+${p.productID}}"><i class="fa fa-link"></i> See details</a>
+                                    </div>
+                                </div>
+                                <h2 th:href="@{'/showProductSingle/'+${p.productID}}">
+                                    <a th:text="${p.productName}"></a>
+                                </h2>
+                                <div class="product-carousel-price">
+                                    <ins th:text="${p.price}"></ins> <del>$100.00</del>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragment/footer::footer"></footer>
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
+
+<script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+<!---->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
+<!---->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.procart').click(function (e) {
+            e.preventDefault();
+            console.log("---start function--");
+            var amount = 1;
+            var productID = $(this).data('productid');
+            $.post("/insertproduct", {
+                productID: productID,
+                amount: 1,
+            }, function (data, status) {
+                console.log(data);
+                console.log("success", status);
+                Toastify({
+                    text: 'Thêm sản phẩm vào giỏ hàng thành công!',
+                    duration: 1500,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'green',
+                    stopOnFocus: true,
+                }).showToast();
+            })
+                .fail(function (error) {
+                    console.log(error);
+                    Toastify({
+                        text: 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng',
+                        duration: 3000,
+                        gravity: 'top',
+                        position: 'right',
+                        backgroundColor: 'red',
+                        stopOnFocus: true,
+                    }).showToast();
+                });
+        });
+    });
+</script>
+</body>
+</html>

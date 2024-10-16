@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style3.css}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="/resources/fonts/css/ionicons.min.css">
+
+    <style type="text/css">
+        .home {
+            width: 100%;
+            height: 40px;
+            text-align: center;
+            padding-top: 15px;
+        }
+        .home a {
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .home a:hover {
+            color: red;
+            text-decoration: underline;
+        }
+        .form-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+        }
+        .form-wrapper input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .form-wrapper .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper" th:style="'background-image: url(' + @{/resources/images/ecommerce3-1.jpg} + ');'">
+    <div class="inner">
+        <div class="image-holder" style="margin-top: -20px;">
+            <img src="/resources/images/ecommerce3-1.jpg" alt="">
+        </div>
+        <form id="loginForm" onsubmit="return false;" name="form">
+        
+            <h3 style="color: rgb(75,66,2);">Đăng nhập</h3>
+            
+            <div class="spanerror" style="width: 320px; margin-top: -20px; height: 40px;">
+                <span id="error" style="font-size: 20px; padding-left: 56px;"></span>
+            </div>
+            
+            <div class="form-wrapper">
+                <input type="text" id="accountName" name="accountName" placeholder="Username or Phone" th:value="${accountName}" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;"><!--style="width:350px;"size="20"-->
+                <class><span class="icon fa fa-info"></span></class>
+            </div>
+            
+            <div class="form-wrapper">
+                <input type="password" id="accountPass" name="accountPass" placeholder="Enter your password" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;"><!---->
+                <span><i class="fa fa-passport toggle-password"></i></span>
+            </div>
+            
+            <div style="width: 100%">
+                <button style="width: 50%; border-radius: 10px;" class="submit" onclick="login()">Đăng nhập</button>
+                <a th:href="@{/registerd}"
+                   style="text-align: center; color: white; font-size: 18px; text-decoration: none;">
+                    <div style="width: 50%; border-radius: 10px; background: rgb(8, 167, 100); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;"> Đăng ký</div>
+                </a>
+            </div>
+            
+            <div class="home">
+                <a th:href="@{/index}">Trở về trang chủ</a>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/validateLogin.js}"></script>
+<script>
+        $(document).ready(function() {
+            $(".toggle-password").click(function() {
+                let input = $("#accountPass");
+                let icon = $(this).find("i");
+                if (input.attr("type") === "password") {
+                    input.attr("type", "text");
+                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
+                } else {
+                    input.attr("type", "password");
+                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+                }
+            });
+        });
+</script>
+<script type="text/javascript">
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+   // Function to get a cookie
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {
+        document.cookie = name + '=; Max-Age=-99999999;';
+    }
+    var rememberMeCheckbox = document.querySelector('input[name="ck"]');
+    var accountNameInput = document.getElementById('accountName');
+    var accountPassInput = document.getElementById('accountPass');
+    var savedAccountName = getCookie('savedAccountName');
+
+    if (rememberMeCheckbox) {
+        rememberMeCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                
+                setCookie('savedAccountName', accountNameInput.value, 7); // Expires in 7 days
+            } else {
+                eraseCookie('savedAccountName');
+            }
+        });
+
+        
+        if (savedAccountName) {
+            accountNameInput.value = savedAccountName;
+            rememberMeCheckbox.checked = true;
+        }
+    }
+</script>
+<script type="text/javascript">
+    function login() {
+        var accountName = $("#accountName").val();
+        var accountPass = $("#accountPass").val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/account/login",
+            contentType: "application/json",
+            data: JSON.stringify({ accountName: accountName, accountPass: accountPass }),
+            success: function(response) {
+                // Ensure that response is parsed correctly
+                var rs = typeof response === "string" ? JSON.parse(response) : response;
+                
+                if (rs.status) {
+                    console.log("Login successful");
+                    sessionStorage.setItem("accountName", accountName); // Use accountName directly
+                    
+                    // Show success message
+                    Toastify({
+                        text: "Đăng Nhập Thành Công",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "center",
+                        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                        stopOnFocus: true,
+                    }).showToast();
+                    
+                    // Redirect based on isAdmin flag
+                    setTimeout(function() {
+                        if (rs.isAdmin) {
+                            window.location.href = "/manager"; 
+                        } else {
+                            window.location.href = "/index"; 
+                        }
+                    }, 1000);
+                    
+                } else {
+                    $("#error").text(rs.message); 
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                if (error.status === 401) {
+                    $("#error").text("Session expired. Please log in again.");
+                    setTimeout(function() {
+                        window.location.href = "/login";
+                    }, 2000);
+                } else {
+                    $("#error").text("An error occurred. Please try again.");
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

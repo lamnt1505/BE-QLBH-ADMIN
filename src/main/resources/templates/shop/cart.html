@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+    <!-- Thư viện Toastify -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
+    <!-- Thư viện Toastify -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+<body>
+<div th:replace="fragment/header::header"></div>
+
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/index}">Home</a></li>
+                    <li><a th:href="@{/index/product}">Product</a></li>
+                    <li class="active"><a th:href="@{/cart}">Cart</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Others</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2 th:href="@{/index}">Shopping Cart</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="single-sidebar">
+                    <h2 class="sidebar-title">Search Products</h2>
+                    <form action="#">
+                        <input type="text" placeholder="Search products...">
+                        <input type="submit" value="Search">
+                    </form>
+                </div>
+
+                <div class="single-sidebar">
+                    <h2 class="sidebar-title">Products</h2>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a>Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins>
+                            <del>$800.00</del>
+                        </div>
+                    </div>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a>Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins>
+                            <del>$800.00</del>
+                        </div>
+                    </div>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a>Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins>
+                            <del>$800.00</del>
+                        </div>
+                    </div>
+                    <div class="thubmnail-recent">
+                        <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <h2><a>Sony Smart TV - 2015</a></h2>
+                        <div class="product-sidebar-price">
+                            <ins>$700.00</ins>
+                            <del>$800.00</del>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-sidebar">
+                    <h2 class="sidebar-title">Recent Posts</h2>
+                    <ul>
+                        <li><a>Sony Smart TV - 2015</a></li>
+                        <li><a>Sony Smart TV - 2015</a></li>
+                        <li><a>Sony Smart TV - 2015</a></li>
+                        <li><a>Sony Smart TV - 2015</a></li>
+                        <li><a>Sony Smart TV - 2015</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!---->
+            <!--GIỎ HÀNG-->
+            <div class="col-md-8">
+                <div class="product-content-right">
+                    <div class="woocommerce">
+                        <!---->
+                        <form action="#">
+                            <table cellspacing="0" class="shop_table cart" th:if="${#lists.size(session.cart) > 0}">
+                                <thead>
+                                <tr>
+                                    <th class="product-remove">&nbsp;</th>
+                                    <th class="product-thumbnail">&nbsp;</th>
+                                    <th class="product-name">Product</th>
+                                    <th class="product-price">Price</th>
+                                    <th class="product-quantity">Quantity</th>
+                                    <th class="product-subtotal">Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="cart_item" th:each="product : ${session.cart}">
+                                    <input type="hidden" class="productID" th:value="${product.productID}"/>
+                                    <td class="product-remove">
+                                        <a title="Remove this item" class="remove product-remove"
+                                           th:attr="data-productid=${product.productID}"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                    <td class="product-thumbnail">
+                                        <a href="single-product.html">
+                                            <img width="145" height="145" class="shop_thumbnail"
+                                                 th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}">
+                                        </a>
+                                    </td>
+                                    <td class="product-name">
+                                        <a th:text="${product.productName}"></a>
+                                    </td>
+                                    <td class="product-price">
+                                        <span class="price" th:text="${product.price}"></span>
+                                    </td>
+                                    <td class="product-quantity">
+                                        <div class="quantity buttons_added">
+                                            <input type="button" class="minus" value="-">
+                                            <input type="number" size="4" class="input-text qty text quantityinput"
+                                                   title="Qty" value="1" min="0" step="1" th:value="${product.amount}">
+                                            <input type="button" class="plus" value="+">
+                                            <button type="button" name="update_cart" class="button updateclick"
+                                                    th:attr="data-productid=${product.productID}">Update
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="product-subtotal">
+                                        <span class="total"
+                                              th:text="${#numbers.formatCurrency(product.price * product.amount)}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="actions" colspan="6">
+                                        <div class="coupon">
+                                            <label>Coupon:</label>
+                                            <input type="text" placeholder="Coupon code" value="" class="input-text">
+                                            <input type="submit" value="Apply Coupon" name="apply_coupon"
+                                                   class="button">
+                                        </div>
+                                        <button type="button" class="btn btn-primary" id="submitorders">Primary</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                        <div class="cart-collaterals">
+                            <form action="#">
+                                <table cellspacing="0" class="shop_table cart">
+                                    <thead>
+                                    <tr>
+                                        <th>InvoiceID</th>
+                                        <th>Date Order</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Cancel order</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="text-center" th:each="oneinvoice : ${orders}">
+                                    <td class="cart-ttl">
+                                        <a th:href="@{'/orderdetails/'+${oneinvoice.orderID}}"
+                                           th:text="${oneinvoice.orderID}"
+                                           th:attr="data-orderid=${oneinvoice.orderID}"></a>
+                                    </td>
+                                    <td>
+                                        <span th:text="${oneinvoice.orderDateImport}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${oneinvoice.status}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${oneinvoice.orderTotal}"></span>
+                                    </td>
+                                    <td>
+                                        <button class="cancel-order-button"
+                                                th:attr="data-orderid=${oneinvoice.orderID}">Hủy
+                                        </button>
+                                    </td>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragment/footer::footer"></footer>
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+
+<script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
+<!--<script type="text/javascript" th:src="@{/resources/js/addTocart1.js}"></script>-->
+<script type="text/javascript">
+$(document).ready(function () {
+    $(".cancel-order-button").click(function () {
+        var orderID = $(this).data("orderid");
+        var button = $(this);
+        
+        if (confirm("Bạn có chắc muốn hủy đơn hàng?")) {
+            $.ajax({
+                type: "POST",
+                url: "/cancel-order",
+                data: {
+                    orderID: orderID
+                },
+                success: function (response) {
+                    
+                    alert("Đơn hàng đã được hủy thành công");
+                    
+                    button.text("Đã hủy");
+                    button.prop("disabled", true);  
+                    button.removeClass("cancel-order-button");
+                },
+                error: function (xhr, status, error) {
+                    
+                    if (xhr.status === 404) {
+                        alert("Lỗi: Đơn hàng không tìm thấy");
+                    } else if (xhr.status === 400) {
+                        alert("Lỗi: Đơn hàng không thể hủy bỏ");
+                    } else {
+                        alert("Lỗi: " + xhr.responseText);
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+</body>
+</html>

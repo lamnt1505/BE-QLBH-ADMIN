@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style3.css}">
+
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="/resources/fonts/css/ionicons.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+</head>
+<body>
+
+<div class="wrapper" th:style="'background-image: url(' + @{/resources/images/ecommerce3-1.jpg} + ');'" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div class="inner" style="width: 600px; display: flex; justify-content: center; align-items: center;">
+        <form id="registrationForm">
+            <h3 style="color: rgb(8, 167, 100);">Đăng ký</h3>
+            <div class="form-wrapper" >
+                <input type="text" placeholder="Họ Tên" name="accountName" id="accountName" required>
+                <i class="zmdi zmdi-account"></i>
+            </div>
+            <div class="error">
+                <span id="usernameError"></span>
+            </div>
+            <div class="form-wrapper">
+                <input type="password" placeholder="Mật Khẩu" name="accountPass" id="accountPass" required>
+                <i class="zmdi zmdi-lock"></i>
+            </div>
+            <div class="error">
+                <span id="passwordError"></span>
+            </div>
+            <button type="button" class="auth-submit" style="width: 100%; border-radius: 16px; margin-top: 20px;" onclick="registerAccount()">Đăng ký</button>
+            <a th:href="@{/login}" style="text-align: center;color: white;font-size: 18px; text-decoration: none;margin-top: 20px;"><div style="width: 100%; border-radius: 16px; background:rgb(8, 167, 100); height: 40px; margin-top: 10px; padding-top: 10px;">Bạn đã có tài khoản</div></a>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/resources/js/validateregisterd.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function registerAccount() {
+        var accountName = $("#accountName").val();
+        var accountPass = $("#accountPass").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/account/save",
+            contentType: "application/json",
+            data: JSON.stringify({ accountName: accountName, accountPass: accountPass }),
+            success: function(response) {
+                // Hiển thị thông báo thành công bằng Toastify
+                Toastify({
+                    text: "Đã Đăng Ký Thành Công",
+                    duration: 3000, // Thời gian hiển thị thông báo (ms)
+                    close: true, // Hiển thị nút đóng
+                    gravity: "top", // Vị trí hiển thị (top/bottom)
+                    position: "center", // Vị trí hiển thị (left/right/center)
+                    backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                    stopOnFocus: true, // Dừng lại khi di chuột qua
+                }).showToast();
+
+                // Chuyển hướng sau khi đăng ký thành công
+                setTimeout(function() {
+                    window.location.href = "/login";
+                }, 3000); // Chuyển hướng sau 3 giây
+            },
+            error: function(xhr, status, error) {
+                // Hiển thị thông báo lỗi
+                Toastify({
+                    text: "Đăng Ký Thất Bại: " + xhr.responseText,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    stopOnFocus: true,
+                }).showToast();
+            }
+        });
+    }
+</script>
+</body>
+</html>

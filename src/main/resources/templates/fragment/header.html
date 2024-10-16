@@ -1,0 +1,35 @@
+<div th:fragment="header" class="header">
+    <!--Topbar-start -->
+    <div class="header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="user-menu">
+                        <ul>
+                            <!--<li th:if="${accountName != null}"><a th:href="@{'/updateProfile/' + ${accountID}}"><i class="fa fa-user"></i> My Account</a></li> -->
+                            <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
+                            <li><a th:href="@{/cart}"><i class="fa fa-user"></i> My Cart</a></li>
+                            <li th:if="${accountName == null}"><a th:href="@{/login}"><i class="fa fa-user"></i> Login</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="header-links pull-right">
+                        <ul>
+                            <li th:if="${accountName != null}">
+                                <a th:href="@{'/updateProfile/' + ${accountID}}">
+                                    <i class="fa fa-user"></i> <span class="shop-menu-ttl" id="accountName"></span>
+                                </a>
+                            </li>
+                            <li th:if="${accountName != null}">
+                                <a th:href="@{/logout}" method="post">
+                                        <i class="fa fa-sign-out"></i> Đăng Xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

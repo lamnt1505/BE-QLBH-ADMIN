@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ustora Demo</title>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<style>
+	.filter-bar {
+	    display: flex;
+	    flex-wrap: wrap;
+	    align-items: center;
+	    gap: 10px; /* khoảng cách giữa các phần tử */
+	}
+	
+	.filter-bar .dropdown,
+	.filter-bar .btn,
+	.filter-bar .dropdown-divider {
+	    margin-right: 10px;
+	    margin-bottom: 10px;
+	}
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        height: 60vh;
+    }
+
+    /* Định dạng phần tên sản phẩm */
+    .card-title a {
+        font-size: 18px;
+        color: #343a40; /* Màu chữ */
+        text-decoration: none; /* Loại bỏ gạch chân dưới */
+        margin-left: 20px;
+    }
+
+    /* Định dạng phần giá tiền */
+    .price {
+        font-size: 16px;
+        color: #007bff; /* Màu chữ */
+    }
+
+    /* Định dạng nút Add to Cart */
+    .buy-now {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    /* Hover effect cho nút Add to Cart */
+    .buy-now:hover {
+        background-color: #218838;
+    }
+
+    /* Định dạng nút Favorite */
+    .favorite-btn {
+        background-color: #dc3545;
+        margin-left: 10px;
+        color: #fff;
+    }
+
+    /* Hover effect cho nút Favorite */
+    .favorite-btn:hover {
+        background-color: #c82333;
+        margin-left: 10px;
+    }
+
+    /* Định dạng nút Compare */
+    .compare-btn {
+        background-color: #6c757d;
+        margin-left: 10px;
+        color: #fff;
+    }
+
+    /* Hover effect cho nút Compare */
+    .compare-btn:hover {
+        background-color: #5a6268;
+    }
+	
+	.dropdown-menu .dropdown-item.selected {
+	    background-color: #00ff00; /* màu xanh cho mục đã chọn */
+	    color: #fff; /* màu chữ trắng */
+	}
+</style>
+<body>
+
+<div th:replace="fragment/header::header"></div>
+<div class="site-branding-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="logo">
+                    <h1><a th:href="@{/index}"><img src="/resources/img/logo.png"></a></h1>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="shopping-item">
+                    <a th:href="@{/cart}">Cart<i class="fa fa-shopping-cart"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/index}">Home</a></li>
+                    <li><a th:href="@{/index/product}">Product</a></li>
+                    <li><a th:href="@{/cart}">Cart</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Others</a></li>
+                    <li><a href="#">Contact</a></li>
+
+                    <li>
+                        <form class="navbar-form" th:action="@{/search}" method="get">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">Search</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="container">
+	<div class="filter-bar">
+    <div class="dropdown"><!--Phần này gộm chung với nhau-->
+        <button class="btn btn-primary" style="margin-right: 10px;" data-toggle="modal" data-target="#modalFilter">
+            Lọc theo danh mục
+        </button>
+        <a style="margin-right: 10px;" href="#">Sắp Xếp theo:</a>
+        <button class="btn btn-primary" type="button" onclick="listProductNewBest()">Mới Nhất</button>
+        <div class="dropdown-divider"></div>
+        </br>
+        <button class="btn btn-primary dropdown" type="button" data-toggle="dropdown">
+            Giá <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item" onclick="listProductPriceDesc()">Giá cao đến thấp</a>
+            </li>
+            <li>
+                <a class="dropdown-item" onclick="listProductPriceAsc()">Giá thấp đến cao</a>
+            </li>
+        </ul>
+    </div>
+    <div class="product-container">
+        <div class="row" id="dataProduct"></div>
+    </div>
+    <div class="container">
+        <div class="row" id="pageproduct"></div>
+    </div>
+    </div>
+</section>
+<footer th:replace="fragment/footer::footer"></footer>
+<!--modalFilter-->
+<div id="modalFilter" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Danh mục Loại Điện Thoại</h4>
+            </div>
+            <div class="modal-body" th:each="cate : ${category}">
+                <ul>
+                    <li>
+                        <input type="radio" name="categoryID"
+                               th:value="${cate.categoryID}">
+                        <span th:text="${cate.categoryName}"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button onclick="showListProductByIdFilter()" type="button"
+                        class="btn btn-default" data-dismiss="modal">
+                    Lọc
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Thoát
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        getProducts();
+    });
+
+    var listProduct = [];
+    var origin = window.location.origin;
+    var pathname = $(location).attr('pathname');
+    pathname.indexOf(1);
+    pathname.toLowerCase();
+    pathname = pathname.split("/")[1];
+    var pageTotal = 0;
+    var pageCurrent = 6;
+    var pageCheck = 1;
+    var pageLimit = 6;
+    var pageProduct = 4;
+    var pageNext = 0;
+
+    $('.price-sale').on('price-sale', function (e) {
+        $(this).val(formatCurrency(this.value.replace(/[,VNĐ]/g, '')));
+    }).on('keypress', function (e) {
+        if (!$.isNumeric(String.fromCharCode(e.which))) e.preventDefault()
+    }).on('paste', function (e) {
+        var cb = e.originalEvent.clipboardData || window.clipboardData;
+        if (!$.isNumeric(cb.getData('text'))) e.preventDefault();
+    })
+
+    function formatCurrency(number) {
+        var n = number.split('').reverse().join("");
+        var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
+        return n2.split('').reverse().join('') + 'VNĐ';
+    }
+
+    function detailHtml(pageTotal, max) {
+        if (listProduct == null) {
+            alert("Failed");
+        } else {
+            listPageProduct(0, max, true);
+        }
+    }
+
+    function getProducts() {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json;",
+            dataType: 'json',
+            url: "/index/listProductAjax",
+            success: function (result) {
+                listProduct = result;
+                pageTotal = listProduct.length / pageProduct;
+                detailHtml(pageTotal, listProduct.length);
+            },
+            error: function (result) {
+                console.log(result);
+                alert('failed');
+            }
+        });
+    }
+
+    function listPageProduct(start, max, donit) {
+        $('#dataProduct').empty();
+        var j = 0;
+        for (var i = start; i < max; i++) {
+            if (j == pageProduct) break;
+            var html = '<div class="col-md-6 col-lg-3 ftco-animate">' +
+                '<div class="card">' +
+                '<a href="' + origin + '/' + pathname + '/showProductSingle/' + listProduct[i]['id'] + '" class="img-profile">' +
+                '<div class="img-container">' +
+                '<img class="card-img-top" src="data:image/png;base64,' + listProduct[i]['imageBase64'] + '" alt="Card image cap">' +
+                '</div> ' +
+                '</a>' +
+                '<div class="card-body">' +
+                '<h5 class="card-title">' +
+                '<a href="#">' + listProduct[i]['name'] + '</a>' +
+                '</h5>' +
+                '<div class="card-text price">' +
+                '<span class="formatPrice">' + listProduct[i]['price'] + '</span> <span class="price-unit">VNĐ</span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="card-footer">' +
+                '<a class="btn btn-primary buy-now procart" data-productid=' + listProduct[i]['id'] + '>' +
+                '<i class="ion-ios-cart"></i> Add to Cart' +
+                '</a>' +
+                '<a class="btn btn-danger favorite-btn addToFavorite" data-productid="' + listProduct[i]['id'] + '">' +
+                '<i class="ion-ios-heart"></i> Favorite' +
+                '</a>' +
+                '<a class="btn btn-secondary compare-btn addToCompare" data-productid="' + listProduct[i]['id'] + '">' +
+                '<i class="ion-ios-shuffle"></i> +' +
+                '</a>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            $('#dataProduct').append(html);
+            j++;
+        }
+        if (donit) {
+            detailPage(0, pageTotal, "1");
+        }
+
+        <!--$('.formatPrice').number(true, 0, ',', '.');-->
+    }
+
+    function showListProductByIdFilter() {
+        var id = [];
+        $.each($("input[name='categoryID']:checked"), function () {
+            id.push($(this).val());
+        });
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            url: "/index/listProductByIdCategoryFilter/" + id,
+            success: function (result) {
+                listProduct = result;
+                pageTotal = listProduct.length / pageProduct;
+                detailHtml(pageTotal, listProduct.length);
+                pageCheck = 1;
+            },
+            error: function (result) {
+                console.log(result);
+                alert('failed');
+            }
+        });
+    }
+
+    function listProductNewBest() {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            async: false,
+            url: "/index/listProductNewBest",
+            success: function (result) {
+                listProduct = result;
+                pageCheck = 1;
+                pageTotal = listProduct.length / pageProduct;
+                detailHtml(pageTotal, listProduct.length);
+            },
+            error: function (result) {
+                console.log(result);
+                alert('failedd');
+            }
+
+        });
+    }
+
+    function listProductPriceDesc() {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            url: "/index/listProductPriceDesc",
+            success: function (result) {
+                listProduct = result;
+                pageCheck = 1;
+                pageTotal = listProduct.length / pageProduct;
+                detailHtml(pageTotal, listProduct.length);
+            },
+            error: function (result) {
+                alert('failedd');
+            }
+        });
+    }
+
+    function listProductPriceAsc() {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            url: "/index/listProductPriceAsc",
+            success: function (result) {
+                listProduct = result;
+                pageCheck = 1;
+                pageTotal = listProduct.length / pageProduct;
+                detailHtml(pageTotal, listProduct.length);
+            },
+            error: function (result) {
+                alert('failedd');
+            }
+        });
+    }
+
+    function detailPage(indexPage, page) {
+        $('#pageproduct').empty();
+        var html =
+            '<div class="col text-center">'
+            + '<div class="block-27">'
+            + '<button class="btn btn-primary" id="preeValue" style="margin-right:2px;">&lt;</button>'
+            + '<span id="pageNumbers"></span>'
+            + '<button class="btn btn-primary" id="nextValue">&gt;</button>'
+            + '</div>'
+            + '</div>';
+        $('#pageproduct').append(html);
+        var i = 0;
+        for (var j = indexPage; j < page; j++) {
+            if (i == 6)
+                break;
+            var active = "";
+            var index = j + 1;
+            if (i == 6) {
+                item = '<button class="btn btn-primary pageNumber '
+                    + active + '" attr-start="0" style="margin-right:2px;" data-page="' + index + '"> + index + </button>';
+            } else {
+                var start = j * pageProduct - 1;
+                if (start < 0) {
+                    start = 0;
+                }
+                item = '<button class="btn btn-primary pageNumber " attr-start= '
+                    + start + ' style="margin-right:2px;" data-page="' + index + '">' + index + '</button>'
+            }
+            $('#pageNumbers').append(item);
+            i++;
+        }
+        $.each($('#pageNumbers .pageNumber'), function (i, page) {
+            if ($(page).attr("data-page") == pageCheck) {
+                $(page).addClass("active");
+            }
+        });
+
+        if (pageTotal <= pageCurrent) $('button#nextValue').prop('disabled', true);
+        if (indexPage == 0) $('button#preeValue').prop('disabled', true);
+
+        $('.pageNumber').click(function () {
+            $('#pageNumbers .pageNumber.active ').removeClass("active")
+            $(this).addClass("active");
+            var attr = $(this).attr("attr-start");
+            listPageProduct(attr, listProduct.length, false);
+            pageCheck = $(this).attr("data-page");
+        });
+        $('#nextValue').click(function () {
+            var numberPage = pageTotal - pageCurrent;
+            pageCurrent = pageCurrent + pageLimit;
+            var button = $('#pageNumbers .pageNumber')[$('#pageNumbers .pageNumber').length - 0];
+            pageNext = parseInt($(button).attr("data-page"));
+            detailPage(pageNext, pageTotal);
+        });
+        $('#preeValue').click(function () {
+            var numberPage = pageTotal - pageCurrent;
+            pageCurrent = pageCurrent - pageLimit;
+            if (pageCurrent < 0) {
+                pageCurrent = 0;
+            }
+            var button = $('#pageNumbers .pageNumber')[$('#pageNumbers .pageNumber').length - 0];
+            pageNext = pageNext - pageLimit;
+            pageNext = pageNext - pageLimit;
+            if (pageNext < 0) {
+                pageNext = 0;
+            }
+            detailPage(pageNext, pageTotal);
+        });
+        $(document).ready(function () {
+            $('#preeValue').prop('disabled', false);
+            $('#nextValue').prop('disabled', false);
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(document).on('click', '.procart', function (e) {
+        e.preventDefault();
+        console.log("Clicked");
+        var amount = 1;
+        var productID = $(this).data('productid');
+        console.log(productID);
+        $.post("/insertproduct", {
+            productID: productID,
+            amount: 1,
+        }, function (data, status) {
+            console.log(data);
+            console.log("success", status);
+            Toastify({
+                text: 'Thêm sản phẩm vào giỏ hàng thành công!',
+                duration: 1500,
+                gravity: 'top',
+                position: 'right',
+                backgroundColor: 'green',
+                stopOnFocus: true,
+            }).showToast();
+        })
+            .fail(function (error) {
+                console.log(error);
+                Toastify({
+                    text: 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng',
+                    duration: 3000,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'red',
+                    stopOnFocus: true,
+                }).showToast();
+            });
+    });
+</script>
+<!-- search product -->
+<script type="text/javascript">
+	function submitSearchForm() {
+	    const form = document.getElementById('searchForm');
+	    const formData = new FormData(form);
+	    const searchCriteria = {};
+	
+	    formData.forEach((value, key) => {
+	        searchCriteria[key] = value;
+	    });
+	
+	    fetch('/search', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(searchCriteria)
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        // Handle the response data here
+	        console.log(data);
+	        // For example, update the product list in the UI
+	    })
+	    .catch(error => {
+	        console.error('Error:', error);
+	    });
+	}
+</script>
+</body>
+</html>
