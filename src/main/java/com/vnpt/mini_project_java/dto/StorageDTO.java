@@ -1,7 +1,6 @@
 package com.vnpt.mini_project_java.dto;
 
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 
@@ -42,13 +41,11 @@ public class StorageDTO {
     	this.idImport = storage.getIdImport();
     	this.users = storage.getUsers();
     	this.quantity = storage.getQuantity();
-    	
     	if (storage.getCreateDate() != null) {
-            this.createDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(storage.getCreateDate());
-        }
-    	
+    		this.createDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(storage.getCreateDate());
+    	}
         if (storage.getUpdateDate() != null) {
-            this.updateDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(storage.getUpdateDate());
+        	this.updateDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(storage.getUpdateDate());
         }
         
     	if(storage.getProduct() != null){

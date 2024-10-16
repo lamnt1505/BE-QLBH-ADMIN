@@ -29,19 +29,15 @@ public class StorageServiceImpl implements StorageService{
 	 private final StorageRepository storageRepository;
 	 
 	 @Autowired
-	 private final ProductRepository productRepository;
-	 
-	 @Autowired
-	 private final CategoryRepository categoryRepository;
+	 private final ProductRepository productRepository; 
 	 
 	 private static final String DATE_FORMAT = "yyyy-MM-dd";
 	 
 	 private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 	 
-	 public StorageServiceImpl(StorageRepository storageRepository, ProductRepository productRepository,CategoryRepository categoryRepository) {
+	 public StorageServiceImpl(StorageRepository storageRepository, ProductRepository productRepository) {
     	super();
         this.storageRepository = storageRepository;
-        this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
     }
 	 
@@ -87,27 +83,24 @@ public class StorageServiceImpl implements StorageService{
 		 
 		 Optional<Storage> optionalStorage = storageRepository.findById(idImport);
 		 if (!optionalStorage.isPresent()) {
-	            throw new RuntimeException("Product with ID " + idImport + " not found");
+	            throw new RuntimeException("Storage with ID " + idImport + " not found");
 	      }
 		 
 		 Storage storage = optionalStorage.get();
-		 
 		 storage.setUsers(storageDTO.getUsers());
-		 
 		 storage.setQuantity(storageDTO.getQuantity());
 		 
 		 if (storageDTO.getCreateDate() != null) {
 			 storage.setCreateDate(LocalDate.parse(storageDTO.getCreateDate(), dateTimeFormatter));
-		 }
-		 
-		 if (storageDTO.getCreateDate() != null) {
+		 } 
+		 if (storageDTO.getUpdateDate() != null) {
 			 storage.setUpdateDate(LocalDate.parse(storageDTO.getUpdateDate(), dateTimeFormatter));
 		 }
-		 
+		  
 		 if(storageDTO.getProductId() != null) {
 			 Long productId = storageDTO.getProductId();
 			 Product product = productRepository.findById(productId)
-	                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + productId));
+	                    .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
 			 storage.setProduct(product);
 		 }
 		 

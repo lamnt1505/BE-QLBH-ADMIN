@@ -38,10 +38,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private final TrademarkReopsitory trademarkReopsitory;
 
-	/*
-	 * @Autowired private final ProductDetailRepository productDetailRepository;
-	 */
-
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);

@@ -46,7 +46,6 @@ public class ProductDTO {
 
     private double price;
 
-
     @Transient
     private int amount;
 

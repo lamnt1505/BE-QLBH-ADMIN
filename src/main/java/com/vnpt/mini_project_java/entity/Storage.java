@@ -6,10 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,6 +23,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -40,20 +43,21 @@ public class Storage {
 	
 	@Column(columnDefinition = "nvarchar(150)")
 	private String users;
-	
-	
+
 	private int quantity;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Column(name = "createDate", updatable = false)
+	@Column(name = "createDate")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate createDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Column(name = "updateDate", updatable = true)
+	@Column(name = "updateDate")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate updateDate;
 	
-	@OneToOne
-	@JoinColumn(name = "product_id", insertable = true, updatable = true)
+	@JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinColumn(name = "product_id")
 	private Product product;
 	
 	public Storage() {
