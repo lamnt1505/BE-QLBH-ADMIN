@@ -35,9 +35,7 @@ public class ProductVersionRestController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductVersionDTO> getProductById(@PathVariable(name = "id") Long versionID) {
         ProductVersion productVersion = productVersionService.getProductVersionById(versionID);
-
         ProductVersionDTO prodouctVersionResponse = new ProductVersionDTO(productVersion);
-
         return ResponseEntity.ok().body(prodouctVersionResponse);
     }
 

@@ -30,28 +30,25 @@ public class StorageDTO {
     
     private String name;
     
-    private int quantity;
+    private Integer quantity;
     
     public StorageDTO() {
     	
     }
     
     public StorageDTO(Storage storage){
-    	
     	this.idImport = storage.getIdImport();
     	this.users = storage.getUsers();
-    	this.quantity = storage.getQuantity();
+    	this.setQuantity(storage.getQuantity());
     	if (storage.getCreateDate() != null) {
     		this.createDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(storage.getCreateDate());
     	}
         if (storage.getUpdateDate() != null) {
         	this.updateDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(storage.getUpdateDate());
         }
-        
     	if(storage.getProduct() != null){
             this.productId = storage.getProduct().getProductID();
             this.name = storage.getProduct().getProductName();
         }
-    	
     }
 }

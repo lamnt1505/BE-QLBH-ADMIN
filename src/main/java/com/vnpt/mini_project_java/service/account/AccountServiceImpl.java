@@ -73,8 +73,6 @@ public class AccountServiceImpl implements AccountService{
 		return account.getAccountName();
 	}
 
-	AccountDTO accountDTO;
-	
 	@Override
 	public LoginMesage loginAccount(LoginDTO loginDTO) {
 			String msg = "";
@@ -88,7 +86,6 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println("Entered password: " + password);
 				System.out.println("Encoded password: " + encodedPassword);
 				if (isPwdRight) {
-					
 					Optional<Account> acccount = accountRepository.findOneByAccountNameAndAccountPass(loginDTO.getAccountName(), encodedPassword);
 					
 					if (acccount.isPresent()) {

@@ -43,8 +43,7 @@ public class ProductRestController {
 	@Autowired
 	StorageService storageService;
 	
-    public ProductRestController(ProductService productService,
-                                 StatisticalService statisticsService) {
+    public ProductRestController(ProductService productService, StatisticalService statisticsService) {
         this.productService = productService;
         this.statisticsService = statisticsService;
     }
@@ -71,15 +70,10 @@ public class ProductRestController {
     public ResponseEntity<ProductDTO> createProduct(ProductDTO dto, MultipartFile image) {
         try {
             ProductDTO createProduct = productService.createProduct(dto, image);
-
-            logger.info("User added a new product. Product ID: {}, Product Name: {}", createProduct.getId(), createProduct.getName());
-
+            logger.info("Người dùng đã thêm một sản phẩm mới. ID sản phẩm: {}, Tên sản phẩm: {}", createProduct.getId(), createProduct.getName());
             return ResponseEntity.status(HttpStatus.CREATED).body(createProduct);
-            
         } catch (EntityNotFoundException ex) {
-        	
             return ResponseEntity.badRequest().build();
-            
         }
     }
 
@@ -153,10 +147,8 @@ public class ProductRestController {
         try{
             InputStream inputStream = getClass().getResourceAsStream("/templates/API-PRODUCT.xlsx");
             InputStreamResource resource = new InputStreamResource(inputStream);
-
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=API-PRODUCT.xlsx");
-
             return ResponseEntity.ok()
                     .headers(headers)
                     .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))

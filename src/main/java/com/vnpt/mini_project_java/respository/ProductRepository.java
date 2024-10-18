@@ -16,9 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query(value = "SELECT * FROM product WHERE category_id = ? LIMIT 4;",nativeQuery = true)
     List<Product> showListProductByIdCategory(long categoryID);
 
-    @Query(value = "select * from product where product_id", nativeQuery = true)
-    public Product findByProductId(long productID);
-
     @Query(value = "select * from product where category_id = ?", nativeQuery = true)
     List<Product> showListProductByIdCategoryFilter(long categoryID);
 

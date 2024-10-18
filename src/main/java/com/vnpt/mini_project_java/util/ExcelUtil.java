@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelUtil {
-    //import danh sách Product bằng excels
+
     public static List<ProductDTO> readProductsFromExcel(MultipartFile file) throws IOException {
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
@@ -65,7 +65,7 @@ public class ExcelUtil {
 
         return products;
     }
-    //import danh sách category bằng excels
+
     public static List<CategoryDTO> readCategoryFromExcel(MultipartFile file) throws IOException{
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
@@ -88,13 +88,13 @@ public class ExcelUtil {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Statistical Product");
 
-        // Tạo hàng tiêu đề
+
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(1).setCellValue("Product Name");
         headerRow.createCell(2).setCellValue("Total Quantity");
         headerRow.createCell(3).setCellValue("Total Revenue");
 
-        // Đổ dữ liệu vào các hàng
+
         int rowNum = 1;
         for (StatisticalProductProjections statistic : statistics) {
             Row row = sheet.createRow(rowNum++);

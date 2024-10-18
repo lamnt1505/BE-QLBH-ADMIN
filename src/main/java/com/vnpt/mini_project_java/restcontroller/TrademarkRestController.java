@@ -50,8 +50,7 @@ public class TrademarkRestController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<TrademarkDTO> updateTrademark(@PathVariable long id,
-                                                        TrademarkDTO trademarkDTO){
+    public ResponseEntity<TrademarkDTO> updateTrademark(@PathVariable long id, TrademarkDTO trademarkDTO){
        try{
            Trademark trademark = trademarkService.updateTramemark(id,trademarkDTO);
            TrademarkDTO updateDTO = new TrademarkDTO(trademark);

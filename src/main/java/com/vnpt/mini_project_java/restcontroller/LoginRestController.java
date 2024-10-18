@@ -36,19 +36,14 @@ public class LoginRestController {
         String accountPass = loginDTO.getAccountPass();
         String phone = loginDTO.getPhone();
         String userpassword = loginDTO.getUserPass();
-        
         Optional<Account> account = accountRepository.findByPhoneNumberAndAccountPass(phoneNumber, accountPass);
-        
         if (account != null) {
-            // Nếu là Account, chuyển hướng đến trang admin
             LoginResponseDTO responseDTO = new LoginResponseDTO();
             return ResponseEntity.ok(responseDTO);
-
         }
         
         Optional<Users> user = userRepository.findByPhoneAndUserPass(phoneNumber, userpassword);
         if (user != null) {
-            // If the login is for a user, redirect to user page
             LoginResponseDTO responseDTO = new LoginResponseDTO();
             responseDTO.setSuccess(true);
             responseDTO.setMessage("Login successful, redirecting to admin page.");

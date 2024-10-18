@@ -197,13 +197,6 @@ public class ProductServiceImpl implements ProductService {
         return productDTOS;
     }
 
-/*    @Override
-    public List<Product> search(ProductSearchCriteria criteria) {
-        Specification<Product> spec = searchByCriteria(criteria);
-        List<Product> products = productRepository.findAll(spec);
-        return productRepository.findAll(spec);
-    }*/
-
     @Override
     public List<Product> findBycategoryId(Long categoryID) {
         return productRepository.findByCategoryId(categoryID);

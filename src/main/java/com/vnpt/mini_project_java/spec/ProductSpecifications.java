@@ -36,12 +36,6 @@ public class ProductSpecifications {
                     System.out.println();
                 }
             }
-			/*
-			 * if(criteria.getCategoryName() != null &&
-			 * !criteria.getCategoryName().isEmpty()){ predicate =
-			 * criteriaBuilder.like(criteriaBuilder.lower(root.get("category_name")), "%" +
-			 * criteria.getCategoryName().toLowerCase() + "%"); predicates.add(predicate); }
-			 */
             if (criteria.getCategoryName() != null && !criteria.getCategoryName().isEmpty()) {
                 predicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("category").get("name")),
                         "%" + criteria.getCategoryName().toLowerCase() + "%");

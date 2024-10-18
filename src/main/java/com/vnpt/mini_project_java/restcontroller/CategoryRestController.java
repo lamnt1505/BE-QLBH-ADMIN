@@ -51,15 +51,12 @@ public class CategoryRestController {
     @GetMapping("/{id}/get")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable(name = "id") Long id){
         Category category = categoryService.getCategoryById(id);
-
         CategoryDTO categoryResponse = new CategoryDTO(category);
-
         return ResponseEntity.ok().body(categoryResponse);
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable long id,
-                                                      CategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable long id,CategoryDTO categoryDTO){
         try {
             Category category = categoryService.updateCategory(id, categoryDTO);
             CategoryDTO updateDTO = new CategoryDTO(category);
@@ -99,7 +96,6 @@ public class CategoryRestController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=API-CATEGORY.xlsx");
-
             return ResponseEntity.ok()
                     .headers(headers)
                     .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))

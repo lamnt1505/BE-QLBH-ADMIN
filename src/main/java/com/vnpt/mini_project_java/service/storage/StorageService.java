@@ -12,6 +12,4 @@ public interface StorageService {
 	StorageDTO createStorage(StorageDTO dto);
 
 	Storage updateStorage(long idImport, StorageDTO storageDTO);
-
-	//Storage updateStorage(long idImport, StorageDTO storageDTO);
 }

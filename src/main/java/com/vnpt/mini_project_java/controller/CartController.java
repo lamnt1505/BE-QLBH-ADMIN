@@ -45,10 +45,8 @@ public class CartController {
 
     @GetMapping("/cart")
     public String viewCart(ModelMap model, HttpServletRequest request, HttpSession session) {
-
         model.addAttribute("product", this.productService.findAll());
         model.addAttribute("category", this.categoryService.findAll());
-
         long id = -1;
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {
@@ -63,7 +61,6 @@ public class CartController {
                 break;
             }
         }
-
         if(session.getAttribute("cart") == null){
             session.setAttribute("cart", new ArrayList<>());
         }
@@ -73,15 +70,12 @@ public class CartController {
             model.addAttribute("orders", this.orderService.listInvoiceByAccount(id));
         }
         return "shop/cart";
-
     }
 
     @GetMapping("/orderdetails/{orderDetailID}")
     public String viewOrderdetails(@PathVariable("orderDetailID") long orderDetailID, ModelMap model, HttpServletRequest request){
-
         model.addAttribute("product", this.productService.findAll());
         model.addAttribute("category", this.categoryService.findAll());
-
         long id = -1;
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {

@@ -127,7 +127,6 @@ public class ViewUserController {
                 model.addAttribute("loginInput", loginInput);
                 model.addAttribute("error", "Tài khoản hoặc số điện thoại không tồn tại");
                 if (rememberMe) {
-                    // Nếu người dùng chọn Remember Me, thì tạo cookie với thời gian sống lâu hơn
                     Cookie cookie = new Cookie("accountName", accountName);
                     cookie.setMaxAge(30 * 24 * 60 * 60); // Ví dụ: 30 ngày
                     response.addCookie(cookie);
@@ -157,8 +156,6 @@ public class ViewUserController {
     public String updateCus(@ModelAttribute("accountID") @Valid Account account,
                             @CookieValue(value = "accountName", required = false) String accountName,
                             HttpServletRequest request, ModelMap model) {
-        //account.setAccountPass(passwordEncoder.encode(account.getAccountPass()));
-        //accountService.save(account);
         return "redirect:/index";
     }
 

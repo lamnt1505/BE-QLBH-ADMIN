@@ -31,11 +31,8 @@ public class ProductDetailRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailDTO> getProductDetailById(@PathVariable(name = "id") Long productDetailID){
-
         ProductDetail productDetail = productDetailService.getProductDetailById(productDetailID);
-
         ProductDetailDTO productDetailResponse = new ProductDetailDTO(productDetail);
-
         return ResponseEntity.ok().body(productDetailResponse);
     }
 

@@ -56,33 +56,23 @@ public class ProductDTO {
         this.id = product.getProductID();
         this.name = product.getProductName();
         this.description = product.getDescription();
-
         this.date_product = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getDateProduct());
         this.price = product.getPrice();
         this.amount = product.getAmount();
-
         if(product.getTrademark() != null){
             this.tradeName = product.getTrademark().getTradeName();
             this.tradeID = product.getTrademark().getTradeID();
         }
-
         if(product.getCategory() != null){
             this.categoryname = product.getCategory().getCategoryName();
             this.categoryID = product.getCategory().getCategoryID();
         }
-
         String imagePath = "src/main/resources/static/images/" + product.getImage();
-        
         try {
-        	
             Path path = Paths.get(imagePath);
-            
             byte[] imageBytes = Files.readAllBytes(path);
-            
             this.imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-            
         } catch (IOException e) {
-        	
             e.printStackTrace();
         }
     }

@@ -38,32 +38,21 @@ public class StorageRestcontroller {
 	public ResponseEntity<StorageDTO> createStorage(@RequestBody StorageDTO dto) {
 		try {
 			StorageDTO createdStorage = storageService.createStorage(dto);
-			
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdStorage);
-			
 		}catch(EntityNotFoundException ex) {
-			
 			return ResponseEntity.badRequest().build();
-			
 		}
 	}
     
     @PutMapping("/update/{id}")
     public ResponseEntity<StorageDTO> updateStorage(@PathVariable long id, StorageDTO storageDTO){
     	try {
-    		
     		Storage storage = storageService.updateStorage(id, storageDTO);
     		
     		StorageDTO updateDTO = new StorageDTO(storage);
-    		
-    		System.out.println(updateDTO);
-    		
+
     		return ResponseEntity.ok(updateDTO);
-    		
     	}catch (EntityNotFoundException ex) {
-    		
-    		System.out.println("Error" + ex.getMessage());
-    		
             return ResponseEntity.notFound().build();
             
 		}

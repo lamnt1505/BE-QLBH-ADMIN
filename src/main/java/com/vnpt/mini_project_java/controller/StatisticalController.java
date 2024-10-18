@@ -27,10 +27,6 @@ import java.util.Optional;
 @Controller
 public class StatisticalController {
 
-	/*
-	 * @Autowired UserService userService;
-	 */
-	
 	@Autowired
 	AccountService accountService;
 	
@@ -45,7 +41,6 @@ public class StatisticalController {
         for(int i = 0; i < cookies.length; ++i){
             if(cookies[i].getName().equals("accountName")){
                 Account users = this.accountService.findByname(cookies[i].getValue()).get();
-
                 modelMap.addAttribute("accountName", users.getAccountName());
                 modelMap.addAttribute("accountID",users.getAccountID());
             }
@@ -57,33 +52,26 @@ public class StatisticalController {
                           HttpServletRequest request,
                           @CookieValue(value = "accountName", required = false) String accountName,
                           RedirectAttributes redirect) {
-        // Check if accountName is available
         if (accountName != null) {
-            // Fetch the user based on the account name
             Optional<Account> userOptional = this.accountService.findByname(accountName);
             if (userOptional.isPresent()) {
                 Account user = userOptional.get();
-                if (user.getIsAdmin()) { // Assuming isRole() checks if the user is an admin
+                if (user.getIsAdmin()) {
                     model.addAttribute("username", accountName);
                     model.addAttribute("accountName", user.getAccountName());
-
-                    // Add statistical data to the model
                     model.addAttribute("years", statisticalService.statisticalForYear());
                     model.addAttribute("products", statisticalService.statisticalForProduct());
                     model.addAttribute("months", statisticalService.statisticalForMonth());
-
                     return "/manager/statistical/statistical";
                 } else {
                     redirect.addFlashAttribute("fail", "Vui lòng sử dụng tài khoản admin!");
                     return "redirect:/manager/listCategory";
                 }
             } else {
-                // User not found
                 redirect.addFlashAttribute("fail", "User not found.");
                 return "/manager/statistical/statistical";
             }
         } else {
-            // No account name found in cookies
             return "redirect:/login";
         }
     }

@@ -139,27 +139,20 @@ public class HomeRestController {
 	@ResponseBody
 	public Product.CartUpdateStatus saveCartToSession(@RequestParam(name = "productID") long productID,
 			@RequestParam int amount, HttpSession session, HttpServletRequest request) {
-
 		Logger logger = LoggerFactory.getLogger(this.getClass());
-
 		Product productOrder = this.productService.findByIdProduct(productID);
-
 		if (productOrder == null) {
 			return Product.CartUpdateStatus.PRODUCT_NOT_FOUND;
 		}
-
 		if (amount <= 0) {
 			return Product.CartUpdateStatus.INVALID_AMOUNT;
 		}
-
 		List<Product> cart = (List<Product>) session.getAttribute("cart");
 		if (cart == null) {
 			cart = new ArrayList<>();
 			session.setAttribute("cart", cart);
 		}
-
 		boolean productFoundInCart = false;
-
 		for (Product item : cart) {
 			if (item.getProductID().equals(productOrder.getProductID())) {
 				item.setAmount(item.getAmount() + amount);
@@ -167,14 +160,11 @@ public class HomeRestController {
 				break;
 			}
 		}
-
 		if (!productFoundInCart) {
 			productOrder.setAmount(amount);
 			cart.add(productOrder);
 		}
-		
 		session.setAttribute("currentStep", 1);
-
 		Cookie[] cookies = request.getCookies();
 		long accountId = -1;
 		if (cookies != null) {
@@ -188,13 +178,11 @@ public class HomeRestController {
 				}
 			}
 		}
-
 		String username = (accountId != -1) ? accountService.findById(accountId).get().getAccountName() : "unknown";
 		String productName = productOrder.getProductName();
-		String logMessage = "User '" + username + "' added " + amount + " units of product '" + productName
-				+ "' to the cart.";
+		String logMessage = "Người dùng '" + username + "' đã mua " + amount + " Đơn Vị Sản Phẩm '" + productName
+				+ "' Vào Gio Hang.";
 		logToConsoleAndFile(logMessage);
-
 		return Product.CartUpdateStatus.SUCCESS;
 	}
 	
@@ -203,11 +191,8 @@ public class HomeRestController {
 	public String updateQuantity(@RequestParam(name = "productID") long productID,
 			@RequestParam(name = "amount") int amount, HttpSession session) {
 		if (amount < 0) {
-			
 			return "0";
-			
 		} else if (amount == 0) {
-			
 			List<Product> list = (List<Product>) session.getAttribute("cart");
 			for (int i = 0; i < list.size(); i++) {
 				if (productID == list.get(i).getProductID()) {
@@ -216,7 +201,6 @@ public class HomeRestController {
 					return "2";
 				}
 			}
-			
 		} else if (session.getAttribute("cart") != null) {
 			List<Product> list = (List<Product>) session.getAttribute("cart");
 			for (int i = 0; i < list.size(); i++) {
@@ -270,9 +254,7 @@ public class HomeRestController {
 				order.setOrderTotal(orderTotal);
 				order.setVendor(account);
 				order.setOrderDetails(setDetail);
-
 				orderService.save(order);
-
 				for (int i = 0; i < list.size(); i++) {
 					orderTotal += list.get(i).getPrice() * list.get(i).getAmount();
 					OrderDetail s = new OrderDetail();
@@ -283,8 +265,7 @@ public class HomeRestController {
 					setDetail.add(s);
 					orderDetailService.save(s);
 				}
-
-				logger.info("Tài Khoản '{}' đã đặt hàng với tổng giá {} và ID đơn hàng {}.", account.getAccountName(),
+				logger.info("Tài Khoản '{}' đã đặt hàng với tổng giá {} và Mã đơn hàng {}.", account.getAccountName(),
 						orderTotal, order.getOrderID());
 				session.setAttribute("cart", new ArrayList<>());
 			} else {
@@ -299,23 +280,18 @@ public class HomeRestController {
 	public ResponseEntity<String> cancelOrder(@RequestParam(name = "orderID") Long orderID) {
 		try {
 			Order order = orderService.findById(orderID);
-
 			if (order == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy đơn hàng");
 			}
-
 			if (!order.getStatus().equals("CHỜ DUYỆT")) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đơn hàng không thể hủy bỏ");
 			}
-
 			order.setStatus("ĐÃ HỦY");
 			orderService.save(order);
-
 			return ResponseEntity.ok("Đơn hàng đã được hủy thành công");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi");
 		}
-
 	}
 	
 	@PostMapping("/search")
@@ -340,7 +316,6 @@ public class HomeRestController {
 			logger.error("Lỗi khi thực hiện hủy đơn hàng", e);
 			return false;
 		}
-
 	}
 
 }

@@ -17,14 +17,13 @@ public class LoginMesage {
     @JsonProperty("status")
     private Boolean status;
     
-    // Constructor
+
     public LoginMesage(String message, Boolean status, boolean isAdmin) {
         this.message = message;
         this.status = status;
         this.isAdmin = isAdmin;
     }
-    
-    // Getters and Setters
+
     public String getMessage() {
         return message;
     }

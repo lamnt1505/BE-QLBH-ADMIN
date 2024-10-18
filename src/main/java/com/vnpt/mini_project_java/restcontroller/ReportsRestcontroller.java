@@ -32,11 +32,8 @@ public class ReportsRestcontroller {
 
     @GetMapping("/reports/product")
     public ResponseEntity<byte[]> generateProductStatisticsReport(){
-
         List<StatisticalProductProjections> productStatistics = statisticalService.statisticalForProduct();
-
         try {
-
             InputStream reportTemplate = getClass().getResourceAsStream("/reports/productReports.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplate);
 
@@ -53,7 +50,6 @@ public class ReportsRestcontroller {
             headers.setContentDispositionFormData("attachment", "product-statistics.pdf");
 
             return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
-
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -62,7 +58,6 @@ public class ReportsRestcontroller {
     @GetMapping("/reports/year")
     public ResponseEntity<byte[]> generateYearStatisticsReport(){
         List<StatisticalForYearProjections> yearStatistics = statisticalService.statisticalForYear();
-
         try{
             InputStream reportTemplate = getClass().getResourceAsStream("/reports/YearReports.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplate);
@@ -107,7 +102,6 @@ public class ReportsRestcontroller {
             headers.setContentDispositionFormData("attachment", "month-statistics.pdf");
 
             return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
-
         } catch (JRException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

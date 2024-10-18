@@ -32,9 +32,7 @@ public class AccountRestController {
 	
 	@PostMapping(path = "/save")
     public ResponseEntity<String> saveEmployee(@RequestBody AccountDTO accountDTO){
-
 		 	String id = accountService.addAccount(accountDTO);
-
 	        if (id != null) {
                 System.out.println(id + "test");
 	            return new ResponseEntity<>("Account registered successfully with ID: " + id, HttpStatus.OK);
@@ -46,14 +44,9 @@ public class AccountRestController {
 	
     @PostMapping(path = "/login")
     public ResponseEntity<LoginMesage> loginEmployee(@RequestBody LoginDTO loginDTO , HttpServletResponse response){
-    	
-    	
     	LoginMesage  loginResponse = accountService.loginAccount(loginDTO);
-    	
     	HttpHeaders headers = new HttpHeaders();
-    	
     	if (loginResponse.isSuccess()) {
-            // Set cookie
             Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
             cookie.setPath("/");
             cookie.setHttpOnly(true);
@@ -65,18 +58,11 @@ public class AccountRestController {
             } else {
                 
                 headers.setLocation(URI.create("/admin"));
-                
-            }     
-            
+            }
             logger.info("User {} logged in successfully at {}", loginDTO.getAccountName(), java.time.LocalDateTime.now());
-            
         } else {
-        	
             logger.warn("Failed login attempt for user {} at {}", loginDTO.getAccountName(), java.time.LocalDateTime.now());
-            
         }
-    	
-        System.out.print("ss" + loginResponse);
         ResponseEntity<LoginMesage> entity = new ResponseEntity<>(loginResponse,headers,HttpStatus.OK);
         return entity;
     }
