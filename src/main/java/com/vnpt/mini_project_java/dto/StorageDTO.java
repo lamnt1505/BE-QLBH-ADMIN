@@ -28,7 +28,7 @@ public class StorageDTO {
     
     private Long productId;
     
-    private String name;
+    private String product_name;
     
     private Integer quantity;
     
@@ -48,7 +48,8 @@ public class StorageDTO {
         }
     	if(storage.getProduct() != null){
             this.productId = storage.getProduct().getProductID();
-            this.name = storage.getProduct().getProductName();
+            this.product_name = storage.getProduct().getProductName();
+            //System.out.println("Product name: " + this.product_name);
         }
     }
 }

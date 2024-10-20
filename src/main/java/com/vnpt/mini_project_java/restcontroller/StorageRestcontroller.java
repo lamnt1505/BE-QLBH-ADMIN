@@ -2,6 +2,7 @@ package com.vnpt.mini_project_java.restcontroller;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.vnpt.mini_project_java.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,8 @@ import com.vnpt.mini_project_java.dto.StorageDTO;
 import com.vnpt.mini_project_java.entity.Storage;
 import com.vnpt.mini_project_java.service.storage.StorageService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1/storage", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StorageRestcontroller {
@@ -28,7 +31,13 @@ public class StorageRestcontroller {
 	public StorageRestcontroller(StorageService storageService) {
 		this.storageService = storageService;
 	}
-	
+
+	@GetMapping("/Listgetall")
+	public ResponseEntity<List<StorageDTO>> getList(){
+		List<StorageDTO> storageDTOS = storageService.getAllStorageDTO();
+		return ResponseEntity.ok(storageDTOS);
+	}
+
 	@GetMapping("/getall")
     public ResponseEntity<?> getListProductdto() {
         return ResponseEntity.ok(storageService.getAllStorageDTO());

@@ -16,6 +16,63 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style type="text/css">
+        .pagination .page-link {
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #f1f1f1;
+            color: #0056b3;
+            border-color: #007bff;
+        }
+
+        .pagination .active .page-link {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+        #pageSize {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+        }
+
+        .pagination .page-link:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .pagination .page-link {
+            margin: 0 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        .form-group {
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -56,9 +113,9 @@
                         <tbody id="product-table">
                         </tbody>
                     </table>
-                    <ul class="pagination" style="margin-left: 40%; margin-top: 25px;">
+                    <ul class="pagination justify-content-center" style="margin-top: 25px;">
                         <li>
-                            <a class="page-link">First</a>
+                            <a class="page-link" href="#" aria-label="First" title='Go to first page'>First</a>
                         </li>
                         <il>
                             <a class="page-link" aria-label="Previous" title='Go to previous page'>
@@ -78,9 +135,19 @@
                             </a>
                         </li>
                         <li>
-                            <a class="page-link"> Last </a>
+                            <a class="page-link" href="#" aria-label="Last" title='Go to last page'> Last </a>
                         </li>
                     </ul>
+                    <div class="form-group">
+                        <label for="pageSize">Bản Ghi::</label>
+                        <select id="pageSize" class="form-control" style="width: 80px; display: inline-block;">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
                     <!-- Modal -->
                     <form id="update-product-form" enctype="multipart/form-data">
 	                    <div class="modal fade" id="product-details-modal" tabindex="-1" role="dialog" aria-labelledby="productDetailsModalLabel" aria-hidden="true">
@@ -239,7 +306,6 @@
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-
 <script type="text/javascript">
     async function showUpdateProductForm(id) {
         const urlGetProductDetail = "/api/v1/product/" + id + "/get";
@@ -255,7 +321,6 @@
         bindingProductToForm(product);
         $('#update-product-dialog').modal('show');
     }
-
     function renderCategory(categories, categoryID) {
         const select = $('#category-select');
         select.empty();
@@ -268,7 +333,6 @@
             select.append(option);
         });
     }
-
     function renderTradeMark(trademarks, tradeID) {
         const select = $('#trademark-select');
         select.empty();
@@ -281,7 +345,6 @@
             select.append(option);
         });
     }
-
     function bindingProductToForm(product) {
         if (product) {
             $('#id').val(product.id);
@@ -292,7 +355,6 @@
             $('#date_product').val(product.date_product);
         }
     }
-
     function saveProduct() {
         const id = $('#id').val();
         const name = $('#name').val();
@@ -342,7 +404,6 @@
                 }).showToast();
             });
     }
-
     function renderTable() {
         $.ajax({
             url: "/api/v1/product/Listgetall",
@@ -383,7 +444,6 @@
             }
         });
     }
-	
     function showProductDetails(productId) {
     	  $.ajax({
     	    url: "/api/v1/product/" + productId + "/get",
@@ -405,7 +465,6 @@
     	    }
     	  });
     	}
-    
     function deleteProduct(id) {
         Swal.fire({
             icon: 'warning',
@@ -456,7 +515,6 @@
             }
         });
     }
-
     async function doGetAjax(url, params = {}) {
         return $.ajax({
             url: url,
@@ -465,7 +523,6 @@
             data: params
         });
     }
-
     async function doPutAjax(url, formData) {
         return $.ajax({
             url: url,
@@ -476,7 +533,6 @@
             data: formData
         });
     }
-
     async function doDeleteAjax(url) {
         return $.ajax({
             url: url,
@@ -485,15 +541,12 @@
         });
     }
 </script>
-
 <script type="text/javascript">
-
     $(document).ready(function () {
         $('#btnOpenUploadExcelDialog').click(function () {
             $('#upload-excel-dialog').modal('show');
         });
     });
-
     function uploadExcelFile() {
 
         var excelFile = $('#excelFile')[0].files[0];
@@ -502,12 +555,9 @@
             alert('Please select an Excel file.');
             return;
         }
-
         showLoadingSpinner();
-
         var formData = new FormData();
         formData.append('file', excelFile);
-
         $.ajax({
             url: '/api/v1/product/import',
             type: 'POST',
@@ -539,16 +589,12 @@
             }
         });
     }
-
     function showLoadingSpinner() {
         $('#loading-spinner').show();
     }
-
     function hideLoadingSpinner() {
         $('#loading-spinner').hide();
     }
-
-
 </script>
 </body>
 </html>

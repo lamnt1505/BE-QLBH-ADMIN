@@ -40,8 +40,7 @@ public class AccountRestController {
 	            return new ResponseEntity<>("Registration failed", HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
     }
-	
-	
+
     @PostMapping(path = "/login")
     public ResponseEntity<LoginMesage> loginEmployee(@RequestBody LoginDTO loginDTO , HttpServletResponse response){
     	LoginMesage  loginResponse = accountService.loginAccount(loginDTO);

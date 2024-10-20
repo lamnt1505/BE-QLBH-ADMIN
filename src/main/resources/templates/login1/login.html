@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ustora Demo</title>
 
-    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="icon" href="/static/images/shopping.png" type="image/x-icon">
 
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style3.css}">
 
@@ -16,8 +16,6 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-
-    <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="/resources/fonts/css/ionicons.min.css">
 
     <style type="text/css">
@@ -55,17 +53,17 @@
     </style>
 </head>
 <body>
-<div class="wrapper" th:style="'background-image: url(' + @{/resources/images/ecommerce3-1.jpg} + ');'">
+<div class="wrapper" th:style="'background-image: url(' + @{/resources/images/e-commerce-la-gi-02.png} + ');'">
     <div class="inner">
         <div class="image-holder" style="margin-top: -20px;">
-            <img src="/resources/images/ecommerce3-1.jpg" alt="">
+            <img src="/resources/images/e-commerce.jpg" alt="">
         </div>
         <form id="loginForm" onsubmit="return false;" name="form">
         
             <h3 style="color: rgb(75,66,2);">Đăng nhập</h3>
             
             <div class="spanerror" style="width: 320px; margin-top: -20px; height: 40px;">
-                <span id="error" style="font-size: 20px; padding-left: 56px;"></span>
+                <span id="error" style="font-size: 15px; padding-left: 56px;"></span>
             </div>
             
             <div class="form-wrapper">
@@ -74,15 +72,15 @@
             </div>
             
             <div class="form-wrapper">
-                <input type="password" id="accountPass" name="accountPass" placeholder="Enter your password" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;"><!---->
-                <span><i class="fa fa-passport toggle-password"></i></span>
+                <input type="password" id="accountPass" name="accountPass" placeholder="Enter your password" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
+                <span><i class="fa fa-eye toggle-password" id="togglePassIcon" style="cursor: pointer;"></i></span>
             </div>
             
             <div style="width: 100%">
-                <button style="width: 50%; border-radius: 10px;" class="submit" onclick="login()">Đăng nhập</button>
+                <button style="width: 50%; border-radius: 10px; background: rgb(3,40,248) " class="submit"  onclick="login()">Đăng nhập</button>
                 <a th:href="@{/registerd}"
                    style="text-align: center; color: white; font-size: 18px; text-decoration: none;">
-                    <div style="width: 50%; border-radius: 10px; background: rgb(8, 167, 100); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;"> Đăng ký</div>
+                    <div style="width: 50%; border-radius: 10px; background: rgb(3,40,248); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;"> Đăng ký</div>
                 </a>
             </div>
             
@@ -104,20 +102,22 @@
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 <script type="text/javascript" th:src="@{/resources/js/validateLogin.js}"></script>
-<script>
-        $(document).ready(function() {
-            $(".toggle-password").click(function() {
-                let input = $("#accountPass");
-                let icon = $(this).find("i");
-                if (input.attr("type") === "password") {
-                    input.attr("type", "text");
-                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
-                } else {
-                    input.attr("type", "password");
-                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
-                }
-            });
-        });
+<script type="text/javascript">
+    const passwordField = document.getElementById("accountPass");
+    const togglePassIcon = document.getElementById("togglePassIcon");
+    togglePassIcon.addEventListener("click", function() {
+        // Toggle the type attribute of the password field
+        const currentType = passwordField.getAttribute("type");
+        if (currentType === "password") {
+            passwordField.setAttribute("type", "text");
+            togglePassIcon.classList.remove("fa-eye");
+            togglePassIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.setAttribute("type", "password");
+            togglePassIcon.classList.remove("fa-eye-slash");
+            togglePassIcon.classList.add("fa-eye");
+        }
+    });
 </script>
 <script type="text/javascript">
     // Function to set a cookie

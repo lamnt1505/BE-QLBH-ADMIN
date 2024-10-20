@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,11 +10,67 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <!-- Custom styles for this template-->
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <style type="text/css">
+        .pagination .page-link {
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #f1f1f1;
+            color: #0056b3;
+            border-color: #007bff;
+        }
+
+        .pagination .active .page-link {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+        #pageSize {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+        }
+
+        .pagination .page-link:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .pagination .page-link {
+            margin: 0 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        .form-group {
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -26,39 +81,45 @@
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
                  th:replace="manager/fragment/listNav::nav"></nav>
             <div class="container-fluid">
+                <div th:if="${success}" class="row alert alert-success alert-dismissible"
+                     style="width: 850px; margin-left: 50px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <span th:text="${success}"></span>
+                </div>
+                <div th:if="${fail}" class="row alert alert-danger alert-dismissible"
+                     style="width: 850px; margin-left: 50px; color: red">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <span th:text="${fail}"></span>
+                </div>
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Danh sách sản phẩm</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Danh Sách Số Lượng</h1>
                 </div>
                 <div class="row">
                     <p class="card-description">
-                        <a class="btn btn-primary" th:href="@{/manager/addProduct}">
-                            <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Sản Phẩm Mặc Định
+                        <a class="btn btn-primary"
+                           th:href="@{/manager/addStorage}">
+                            <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Số Lượng
                         </a>
-                        <a class="btn btn-inverse-outline-danger" href="/api/v1/product/download" download="API-PRODUCT.xlsx">
-                            <i class="fas fa-download fa-sm text-white-50"></i> File Mẫu Excel Để Thêm Sản Phẩm
-                        </a>
-                        <button type="button" id="btnOpenUploadExcelDialog" class="btn btn-secondary">
-                            <i class="fas fa-file-excel fa-sm text-white-50"></i> Upload Excel
-                        </button>
                     </p>
-                    <table class="table table-striped">
+                    <table  class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Image</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>DateProduct</th>
-                                <th>Category</th>
-                                <th>Trademark</th>
+                                <th>Nhân Viên</th>
+                                <th>Sản Phẩm</th>
+                                <th>Ngày Nhập</th>
+                                <th>Ngày Cập Nhập</th>
+                                <th>Số Lượng</th>
                             </tr>
                         </thead>
-                        <tbody id="product-table">
-                        </tbody>
+                        <tbody id="storage-table"></tbody>
                     </table>
-                    <ul class="pagination" style="margin-left: 40%; margin-top: 25px;">
+                    <ul class="pagination justify-content-center" style="margin-top: 25px;">
                         <li>
-                            <a class="page-link">First</a>
+                            <a class="page-link" href="#" aria-label="First" title='Go to first page'>First</a>
                         </li>
                         <il>
                             <a class="page-link" aria-label="Previous" title='Go to previous page'>
@@ -78,129 +139,42 @@
                             </a>
                         </li>
                         <li>
-                            <a class="page-link"> Last </a>
+                            <a class="page-link" href="#" aria-label="Last" title='Go to last page'> Last </a>
                         </li>
                     </ul>
-                    <!-- Modal -->
-                    <form id="update-product-form" enctype="multipart/form-data">
-	                    <div class="modal fade" id="product-details-modal" tabindex="-1" role="dialog" aria-labelledby="productDetailsModalLabel" aria-hidden="true">
-						  <div class="modal-dialog" role="document">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <h5 class="modal-title" id="productDetailsModalLabel">Chi tiết sản phẩm</h5>
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						          <span aria-hidden="true">&times;</span>
-						        </button>
-						      </div>
-						      <div class="modal-body">
-						        <div class="text-center mb-3">
-						          <img id="product-details-image" src="" alt="Product Image" class="img-fluid" style="max-height: 200px;">
-						        </div>
-						        <p><strong>Tên:</strong> <span id="product-details-name"></span></p>
-						        <p><strong>Mô tả:</strong> <span id="product-details-description"></span></p>
-						        <p><strong>Giá:</strong> <span id="product-details-price"></span></p>
-						        <p><strong>Ngày sản xuất:</strong> <span id="product-details-date"></span></p>
-						        <p><strong>Danh mục:</strong> <span id="product-details-category"></span></p>
-						        <p><strong>Thương hiệu:</strong> <span id="product-details-trademark"></span></p>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-						      </div>
-						    </div>
-						  </div>
-						</div>
-                    </form>
-                    <form id="update-product-form" enctype="multipart/form-data">
-                        <div class="modal fade" id="update-product-dialog" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
+                    <div class="form-group">
+                        <label for="pageSize">Bản Ghi:</label>
+                        <select id="pageSize" class="form-control" style="width: 80px; display: inline-block;">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <form id="update-category-form" enctype="multipart/form-data">
+                        <div class="modal fade" id="update-category-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" >
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Update Storage</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body" >
                                         <div class="col-md-12">
                                             <input type="hidden" class="form-control" id="id">
                                             <div class="form-group">
                                                 <label for="name">Name</label>
-                                                <input type="name" class="form-control" id="name"
-                                                       placeholder="FullName">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for='image'>Ảnh:</label><br>
-                                                <input type="file" class="form-control" id="image" name="image"
-                                                       accept="image/*"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="description">Description</label>
-                                                <input type="description" class="form-control" id="description"
-                                                       placeholder="Description">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="price">Price</label>
-                                                <input type="number" class="form-control" id="price">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="date_product">Date Product</label>
-                                                <input type="date" class="form-control" id="date_product"
-                                                       name="date_product">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Category:</label>
-                                                <select id="category-select" class="form-control">
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Trademark:</label>
-                                                <select id="trademark-select" class="form-control">
-                                                </select>
+                                                <input type="name" class="form-control" id="name" placeholder="Name">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                            <i class="fas fa-info-circle"></i> Close
-                                        </button>
-                                        <button onclick="saveProduct()" type="button" class="btn btn-primary">
-                                            <i class="fas fa-check"></i> Save changes
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <form id="upload-excel-form" enctype="multipart/form-data">
-                        <div class="modal fade" id="upload-excel-dialog" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Upload Excel File</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="excelFile">Select Excel File:</label><br>
-                                                <input type="file" class="form-control" id="excelFile" name="excelFile"
-                                                       accept=".xlsx, .xls"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                            <i class="fas fa-info-circle"></i> Close
-                                        </button>
-                                        <button onclick="uploadExcelFile()" type="button" class="btn btn-primary">
-                                            <i class="fas fa-upload"></i> Upload File
-                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button onclick="saveCategory()" type="button" class="btn btn-primary">Save changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -234,226 +208,149 @@
 <script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/listproduct.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/liststo.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/dataTables.bootstrap4.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-
 <script type="text/javascript">
-    async function showUpdateProductForm(id) {
-        const urlGetProductDetail = "/api/v1/product/" + id + "/get";
-        const product = await doGetAjax(urlGetProductDetail);
-        console.log("product", product);
-        const urlCategory = '/api/v1/category/Listgetall';
-        const categories = await doGetAjax(urlCategory);
-        renderCategory(categories, product.categoryID);
-        const urlTradeMark = '/api/trademark/gettrademark';
-        const trademarks = await doGetAjax(urlTradeMark);
-        console.log("trademarks", trademarks);
-        renderTradeMark(trademarks, product.tradeID);
-        bindingProductToForm(product);
-        $('#update-product-dialog').modal('show');
-    }
-
-    function renderCategory(categories, categoryID) {
-        const select = $('#category-select');
-        select.empty();
-        $.each(categories, function (index, category) {
-            const option = $('<option>', {
-                value: category.id,
-                text: category.name,
-                selected: category.id === categoryID
-            });
-            select.append(option);
-        });
-    }
-
-    function renderTradeMark(trademarks, tradeID) {
-        const select = $('#trademark-select');
-        select.empty();
-        $.each(trademarks, function (index, trademark) {
-            const option = $('<option>', {
-                value: trademark.tradeID,
-                text: trademark.tradeName,
-                selected: trademark.tradeID === tradeID
-            });
-            select.append(option);
-        });
-    }
-
-    function bindingProductToForm(product) {
-        if (product) {
-            $('#id').val(product.id);
-            $('#name').val(product.name);
-            $('#description').val(product.description);
-            $('#price').val(product.price);
-            $('#image').val(product.image);
-            $('#date_product').val(product.date_product);
+    async function showUpdateCategoryForm(id) {
+        try {
+            const urlGetCategoryDetail = "/api/v1/category/" + id + "/get";
+            const category = await doGetAjax(urlGetCategoryDetail);
+            console.log("category", category);
+            bindingCategoryToForm(category);
+            $('#update-category-dialog').modal('show');
+        } catch (error) {
+            console.error("An error occurred:", error);
         }
     }
 
-    function saveProduct() {
+    function bindingCategoryToForm(category){
+        if (category) {
+            $('#id').val(category.id);
+            $('#name').val(category.name);
+        }
+    }
+
+    function saveCategory() {
+
         const id = $('#id').val();
         const name = $('#name').val();
-        const description = $('#description').val();
-        const price = $('#price').val();
-        const date_product = $('#date_product').val();
-        const categoryID = $('#category-select').val();
-        const tradeID = $('#trademark-select').val();
-        const image = $('#image')[0].files[0];
 
         const formData = new FormData();
         formData.append('id', id);
         formData.append('name', name);
-        formData.append('description', description);
-        formData.append('price', price);
-        formData.append('date_product', date_product);
-        formData.append('categoryID', categoryID);
-        formData.append('tradeID', tradeID);
-        formData.append('image', image);
 
-        formData.forEach(item => console.log("item", item));
-
-        const url = '/api/v1/product/update/' + id;
-        doPutAjax(url, formData)
+        const url = '/api/v1/category/' + id + '/update';
+        doPostAjax(url, formData)
             .then(response => {
-                Toastify({
-                    text: 'Cập nhật sản phẩm thành công ✔️!',
-                    duration: 1500,
-                    gravity: 'top',
-                    position: 'right',
-                    backgroundColor: 'green',
-                    stopOnFocus: true,
-                }).showToast();
-
-                setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật danh mục thành công ✔️!',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
                     window.location.reload();
-                }, 1500);
+                });
             })
             .catch(error => {
-                Toastify({
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
                     text: 'Đã xảy ra lỗi khi cập nhật danh mục',
-                    duration: 3000,
-                    gravity: 'top',
-                    position: 'right',
-                    backgroundColor: 'red',
-                    stopOnFocus: true,
-                }).showToast();
+                });
             });
     }
 
     function renderTable() {
         $.ajax({
-            url: "/api/v1/product/Listgetall",
+            url: "/api/v1/storage/Listgetall",
             type: "GET",
             dataType: "json",
             success: function (data) {
-                var table = $("#product-table");
+                console.log(data);
+                var table = $("#storage-table");
                 table.empty();
                 table.append("");
-                $.each(data, function (index, product) {
-                    table.append("<tr><td>" + product.name + "</td>" +
+                $.each(data, function (index, storage) {
+                    var productName = storage.product_name ? storage.product_name : "N/A";
+                    table.append("<tr>" +
+                        "<td>" + (storage.users ? storage.users : "N/A") + "</td>" +
+                        "<td>" + productName + "</td>" +
+                        "<td>" + (storage.createDate ? storage.createDate : "N/A") + "</td>" +
+                        "<td>" + (storage.updateDate ? storage.updateDate : "N/A") + "</td>" +
+                        "<td>" + (storage.quantity ? storage.quantity : "N/A") + "</td>" + // Hiển thị số lượng
                         "<td>" +
-                        "<img src='data:image/png;base64," + product.imageBase64 + "' width='60' height='60'>" +
-                        "</td>" +
-                        "<td>" + product.description + "</td>" +
-                        "<td>" + product.price + "</td>" +
-                        "<td>" + product.date_product + "</td>" +
-                        "<td>" + product.categoryname + "</td>" +
-                        "<td>" + product.tradeName + "</td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "</tr>" +
-                        "<td>" +
-                        "<button class='btn btn-info' onclick=\"showProductDetails(" + product.id + ")\">Chi tiết</button>" +
+                        "<button class='btn btn-info' onclick=\"showStorageDetails(" + storage.id + ")\">Chi tiết</button>" +
                         "</td>" +
                         "<td>" +
-                        "<button class='btn btn-primary' onclick=\"showUpdateProductForm(" + product.id + ")\">Cập nhật</button>" +
+                        "<button class='btn btn-primary' onclick=\"showUpdateStorageForm(" + storage.id + ")\">Cập nhật</button>" +
                         "</td>" +
                         "<td>" +
-                        "<button class='btn btn-danger' onclick=\"deleteProduct(" + product.id + ")\">Xóa</button>" +
+                        "<button class='btn btn-danger' onclick=\"deleteStorage(" + storage.id + ")\">Xóa</button>" +
                         "</td>" +
-                        "</td>");
+                        "</tr>");
                 });
             },
             error: function () {
-                alert("Error while retrieving products.");
+                alert("Error while retrieving categories.");
             }
         });
     }
-	
-    function showProductDetails(productId) {
-    	  $.ajax({
-    	    url: "/api/v1/product/" + productId + "/get",
-    	    type: "GET",
-    	    dataType: "json",
-    	    success: function(product) {
-    	      $("#product-details-image").attr("src", "data:image/png;base64," + product.imageBase64);
-    	      $("#product-details-name").text(product.name);
-    	      $("#product-details-description").text(product.description);
-    	      $("#product-details-price").text(product.price);
-    	      $("#product-details-date").text(product.date_product);
-    	      $("#product-details-category").text(product.categoryname);
-    	      $("#product-details-trademark").text(product.tradeName);
-    	      
-    	      $("#product-details-modal").modal("show");
-    	    },
-    	    error: function() {
-    	      alert("Lỗi khi lấy thông tin chi tiết sản phẩm.");
-    	    }
-    	  });
-    	}
-    
-    function deleteProduct(id) {
+
+    function deleteCategory(id) {
         Swal.fire({
             icon: 'warning',
-            title: 'Bạn có chắc muốn xóa sản phẩm này không ?',
+            title: 'Bạn có chắc muốn xóa danh mục này không?',
             showCancelButton: true,
             confirmButtonText: 'Xóa',
             cancelButtonText: 'Hủy',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                const url = '/api/v1/product/delete/' + id;
+                const url = '/api/v1/category/' + id + '/delete/';
                 doDeleteAjax(url)
                     .then(response => {
                         if (response.status === 'success') {
-                            Toastify({
-                                text: 'Xóa sản phẩm thành công ❌!',
-                                duration: 1500,
-                                gravity: 'top',
-                                position: 'right',
-                                backgroundColor: 'green',
-                                stopOnFocus: true,
-                            }).showToast();
-
-                            setTimeout(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Xóa danh mục thành công ✔️!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
                                 renderTable();
-                            }, 1500);
+                            });
                         } else {
-                            Toastify({
-                                text: response.message,
-                                duration: 3000,
-                                gravity: 'top',
-                                position: 'right',
-                                backgroundColor: 'red',
-                                stopOnFocus: true,
-                            }).showToast();
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: response.message
+                            });
                         }
                     })
                     .catch(error => {
-                        Toastify({
-                            text: 'Đã xảy ra lỗi khi thực hiện xóa sản phẩm',
-                            duration: 3000,
-                            gravity: 'top',
-                            position: 'right',
-                            backgroundColor: 'red',
-                            stopOnFocus: true,
-                        }).showToast();
+                        alert(error.message);
                     });
             }
+        });
+    }
+
+    async function doDeleteAjax(url) {
+        return $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+        });
+    }
+
+    async function doPostAjax(url, formData) {
+        return $.ajax({
+            url: url,
+            type: 'PUT',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: formData
         });
     }
 
@@ -465,90 +362,6 @@
             data: params
         });
     }
-
-    async function doPutAjax(url, formData) {
-        return $.ajax({
-            url: url,
-            type: 'PUT',
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            data: formData
-        });
-    }
-
-    async function doDeleteAjax(url) {
-        return $.ajax({
-            url: url,
-            type: 'DELETE',
-            dataType: 'json',
-        });
-    }
-</script>
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $('#btnOpenUploadExcelDialog').click(function () {
-            $('#upload-excel-dialog').modal('show');
-        });
-    });
-
-    function uploadExcelFile() {
-
-        var excelFile = $('#excelFile')[0].files[0];
-
-        if (!excelFile) {
-            alert('Please select an Excel file.');
-            return;
-        }
-
-        showLoadingSpinner();
-
-        var formData = new FormData();
-        formData.append('file', excelFile);
-
-        $.ajax({
-            url: '/api/v1/product/import',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Import successful!',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#upload-excel-dialog').modal('hide');
-                        location.reload();
-                    }
-                });
-            },
-            error: function (error) {
-                console.error(error);
-
-                var errorMessage = error.responseText;
-
-                alert('Error during import: ' + errorMessage);
-            },
-            complete: function () {
-                hideLoadingSpinner();
-            }
-        });
-    }
-
-    function showLoadingSpinner() {
-        $('#loading-spinner').show();
-    }
-
-    function hideLoadingSpinner() {
-        $('#loading-spinner').hide();
-    }
-
-
 </script>
 </body>
 </html>

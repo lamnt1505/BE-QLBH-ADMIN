@@ -33,6 +33,9 @@ public class Account {
     @Column(name = "account_name")
     private String  accountName;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "account_pass")
     private String  accountPass;
     

@@ -2,6 +2,7 @@ package com.vnpt.mini_project_java.controller;
 
 import com.vnpt.mini_project_java.dto.CategoryDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
+import com.vnpt.mini_project_java.dto.StorageDTO;
 import com.vnpt.mini_project_java.dto.TrademarkDTO;
 import com.vnpt.mini_project_java.entity.*;
 import com.vnpt.mini_project_java.restcontroller.AccountRestController;
@@ -10,6 +11,7 @@ import com.vnpt.mini_project_java.service.category.CategoryService;
 import com.vnpt.mini_project_java.service.order.OrderService;
 import com.vnpt.mini_project_java.service.orderDetail.OrderDetailService;
 import com.vnpt.mini_project_java.service.product.ProductService;
+import com.vnpt.mini_project_java.service.storage.StorageService;
 import com.vnpt.mini_project_java.service.users.UserService;
 
 import org.slf4j.Logger;
@@ -46,6 +48,9 @@ public class ManagerController {
 
 	@Autowired
 	private OrderDetailService orderDetailService;
+
+	@Autowired
+	private StorageService storageService;
 
 	@Autowired
 	private OrderService orderService;
@@ -139,7 +144,6 @@ public class ManagerController {
 	    return null;
 	}
 
-
 	@GetMapping("/addProduct")
 	public String addProduct(ModelMap model, HttpServletRequest request) {
 	    String accountName = getAccountNameFromCookies(request);
@@ -164,7 +168,6 @@ public class ManagerController {
 	    if (accountName != null) {
 	        Optional<Users> userOptional = this.userService.findByname(accountName);
 	        if (userOptional.isPresent()) {
-	            Users user = userOptional.get();
 	            List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
 	            getName(request, model);
 	            model.addAttribute("categoryList", categoryList);
@@ -193,7 +196,24 @@ public class ManagerController {
 	        return "redirect:/login";
 	    }
 	}
-
+	@GetMapping("/listStorage")
+	public String getStorage(ModelMap model,
+							 @CookieValue(value = "accountName", required = false) String accountName,
+							 HttpServletRequest request) {
+		if (accountName != null) {
+			Optional<Users> userOptional = this.userService.findByname(accountName);
+			if (userOptional.isPresent()) {
+				List<StorageDTO> storageList = storageService.getAllStorageDTO();
+				getName(request, model);
+				model.addAttribute("storageList", storageList);
+				return "manager/storage/listStorage";
+			} else {
+				return "manager/storage/listStorage";
+			}
+		} else {
+			return "redirect:/login";
+		}
+	}
 	@GetMapping("/listTrademark")
 	public String getTrademark(ModelMap model, 
 	                           @CookieValue(value = "accountName", required = false) String accountName,
