@@ -1,0 +1,156 @@
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-bar .dropdown,
+.filter-bar .btn,
+.filter-bar .dropdown-divider {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 60vh;
+}
+
+.card-title a {
+    font-size: 18px;
+    color: #343a40;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.price {
+    font-size: 16px;
+    color: #007bff;
+}
+
+.buy-now {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.buy-now:hover {
+    background-color: #218838;
+}
+
+.favorite-btn {
+    background-color: #dc3545;
+    margin-left: 10px;
+    color: #fff;
+}
+.favorite-btn:hover {
+    background-color: #c82333;
+    margin-left: 10px;
+}
+.compare-btn {
+    background-color: #6c757d;
+    margin-left: 10px;
+    color: #fff;
+}
+.compare-btn:hover {
+    background-color: #5a6268;
+}
+.dropdown-menu .dropdown-item.selected {
+    background-color: #00ff00;
+    color: #fff;
+}
+.product-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.img-container {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.product-title {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+}
+
+.price {
+    font-size: 1.2rem;
+    color: #007bff;
+}
+
+.card-footer a {
+    margin: 5px;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-danger, .btn-outline-secondary {
+    color: #333;
+}
+
+.btn-outline-danger:hover {
+    color: white;
+    background-color: #dc3545;
+}
+
+.btn-outline-secondary:hover {
+    color: white;
+    background-color: #6c757d;
+}
+#productModalBody table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#productModalBody th, #productModalBody td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#productModalBody th {
+    background-color: #4CAF50; /* Màu nền cho tiêu đề */
+    color: white; /* Màu chữ trắng */
+    font-weight: bold;
+}
+
+#productModalBody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Màu nền xen kẽ cho các hàng */
+}
+
+#productModalBody tr:hover {
+    background-color: #f1f1f1; /* Màu nền khi hover */
+}
+
+#productModalBody img {
+    border-radius: 5px; /* Bo góc cho ảnh */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Hiệu ứng đổ bóng cho ảnh */
+}
+
+#productModalBody td {
+    color: #333; /* Màu chữ ô dữ liệu */
+    font-size: 0.9rem;
+}

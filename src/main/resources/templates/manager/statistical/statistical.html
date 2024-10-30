@@ -7,15 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Hệ Thống Quản Lí Mua Sắm Điện Tử</title>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -69,8 +70,8 @@
                             </tbody>
                         </table>
                         <div>
-                            <button class="btn btn-primary mr-2" id="btn1"><i class="fas fa-download fa-sm text-white-50"></i> Export Data Excel</button>
-                            <button class="btn btn-primary" id="btn2"><i class="fas fa-download fa-sm text-white-50"></i> Export Data PDF</button>
+                            <button class="btn btn-primary mr-2" id="btn1"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu Excel </button>
+                            <button class="btn btn-primary" id="btn2"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu PDF </button>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel"
@@ -95,10 +96,9 @@
                             </tr>
                             </tbody>
                         </table>
-                        <!--<i class="bi bi-file-excel-fill">-->
                         <div>
-                            <button class="btn btn-primary mr-2" id="exportExcel"><i class="fas fa-download fa-sm text-white-50"></i> Export Data Excel</button>
-                            <button class="btn btn-primary" id="exportPDF"><i class="fas fa-download fa-sm text-white-50"></i> Export Data PDF</button>
+                            <button class="btn btn-primary mr-2" id="exportExcel"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu Excel </button>
+                            <button class="btn btn-primary" id="exportPDF"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu PDF </button>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel"
@@ -120,8 +120,8 @@
                             </tbody>
                         </table>
                         <div>
-                            <button class="btn btn-primary mr-2" id="exportExcelBtn"><i class="fas fa-download fa-sm text-white-50"></i> Export Data Excel</button>
-                            <button class="btn btn-primary" id="exportPdfBtn"><i class="fas fa-download fa-sm text-white-50"></i> Export Data PDF</button>
+                            <button class="btn btn-primary mr-2" id="exportExcelBtn"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu Excel </button>
+                            <button class="btn btn-primary" id="exportPdfBtn"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu PDF </button>
                         </div>
                     </div>
                 </div>
@@ -130,20 +130,19 @@
     </div>
 </div>
 <footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Sẵn sàng rời đi?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc phiên hiện tại của mình.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+                <a class="btn btn-primary" id="logoutButton">Đăng Xuất</a>
             </div>
         </div>
     </div>
@@ -156,10 +155,9 @@
 <script type="text/javascript" th:src="@{/resources/js/Excelyear.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/Excelmonth.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/Pdfyear.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/logoutadmin.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/Pdfproduct1.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/Pdfmonth1.js}"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>

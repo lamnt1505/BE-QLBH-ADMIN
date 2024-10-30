@@ -5,26 +5,22 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ustora Demo</title>
+    <title>Hệ Thống Mua Sắm Điện Tử</title>
 
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
-          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
-
+    <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -34,7 +30,7 @@
         <div class="row">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">Chuyển Đổi Điều Hướng</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -42,11 +38,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/index}">Home</a></li>
-                    <li><a th:href="@{/index/product}">Product</a></li>
-                    <li class="active"><a th:href="@{/cart}">Cart</a></li>
+                    <li><a th:href="@{/index}">Trang Chủ</a></li>
+                    <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
+                    <li class="active"><a th:href="@{/cart}">Giỏ Hàng</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">Loại Sản Phẩm<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li th:each="cate : ${category}">
                                 <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
@@ -55,19 +51,19 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Giới Thiệu</a></li>
+                    <li><a href="#">Liên Hệ</a></li>
                 </ul>
             </div>
         </div>
     </div>
-</div> <!-- End mainmenu area -->
+</div>
     <div class="product-big-title-area">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2 th:href="@{/index}">Shopping Cart</h2>
+                    <h2 th:href="@{/index}">Giỏ Hàng</h2>
                 </div>
             </div>
         </div>
@@ -78,11 +74,11 @@
             <table cellspacing="0" class="shop_table cart">
                 <thead>
                     <tr>
-                        <th>Photo</th>
-                        <th>Products</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Summ</th>
+                        <th>Ảnh</th>
+                        <th>Sản Phẩm</th>
+                        <th>Giá Tiền</th>
+                        <th>Số Lượng</th>
+                        <th>Tổng</th>
                     </tr>
                 </thead>
                 <tbody class="text-center" th:each="product : ${oldorders}">
@@ -109,22 +105,15 @@
         </form>
     </div>
 <footer th:replace="fragment/footer::footer"></footer>
-
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
-
 <script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
-
 </body>
 </html>

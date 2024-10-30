@@ -1,10 +1,9 @@
 $(document).ready(function () {
-    var pageSize = 5; // Default page size
+    var pageSize = 5;
 
-    // Event for changing the page size
     $('#pageSize').change(function () {
         pageSize = $(this).val();
-        renderPagination(); // Call to re-render pagination
+        renderPagination();
     });
 
     function renderPagination() {
@@ -26,13 +25,13 @@ $(document).ready(function () {
                         "<td>" + (storage.updateDate ? new Date(storage.updateDate).toLocaleDateString() : "N/A") + "</td>" +
                         "<td>" + (storage.quantity ? storage.quantity : "N/A") + "</td>" + // Show quantity
                         "<td>" +
-                        "<button class='btn btn-info' onclick=\"showStorageDetails(" + storage.id + ")\">Chi tiết</button>" +
+                        "<button class='btn btn-info' onclick=\"showStorageDetails(" + storage.idImport  + ")\">Chi tiết</button>" +
                         "</td>" +
                         "<td>" +
-                        "<button class='btn btn-primary' onclick=\"showUpdateStorageForm(" + storage.id + ")\">Cập nhật</button>" +
+                        "<button class='btn btn-primary' onclick=\"showUpdateImportForm(" + storage.idImport  + ")\">Cập nhật</button>" +
                         "</td>" +
                         "<td>" +
-                        "<button class='btn btn-danger' onclick=\"deleteStorage(" + storage.id + ")\">Xóa</button>" +
+                        "<button class='btn btn-danger' onclick=\"deleteStorage(" + storage.idImport  + ")\">Xóa</button>" +
                         "</td>" +
                         "</tr>";
                     table.append(row);

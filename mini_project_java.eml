@@ -6,6 +6,11 @@
 		<testFolder url="file://$MODULE_DIR$/src/test/resources"/>
 		<excludeFolder url="file://$MODULE_DIR$/target"/>
 	</contentEntry>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
+		<testFolder url="file://$MODULE_DIR$/src/test/resources"/>
+		<excludeFolder url="file://$MODULE_DIR$/target"/>
+	</contentEntry>
 	<lib name="Maven: org.springframework.boot:spring-boot-starter-logging:2.7.9" scope="RUNTIME"/>
 	<lib name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.17.2" scope="RUNTIME"/>
 	<lib name="Maven: org.apache.logging.log4j:log4j-api:2.17.2" scope="RUNTIME"/>

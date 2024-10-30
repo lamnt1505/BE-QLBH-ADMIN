@@ -23,12 +23,45 @@ $(document).ready(function() {
                     labels: labels,
                     datasets: [{
                         data: quantities,
-                        backgroundColor: ['red', 'green', 'yellow','blue','brow','black']
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                        borderColor: '#fff',
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Nguồn doanh thu theo sản phẩm',
+                        fontSize: 16,
+                        fontColor: '#333'
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var total = dataset.data.reduce(function(previousValue, currentValue) {
+                                    return previousValue + currentValue;
+                                });
+                                var currentValue = dataset.data[tooltipItem.index];
+                                var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                                return data.labels[tooltipItem.index] + ': ' + percentage + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 20,
+                            fontSize: 12,
+                            padding: 15
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
                 }
             });
         },

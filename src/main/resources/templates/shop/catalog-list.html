@@ -4,32 +4,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ustora Demo</title>
+    <title>Hệ Thống Mua Sắm Điện Tử</title>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
 
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
-          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
-    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
-
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<style>
+<style type="text/css">
     .compare-result {
         display: flex;
         flex-wrap: wrap;
@@ -74,7 +68,7 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a th:href="@{/cart}">Cart<i class="fa fa-shopping-cart"></i></a>
+                    <a th:href="@{/cart}">Giỏ Hàng<i class="fa fa-shopping-cart"></i></a>
                 </div>
             </div>
         </div>
@@ -85,7 +79,7 @@
         <div class="row">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">Chuyển Đổi Điều Hướng</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -93,11 +87,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/index}">Home</a></li>
-                    <li><a th:href="@{/index/product}">Product</a></li>
-                    <li><a th:href="@{/cart}">Cart</a></li>
+                    <li><a th:href="@{/index}">Trang Chủ</a></li>
+                    <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
+                    <li><a th:href="@{/cart}">Giỏ Hàng</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">Loại Sản Phẩm<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li th:each="cate : ${category}">
                                 <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
@@ -106,8 +100,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Giới Thiệu</a></li>
+                    <li><a href="#">Liên Hệ</a></li>
                 </ul>
             </div>
         </div>
@@ -118,7 +112,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Shop</h2>
+                    <h2>Cửa Hàng</h2>
                 </div>
             </div>
         </div>
@@ -139,7 +133,7 @@
                     </div>
                     <div class="product-option-shop">
                         <a class="add_to_cart_button procart" th:attr="data-productid=${product.productID}">
-                            Add to cart</a>
+                            Thêm Vào Giỏ Hàng</a>
                         <a class="btn btn-secondary compare-btn addToCompare" th:attr="data-productid=${product.productID}"> + </a>
                     </div>
                 </div>
@@ -177,8 +171,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="compareModalLabel">Product Comparison</h4>
-                <a class="cmprBtn">Compare</a>
+                <h4 class="modal-title" id="compareModalLabel">So Sánh Sản Phẩm</h4>
+                <a class="cmprBtn">So Sánh</a>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -188,7 +182,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -196,104 +190,47 @@
     <div class="modPos" style="display: none;">
     </div>
 <footer th:replace="fragment/footer::footer"></footer>
-
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
-
 <script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
-<!---->
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
-<!---->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
-<!---->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.procart').click(function (e) {
-            e.preventDefault();
-            console.log("---start function--");
-            var amount = 1;
-            var productID = $(this).data('productid');
-            $.post("/insertproduct", {
-                productID: productID,
-                amount: 1,
-            }, function (data, status) {
-                console.log(data);
-                console.log("success", status);
-                Toastify({
-                    text: 'Thêm sản phẩm vào giỏ hàng thành công!',
-                    duration: 1500,
-                    gravity: 'top',
-                    position: 'right',
-                    backgroundColor: 'green',
-                    stopOnFocus: true,
-                }).showToast();
-            })
-                .fail(function (error) {
-                    console.log(error);
-                    Toastify({
-                        text: 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng',
-                        duration: 3000,
-                        gravity: 'top',
-                        position: 'right',
-                        backgroundColor: 'red',
-                        stopOnFocus: true,
-                    }).showToast();
-                });
-        });
-    });
-</script>
-
-<!--Nạp sản phẩm để so sánh -->
+<script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
 <script type="text/javascript">
     var listProduct = [];
-
     var comparedProducts = [];
-
     function addToComparison(id) {
-
         var product = listProduct.find(item => item.id === id);
-
         if (!product) {
             console.log('Không tìm thấy sản phẩm id ' + id);
             alert('Không tìm thấy sản phẩm cần so sánh.');
             return;
         }
-
         var categoryID = product.categoryID;
-        
         if (!compareProductTypes(categoryID)) {
             console.log('Sản phẩm có id ' + id + ' không thuộc loại cần so sánh.');
             return;
         }
-	
         if (comparedProducts.includes(id)) {
             alert('Sản phẩm đã tồn tại trong danh sách so sánh.');
             return;
         }
-        
         if (comparedProducts.length > 0) {
             var firstProduct = listProduct.find(item => item.id === comparedProducts[0]);
             if (firstProduct && firstProduct.categoryID !== categoryID) {
                 comparedProducts = [];
             }
         }
-        
         comparedProducts.push(id);
         $('#compareModal').modal('show');
         displayComparedProducts();
     }
-
     function displayComparedProducts() {
-
         var container = $('#compareModal .modal-content');
         container.empty();
 
@@ -310,7 +247,6 @@
                 container.append(html);
             }
         }
-
         if (comparedProducts.length === 2) {
             var compareDiv = '<div class="compare-section">' +
                 '<button class="btn btn-primary cmprBtn compareTwoProducts"> So Sánh </button>' +
@@ -318,7 +254,6 @@
             container.append(compareDiv);
         }
     }
-
     function getProductDetailsFromAPI(id) {
         $.ajax({
             url: '/api/v1/product/' + id + '/get',
@@ -327,9 +262,7 @@
             success: function (product) {
                 if (product) {
                     var categoryID = product.categoryID;
-
                     var isExistInList = compareProductTypes(categoryID);
-
                     if (isExistInList) {
  						if (listProduct.some(item => item.id === id)) {
  	                        addToComparison(id);
@@ -349,35 +282,27 @@
             }
         });
     }
-
     function compareProductTypes(categoryID) {
         var productTypes = [1, 2];
         return true;
     }
-
-
     $(document).on('click', '.addToCompare', function() {
         var id = $(this).data('productid');
         getProductDetailsFromAPI(id);
     });
-    
 </script>
 <script type="text/javascript">
-
     function compareProducts() {
         if (comparedProducts.length < 2) {
             alert("Vui lòng chọn ít nhất 2 sản phẩm để so sánh.");
             return;
         }
-
         var product1 = listProduct.find(item => item.id === comparedProducts[0]);
         var product2 = listProduct.find(item => item.id === comparedProducts[1]);
-
         if (!product1 || !product2) {
             console.log("Không tìm thấy thông tin sản phẩm để so sánh.");
             return;
         }
-		
         var compareHtml = '<div class="compare-result">' +
             '<h2>So sánh hai sản phẩm</h2>' +
             '<div class="product-info">' +
@@ -417,20 +342,12 @@
             '</div>' +
             '</div>' +
             '</div>';
-
         $('#compareModal .modal-content').html(compareHtml);
         $('#compareModal').modal('show');
     }
-
     $(document).on('click', '.cmprBtn', function () {
         compareProducts();
     });
-
-    /* $('#compareModal').on('hidden.bs.modal', function () {
-	    comparedProducts = [];
-	    $('#compareModal .modal-content').empty();
-	}); */
-    
 </script>
 </body>
 </html>

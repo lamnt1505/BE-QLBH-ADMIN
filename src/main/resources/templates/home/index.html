@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ustora Demo</title>
-    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <title>Hệ Thống Mua Sắm Điện Tử</title>
+
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
           type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
@@ -16,28 +16,48 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             var accountName = sessionStorage.getItem("accountName");
-            console.log("Login successful" + accountName);
+            //console.log("Login successful" + accountName);
             if (accountName) {
                 document.getElementById("accountName").innerText = accountName;
             }
         });
     </script>
+    <style type="text/css">
+        @keyframes highlight {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); color: #4CAF50; }
+            100% { transform: scale(1); }
+        }
+
+        .highlight {
+            animation: highlightAnimation 1s ease-in-out;
+        }
+        .shopping-item {
+            position: relative;
+            padding: 10px;
+        }
+        #cartQuantity {
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
 <body>
-<!-- Header -->
 <div th:replace="fragment/header::header"></div>
-
     <div class="site-branding-area">
     <div class="container">
         <div class="row">
-            <!-- Logo Section -->
             <div class="col-sm-6">
                 <div class="logo">
                     <h1>
@@ -48,11 +68,10 @@
                 </div>
             </div>
 
-            <!-- Shopping Cart Section -->
             <div class="col-sm-6">
                 <div class="shopping-item">
                     <a th:href="@{/cart}">
-                        Cart
+                        Giỏ Hàng
                         <i class="fa fa-shopping-cart"></i>
                     </a>
                 </div>
@@ -60,32 +79,24 @@
         </div>
     </div>
 </div>
-
-    <!-- End site branding area -->
-
     <div class="mainmenu-area">
     <div class="container">
         <div class="row">
-            <!-- Navbar Header with Toggle Button -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">Chuyển Đổi Điều Hướng</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
             </div>
-
-            <!-- Navbar Collapse Section -->
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/index}">Home</a></li>
-                    <li><a th:href="@{/index/product}">Product</a></li>
-                    <li class=""><a th:href="@{/cart}">Cart</a></li>
-
-                    <!-- Dropdown Category Section -->
+                    <li><a th:href="@{/index}">Trang Chủ</a></li>
+                    <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
+                    <li class=""><a th:href="@{/cart}">Giỏ Hàng</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Category <b class="caret"></b></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">Loại<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li th:each="cate : ${category}">
                                 <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
@@ -94,20 +105,14 @@
                             </li>
                         </ul>
                     </li>
-
-                    <!-- Other Menu Items -->
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Giới Thiệu</a></li>
+                    <li><a href="#">Liên Hệ</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-
-    <!-- End mainmenu area -->
-
     <div class="slider-area">
-    <!-- Slider -->
     <div class="block-slider block-slider4">
         <ul id="bxslider-home4" class="slider-list">
             <li class="slider-item">
@@ -117,7 +122,7 @@
                         iPhone <span class="primary">6 <strong>Plus</strong></span>
                     </h2>
                     <h4 class="caption subtitle">Dual SIM</h4>
-                    <a class="caption button-radius" href="#"><span class="icon"></span>Shop now</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
                 </div>
             </li>
             <li class="slider-item">
@@ -127,7 +132,7 @@
                         by one, get one <span class="primary">50% <strong>off</strong></span>
                     </h2>
                     <h4 class="caption subtitle">school supplies & backpacks.*</h4>
-                    <a class="caption button-radius" href="#"><span class="icon"></span>Shop now</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
                 </div>
             </li>
             <li class="slider-item">
@@ -136,8 +141,8 @@
                     <h2 class="caption title">
                         Apple <span class="primary">Store <strong>iPod</strong></span>
                     </h2>
-                    <h4 class="caption subtitle">Select Item</h4>
-                    <a class="caption button-radius" href="#"><span class="icon"></span>Shop now</a>
+                    <h4 class="caption subtitle">Chọn Mục</h4>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
                 </div>
             </li>
             <li class="slider-item">
@@ -147,68 +152,54 @@
                         Apple <span class="primary">Store <strong>iPod</strong></span>
                     </h2>
                     <h4 class="caption subtitle">& Phone</h4>
-                    <a class="caption button-radius" href="#"><span class="icon"></span>Shop now</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
                 </div>
             </li>
         </ul>
     </div>
-    <!-- ./Slider -->
 </div>
-
-    <!-- End slider area -->
-
     <div class="promo-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
-            <!-- Promo Item 1 -->
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo1">
                     <i class="fa fa-refresh"></i>
-                    <h4>30 Days Return</h4>
-                    <p>Shop with confidence site</p>
+                    <h4>Hoàn trả trong 30 ngày</h4>
+                    <p>Mua Sắm Với Trang Web Đáng Tin Cậy</p>
                 </div>
             </div>
-
-            <!-- Promo Item 2 -->
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo2">
                     <i class="fa fa-truck"></i>
-                    <h4>Free Shipping</h4>
-                    <p>On all orders over $50</p>
+                    <h4>Miễn Phí Vận Chuyển</h4>
+                    <p>Với Tất Cả Các Đơn Hàng Trên $50</p>
                 </div>
             </div>
-
-            <!-- Promo Item 3 -->
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo3">
                     <i class="fa fa-lock"></i>
-                    <h4>Secure Payments</h4>
-                    <p>Your information is safe</p>
+                    <h4>Thanh Toán An Toàn</h4>
+                    <p>Thông Tin Của Bạn Được An Toàn</p>
                 </div>
             </div>
-
-            <!-- Promo Item 4 -->
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo4">
                     <i class="fa fa-gift"></i>
-                    <h4>New Products</h4>
-                    <p>Check out our latest arrivals</p>
+                    <h4>Sản Phẩm Mới</h4>
+                    <p>Kiểm Tra Những Sản Phẩm Mới Nhất Của Chúng Tôi</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-    <!-- End promo area -->
-
     <div class="maincontent-area">
         <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="latest-product" >
-                        <h2 class="section-title">Latest Products</h2>
+                        <h2 class="section-title">Sản Phẩm Mới Nhất</h2>
                         <div class="product-carousel" th:each="product : ${product}">
                             <div class="single-product">
                                 <div class="product-f-image">
@@ -216,10 +207,10 @@
                                          style="height: 200px">
                                     <div class="product-hover">
                                         <a class="add-to-cart-link procart" th:attr="data-productid=${product.productID}">
-                                            <i class="fa fa-shopping-cart"></i> Add to cart
+                                            <i class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng
                                         </a>
                                         <a th:href="@{'/index/showProductSingle/'+${product.productID}}" class="view-details-link"><i class="fa fa-link"></i>
-                                            See details</a>
+                                            Chi Tiết Sản Phẩm</a>
                                     </div>
                                 </div>
                                 <h2><a th:text="${product.productName}"></a></h2>
@@ -234,9 +225,6 @@
             </div>
         </div>
     </div>
-
-    <!-- End main content area -->
-
     <div class="brands-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
@@ -258,17 +246,14 @@
         </div>
     </div>
 </div>
-
-    <!-- End brands area -->
-
     <div class="product-widget-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
                 <div class="single-product-widget">
-                    <h2 class="product-wid-title">Top Sellers</h2>
-                    <a href="" class="wid-view-more">View All</a>
+                    <h2 class="product-wid-title">Bán Chạy Nhất</h2>
+                    <a href="" class="wid-view-more">Tất Cả</a>
                     <div class="single-wid-product">
                         <a href="single-product.html"><img src="/resources/img/product-thumb-1.jpg" alt=""
                                                            class="product-thumb"></a>
@@ -321,8 +306,8 @@
             </div>
             <div class="col-md-4">
                 <div class="single-product-widget">
-                    <h2 class="product-wid-title">Recently Viewed</h2>
-                    <a href="#" class="wid-view-more">View All</a>
+                    <h2 class="product-wid-title">Đã Xem Gần Đây</h2>
+                    <a href="#" class="wid-view-more">Tất Cả</a>
                     <div class="single-wid-product">
                         <a href="single-product.html"><img src="/resources/img/product-thumb-4.jpg" alt=""
                                                            class="product-thumb"></a>
@@ -375,8 +360,8 @@
             </div>
             <div class="col-md-4">
                 <div class="single-product-widget">
-                    <h2 class="product-wid-title">Top New</h2>
-                    <a href="#" class="wid-view-more">View All</a>
+                    <h2 class="product-wid-title">Mới Hàng Đầu</h2>
+                    <a href="#" class="wid-view-more">Tất Cả</a>
                     <div class="single-wid-product">
                         <a href="single-product.html"><img src="/resources/img/product-thumb-3.jpg" alt=""
                                                            class="product-thumb"></a>
@@ -429,12 +414,8 @@
             </div>
         </div>
     </div>
-</div> <!-- End product widget area -->
-<!-- Footer -->
-
+</div>
 <footer th:replace="fragment/footer::footer"></footer>
-<!---->
-
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
@@ -443,40 +424,7 @@
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.procart').click(function (e) {
-            e.preventDefault();
-            var amount = 1;
-            var productID = $(this).data('productid');
-            $.post("/insertproduct", {
-                productID: productID,
-                amount: 1,
-            }, function (data, status) {
-                console.log(data);
-                console.log("success", status);
-                Toastify({
-                    text: 'Thêm sản phẩm vào giỏ hàng thành công!',
-                    duration: 1500,
-                    gravity: 'top',
-                    position: 'right',
-                    backgroundColor: 'green',
-                    stopOnFocus: true,
-                }).showToast();
-            })
-                .fail(function (error) {
-                    console.log(error);
-                    Toastify({
-                        text: 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng',
-                        duration: 3000,
-                        gravity: 'top',
-                        position: 'right',
-                        backgroundColor: 'red',
-                        stopOnFocus: true,
-                    }).showToast();
-                });
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 </body>
 </html>

@@ -18,9 +18,9 @@ document.getElementById('btn2').addEventListener('click', function() {
                 stopOnFocus: true
             }).showToast();
         } else {
-            console.error('Error generating month statistics report');
+            //console.error('Error generating month statistics report');
             Toastify({
-                text: 'Export Failed',
+                text: 'Lỗi Xuất Danh Sách',
                 duration: 3000,
                 gravity: 'top',
                 position: 'right',

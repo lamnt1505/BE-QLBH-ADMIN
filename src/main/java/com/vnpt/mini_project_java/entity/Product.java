@@ -50,8 +50,6 @@ public class Product {
     private Category category;
 
     @JsonManagedReference
-    @JsonIgnore
-    @JsonBackReference
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ProductVersion> productVersions = new HashSet<>();
 
@@ -73,7 +71,7 @@ public class Product {
 
     @JsonManagedReference
     @JsonIgnore
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Discount> discounts = new HashSet<>();
 
     private String getImagesDir() {

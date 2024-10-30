@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="oderdetail" pageWidth="250" pageHeight="400" columnWidth="210" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0252e22-64d3-4592-a477-4d8578d69165">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="mini-project-java"/>
+    <queryString>
+        <![CDATA[select * from order_detail where order_id]]>
+    </queryString>
+    <field name="order_detail_id" class="java.lang.Long">
+        <fieldDescription><![CDATA[]]></fieldDescription>
+    </field>
+    <field name="amount" class="java.lang.Integer">
+        <fieldDescription><![CDATA[]]></fieldDescription>
+    </field>
+    <field name="price" class="java.lang.Double">
+        <fieldDescription><![CDATA[]]></fieldDescription>
+    </field>
+    <field name="order_id" class="java.lang.Long">
+        <fieldDescription><![CDATA[]]></fieldDescription>
+    </field>
+    <field name="productid" class="java.lang.Long">
+        <fieldDescription><![CDATA[]]></fieldDescription>
+    </field>
+    <group name="Group1">
+        <groupExpression><![CDATA[$F{order_detail_id}]]></groupExpression>
+        <groupHeader>
+            <band height="33"/>
+        </groupHeader>
+        <groupFooter>
+            <band/>
+        </groupFooter>
+    </group>
+    <group name="Group2">
+        <groupExpression><![CDATA[$F{amount}]]></groupExpression>
+        <groupHeader>
+            <band height="64">
+                <staticText>
+                    <reportElement x="-20" y="20" width="100" height="24" forecolor="#666666" uuid="900fe30d-5671-4dcc-8f73-f3d240a8d07d"/>
+                    <textElement>
+                        <font fontName="Serif" size="12"/>
+                    </textElement>
+                    <text><![CDATA[Mã Hóa Đơn Gốc]]></text>
+                </staticText>
+                <textField>
+                    <reportElement positionType="Float" x="100" y="20" width="128" height="24" forecolor="#006699" uuid="007610de-bc24-4891-8a04-cf41095be520"/>
+                    <textElement textAlignment="Center">
+                        <font size="12" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{order_id}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band/>
+        </groupFooter>
+    </group>
+    <group name="Group3">
+        <groupExpression><![CDATA[$F{price}]]></groupExpression>
+        <groupHeader>
+            <band height="32"/>
+        </groupHeader>
+        <groupFooter>
+            <band/>
+        </groupFooter>
+    </group>
+    <group name="Group4">
+        <groupExpression><![CDATA[$F{order_id}]]></groupExpression>
+        <groupHeader>
+            <band height="38">
+                <line>
+                    <reportElement positionType="FixRelativeToBottom" x="-20" y="8" width="249" height="1" uuid="735322ff-dfbe-4035-9a00-d8f1b6676d59"/>
+                </line>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band/>
+        </groupFooter>
+    </group>
+    <group name="productid">
+        <groupExpression><![CDATA[$F{productid}]]></groupExpression>
+    </group>
+    <background>
+        <band/>
+    </background>
+    <title>
+        <band height="103">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="250" height="63" backcolor="#006699" uuid="d004c6d1-b458-4f37-bfb2-75bc7ae6b59a"/>
+                <staticText>
+                    <reportElement stretchType="RelativeToBandHeight" x="14" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="3d08fec3-71c8-456d-8484-27db1a5c2a39"/>
+                    <textElement textAlignment="Center">
+                        <font size="20" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[HÓA ĐƠN CÁ NHÂN]]></text>
+                </staticText>
+            </frame>
+            <line>
+                <reportElement x="-20" y="60" width="249" height="1" forecolor="#666666" uuid="8b3ef0e1-bc60-4eb5-bb90-82bb3bc84efd"/>
+            </line>
+            <staticText>
+                <reportElement mode="Opaque" x="-20" y="80" width="98" height="22" forecolor="#666666" backcolor="#E6E6E6" uuid="8b61bb95-a1db-4bf4-bf83-7461a09c9b80"/>
+                <textElement>
+                    <font fontName="Serif" size="12"/>
+                </textElement>
+                <text><![CDATA[Mã Hóa Đơn]]></text>
+            </staticText>
+            <textField>
+                <reportElement mode="Opaque" x="100" y="80" width="120" height="22" forecolor="#006699" backcolor="#E6E6E6" uuid="c1ecd631-ff08-49f3-a9ed-9d33be5cdaad"/>
+                <textElement textAlignment="Center">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{order_detail_id}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="13"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="100">
+            <staticText>
+                <reportElement x="-20" y="12" width="100" height="20" forecolor="#666666" uuid="52a6606c-cfee-430b-9e63-8e258136d579"/>
+                <textElement>
+                    <font fontName="Serif" size="12"/>
+                </textElement>
+                <text><![CDATA[Số Lượng]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="12" width="122" height="20" forecolor="#006699" uuid="c79b5ada-7c04-4ad1-b4e7-fe6367e1a250"/>
+                <textElement textAlignment="Center">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="-21" y="80" width="100" height="20" forecolor="#666666" uuid="78989bb4-e827-49c6-89dc-e7158f2c0dd9"/>
+                <textElement>
+                    <font fontName="Serif" size="12"/>
+                </textElement>
+                <text><![CDATA[Giá Tiền]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="99" y="80" width="122" height="20" forecolor="#006699" uuid="beb4260b-6267-4ab3-8ab9-ef7496add2fc"/>
+                <textElement textAlignment="Center">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+            </textField>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="24"/>
+    </detail>
+    <columnFooter>
+        <band/>
+    </columnFooter>
+    <pageFooter>
+        <band height="17"/>
+    </pageFooter>
+    <summary>
+        <band/>
+    </summary>
+</jasperReport>

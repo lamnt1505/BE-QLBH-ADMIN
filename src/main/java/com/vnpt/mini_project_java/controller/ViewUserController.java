@@ -20,7 +20,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -77,7 +76,6 @@ public class ViewUserController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("category", this.categoryService.findAll());
         loginFailed = false;
         return "login1/login";
     }
@@ -128,7 +126,7 @@ public class ViewUserController {
                 model.addAttribute("error", "Tài khoản hoặc số điện thoại không tồn tại");
                 if (rememberMe) {
                     Cookie cookie = new Cookie("accountName", accountName);
-                    cookie.setMaxAge(30 * 24 * 60 * 60); // Ví dụ: 30 ngày
+                    cookie.setMaxAge(30 * 24 * 60 * 60);
                     response.addCookie(cookie);
                 }
                 return "login1/login";

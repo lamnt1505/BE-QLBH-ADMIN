@@ -3,6 +3,7 @@ $(document).ready(function () {
         event.preventDefault();
         ajaxPost();
     });
+
     function ajaxPost() {
         var formData = new FormData();
         formData.append('name', $('#name').val());
@@ -16,7 +17,6 @@ $(document).ready(function () {
         if (imageFile) {
             formData.append('image', imageFile);
         }
-
         formData.forEach(item => console.log("item", item));
         $.ajax({
             type: "POST",
@@ -25,16 +25,30 @@ $(document).ready(function () {
             data: formData,
             processData: false,
             contentType: false,
-        }).done(function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Thêm Mới Thành Công!',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            location.reload();
-        }).fail(function (xhr, status, error) {
-            alert("Lỗi!" + error)
         })
+            .done(function (response) {
+                Toastify({
+                    text: "Thêm mới thành công!",
+                    duration: 1500,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "green",
+                    stopOnFocus: true,
+                }).showToast();
+
+                setTimeout(function () {
+                    window.location.href = '/manager/listProduct';
+                }, 1500);
+            })
+            .fail(function (xhr, status, error) {
+                Toastify({
+                    text: "Đã xảy ra lỗi khi thêm mới sản phẩm",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "red",
+                    stopOnFocus: true,
+                }).showToast();
+            });
     }
-})
+});

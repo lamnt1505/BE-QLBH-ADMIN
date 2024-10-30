@@ -16,7 +16,6 @@ public class LoginMesage {
     
     @JsonProperty("status")
     private Boolean status;
-    
 
     public LoginMesage(String message, Boolean status, boolean isAdmin) {
         this.message = message;

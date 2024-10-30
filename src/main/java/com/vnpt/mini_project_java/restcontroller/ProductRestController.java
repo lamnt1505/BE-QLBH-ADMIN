@@ -15,6 +15,10 @@ import com.vnpt.mini_project_java.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -82,10 +88,10 @@ public class ProductRestController {
         try {
             Product product = productService.updateProduct(id,productDTO,image);
             ProductDTO updateDTO = new ProductDTO(product);
-            System.out.println(updateDTO);
+            //System.out.println(updateDTO);
             return ResponseEntity.ok(updateDTO);
         } catch (EntityNotFoundException ex) {
-            System.out.println("Error" + ex.getMessage());
+            //System.out.println("Error" + ex.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
@@ -132,13 +138,17 @@ public class ProductRestController {
     }
 
     @PostMapping("/import")
-    public ResponseEntity<String> importProducts(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, String>> importProducts(@RequestParam("file") MultipartFile file) {
         try {
             List<ProductDTO> products = ExcelUtil.readProductsFromExcel(file);
             productService.importProductsFromExcel(products);
-            return ResponseEntity.ok("Import successful");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Thêm mới thành công");
+            return ResponseEntity.ok(response);
         } catch (IOException e) {
-            return ResponseEntity.badRequest().body("Error importing file");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Có lỗi khi thêm file");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
     
@@ -157,6 +167,18 @@ public class ProductRestController {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/paginated")
+    public Page<ProductDTO> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "productID,asc") String[] sort) {
+
+        Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort[0]));
+
+        return productService.getPaginatedProducts(pageable);
     }
 }
 

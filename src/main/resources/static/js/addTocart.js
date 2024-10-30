@@ -12,7 +12,6 @@ $(document).ready(function () {
         };
         $.post("/updatequantities", product).done(function(data, status) {
                 if (data == "0") {
-                    // Hiển thị thông báo lỗi bằng Toastify
                     Toastify({
                         text: 'Có lỗi hoặc số lượng đang nhỏ hơn 0! Vui lòng thử lại...',
                         duration: 3000,
@@ -22,7 +21,6 @@ $(document).ready(function () {
                         stopOnFocus: true,
                     }).showToast();
                 } else if (data == "1") {
-                    // Hiển thị thông báo thành công bằng Toastify
                     Toastify({
                         text: 'Cập nhật thành công!',
                         duration: 1500,
@@ -45,7 +43,6 @@ $(document).ready(function () {
                         }
                     }).showToast();
                 } else {
-                    // Hiển thị thông báo lỗi bằng Toastify
                     Toastify({
                         text: 'Có gì đó sai!',
                         duration: 3000,
@@ -61,7 +58,6 @@ $(document).ready(function () {
         $.post("/orders")
             .done(function (data, status) {
                 if (data == "0") {
-                    // Hiển thị thông báo lỗi bằng Toastify
                     Toastify({
                         text: 'Bạn phải đăng nhập!',
                         duration: 1000,
@@ -74,7 +70,6 @@ $(document).ready(function () {
                         }
                     }).showToast();
                 } else if (data == "-1") {
-                    // Hiển thị thông báo lỗi bằng Toastify
                     Toastify({
                         text: 'Chưa chọn sản phẩm vào giỏ hàng!',
                         duration: 3000,
@@ -84,7 +79,6 @@ $(document).ready(function () {
                         stopOnFocus: true,
                     }).showToast();
                 } else if (data == "1") {
-                    // Hiển thị thông báo thành công bằng Toastify và reload trang sau khi hoàn thành
                     Toastify({
                         text: 'Đặt hàng thành công!',
                         duration: 1000,

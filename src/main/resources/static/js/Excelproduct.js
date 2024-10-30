@@ -34,7 +34,7 @@ $(document).ready(function() {
             error: function(xhr, status, error) {
                 console.log('Error:', error);
                 Toastify({
-                    text: 'Export Failed',
+                    text: 'Lỗi Xuất Danh Sách',
                     duration: 3000,
                     gravity: 'top',
                     position: 'right',

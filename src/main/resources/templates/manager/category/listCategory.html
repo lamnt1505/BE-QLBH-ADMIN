@@ -6,14 +6,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Manager</title>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-    <!-- Custom styles for this template-->
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <style type="text/css">
+        .pagination .page-link {
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+        .pagination .page-link:hover {
+            background-color: #f1f1f1;
+            color: #0056b3;
+            border-color: #007bff;
+        }
+
+        .pagination .active .page-link {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+        #pageSize {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+        }
+
+        .pagination .page-link:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .pagination .page-link {
+            margin: 0 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #007bff;
+        }
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .pagination {
+            margin-bottom: 0;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        .form-group {
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -57,36 +123,46 @@
                     <table  class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Tên Loại Sản Phẩm</th>
                             </tr>
                         </thead>
                         <tbody id="category-table"></tbody>
                     </table>
-                    <ul class="pagination" style="margin-left: 40%; margin-top: 25px;">
-                        <li>
-                            <a class="page-link">First</a>
-                        </li>
-                        <il>
-                            <a class="page-link" aria-label="Previous" title='Go to previous page'>
-                                <span aria-hidden="true">«</span>
-                                <span class="sr-only"> Previous </span>
-                            </a>
-                        </il>
-                        <li>
-                            <a class="page-link">
-                                <span>1</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="page-link" aria-label="Next" title='Go to next page'>
-                                <span aria-hidden="true">»</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="page-link"> Last </a>
-                        </li>
-                    </ul>
+                    <div class="d-flex justify-content-between align-items-center" style="margin-top: 25px;">
+                        <ul class="pagination mb-0">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="First" title="Go to first page">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Previous" title="Go to previous page">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Next" title="Go to next page">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Last" title="Go to last page">Last</a>
+                            </li>
+                        </ul>
+                        <div class="form-group ml-3 mb-0">
+                            <label for="pageSize" class="mr-2">Bản Ghi:</label>
+                            <select id="pageSize" class="form-control" style="width: 80px; display: inline-block;">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
                     <!-- Modal -->
                     <form id="update-category-form" enctype="multipart/form-data">
                         <div class="modal fade" id="update-category-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -94,7 +170,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Update Category</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Cập Nhật Loại Sản Phẩm</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -103,14 +179,14 @@
                                         <div class="col-md-12">
                                             <input type="hidden" class="form-control" id="id">
                                             <div class="form-group">
-                                                <label for="name">Name</label>
+                                                <label for="name">Tên Loại Sản Phẩm</label>
                                                 <input type="name" class="form-control" id="name" placeholder="Name">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button onclick="saveCategory()" type="button" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                        <button onclick="saveCategory()" type="button" class="btn btn-primary">Cập Nhật</button>
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +199,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Upload Excel File</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Tải lên tệp Excel:</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -131,7 +207,7 @@
                                     <div class="modal-body">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="excelFile">Select Excel File:</label><br>
+                                                <label for="excelFile">Chọn tệp Excel:</label><br>
                                                 <input type="file" class="form-control" id="excelFile" name="excelFile"
                                                        accept=".xlsx, .xls"/>
                                             </div>
@@ -139,10 +215,10 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                            <i class="fas fa-info-circle"></i> Close
+                                            <i class="fas fa-info-circle"></i> Đóng
                                         </button>
                                         <button onclick="uploadExcelFile()" type="button" class="btn btn-primary">
-                                            <i class="fas fa-upload"></i> Upload File
+                                            <i class="fas fa-upload"></i> Tải tệp lên
                                         </button>
                                     </div>
                                 </div>
@@ -155,20 +231,19 @@
     </div>
 </div>
 <footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Sẵn sàng rời đi?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc phiên hiện tại của mình.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Đăng Xuất</a>
             </div>
         </div>
     </div>
@@ -326,7 +401,6 @@
     }
 
 </script>
-
 <script type="text/javascript">
 
     $(document).ready(function () {

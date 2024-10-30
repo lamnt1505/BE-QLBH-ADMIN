@@ -6,6 +6,7 @@ import com.vnpt.mini_project_java.entity.Account;
 import com.vnpt.mini_project_java.response.LoginMesage;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,8 @@ public interface AccountService {
 
     Optional<Account> findById(Long accountID);
     
-    String addAccount(AccountDTO accountDTO);
-    
+    String addAccount(AccountDTO accountDTO, MultipartFile image);
+
     LoginMesage loginAccount(LoginDTO loginDTO);
 
 

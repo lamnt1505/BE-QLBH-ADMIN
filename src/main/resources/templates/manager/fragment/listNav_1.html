@@ -3,50 +3,50 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin</div>
+        <div class="sidebar-brand-text mx-3" th:href="@{/manager/index}">Tổng Quan</div>
     </a>
     <hr class="sidebar-divider my-0">
     <li class="nav-item active">
         <a class="nav-link" th:href="@{/manager/index}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <i class="fa-solid fa-area-chart"></i>
+            <span>TRANG TỔNG QUAN</span></a>
     </li>
     <li class="nav-item active">
         <a class="nav-link collapsed" th:href="@{/manager/listStorage}" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Storage</span></a>
+            <i class="fa-solid fa-location-arrow"></i>
+            <span>Lưu trữ</span></a>
     </li>
     <div class="sidebar-heading">
         Danh Mục
     </div>
     <li class="nav-item">
         <a class="nav-link collapsed" th:href="@{/manager/listProduct}" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Product</span>
+            <i class="fa-solid fa-product-hunt"></i>
+            <span>Sản Phẩm</span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" th:href="@{/manager/listCategory}" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Category</span>
+            <i class="fa-solid fa-list-ol"></i>
+            <span>Loại</span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" th:href="@{/manager/statistical}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Statistical</span></a>
+        <a class="nav-link collapsed" th:href="@{/manager/listTrademark}" aria-controls="collapseUtilities">
+            <i class="fa-solid fa-trademark"></i>
+            <span>Thương Hiệu</span>
+        </a>
     </li>
     <hr class="sidebar-divider my-0">
     <li class="nav-item">
-        <a class="nav-link collapsed" th:href="@{/manager/listTrademark}" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>TradeMark</span>
-        </a>
+        <a class="nav-link" th:href="@{/manager/statistical}">
+            <i class="fa-solid fa-area-chart"></i>
+            <span>Thống Kê</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" th:href="@{/manager/order}" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Cart Management</span>
+            <i class="fa-solid fa-luggage-cart"></i>
+            <span>Quản Lý Giỏ Hàng</span>
         </a>
     </li>
     <hr class="sidebar-divider d-none d-md-block">

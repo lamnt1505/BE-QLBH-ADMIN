@@ -15,13 +15,11 @@ import com.vnpt.mini_project_java.service.storage.StorageService;
 import com.vnpt.mini_project_java.service.users.UserService;
 
 import org.slf4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -67,10 +65,10 @@ public class ManagerController {
 			}
 		}
 	}
-	
+
 	@GetMapping()
 	public String manager(ModelMap model, @CookieValue(value = "accountName", required = true) String accountName,
-			HttpServletRequest request) {
+						  HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -78,6 +76,7 @@ public class ManagerController {
                     Optional<Account> userOptional = accountService.findByname(cookie.getValue());
                     if (userOptional.isPresent()) {
                         Account account = userOptional.get();
+						model.addAttribute("account", account);
                         model.addAttribute("accountName", accountName);
                         model.addAttribute("fullname", account.getAccountName());
                         if (account.getIsAdmin()) {
@@ -103,6 +102,7 @@ public class ManagerController {
 	        model.addAttribute("categoryList", categoryList);
 	        model.addAttribute("accountName", user.getAccountName());
 	        model.addAttribute("accountID", user.getAccountID());
+			model.addAttribute("imageUrl", "data:image/jpeg;base64," + user.getImageBase64());
 	        return "manager/home/index";
 	    } else {
 	        return "redirect:/login";
@@ -130,7 +130,6 @@ public class ManagerController {
 	    model.addAttribute("productList", productList);
 	    return "manager/product/listProduct";
 	}
-
 
 	private String getAccountNameFromCookies(HttpServletRequest request) {
 	    Cookie[] cookies = request.getCookies();
@@ -195,6 +194,22 @@ public class ManagerController {
 	    } else {
 	        return "redirect:/login";
 	    }
+	}
+	@GetMapping("/addImport")
+	public String addImport(ModelMap model, HttpServletRequest request) {
+		String accountName = getAccountNameFromCookies(request);
+		if (accountName != null) {
+			Optional<Users> userOptional = this.userService.findByname(accountName);
+			if (userOptional.isPresent()) {
+				getName(request, model);
+				model.addAttribute("storage", new StorageDTO());
+				return "manager/storage/addImport";
+			} else {
+				return "manager/storage/addImport";
+			}
+		} else {
+			return "redirect:/login";
+		}
 	}
 	@GetMapping("/listStorage")
 	public String getStorage(ModelMap model,

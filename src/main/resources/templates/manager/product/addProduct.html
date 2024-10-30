@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Hệ Thống Quản Lí Mua Sắm Điện Tử</title>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
-    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
@@ -34,45 +36,45 @@
                             <form id="productForm" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="name">Name:</label>
+                                        <label for="name">Tên Sản Phẩm:</label>
                                         <input type="text" class="form-control" id="name" name="name"/>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="image">Image:</label>
+                                        <label for="image">Hình Ảnh:</label>
                                         <input type="file" class="form-control-file" id="image" name="image"
                                                accept="image/*"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Description:</label>
+                                    <label for="description">Miêu Tả:</label>
                                     <textarea class="form-control" id="description" name="description"></textarea>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="date_product">Date Product:</label>
+                                        <label for="date_product">Ngày Sản Xuất:</label>
                                         <input type="date" class="form-control" id="date_product" name="date_product"/>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="price">Price:</label>
+                                        <label for="price">Giá:</label>
                                         <input type="number" class="form-control" id="price" name="price"/>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="trademarkSelect">Category:</label>
+                                        <label for="trademarkSelect">Loại Sản Phẩm:</label>
                                         <select class="form-control" id="categorySelect" name="categorySelect">
-                                            <option value="">Select a category</option>
+                                            <option value="">Chọn Một Danh Mục Loại Sản Phẩm</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="trademarkSelect">Trade Mark:</label>
+                                        <label for="trademarkSelect">Thương Hiệu:</label>
                                         <select class="form-control" id="trademarkSelect" name="trademarkSelect">
-                                            <option value="">Select a trademark</option>
+                                            <option value="">Chọn Một Danh Mục Thương Hiệu</option>
                                         </select>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary py-2 px-4">
-                                    <i class="fas fa-upload fa-sm text-white-50"></i> Add New
+                                    <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Mới
                                 </button>
                             </form>
                         </div>
@@ -83,20 +85,19 @@
     </div>
 </div>
 <footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Sẵn sàng rời đi?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc phiên hiện tại của mình.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Đăng Xuất</a>
             </div>
         </div>
     </div>
@@ -108,62 +109,7 @@
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/trademark.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/categoryaddProduct.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/addProduct.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#productForm').submit(function (event) {
-            event.preventDefault();
-            ajaxPost();
-        });
-
-        function ajaxPost() {
-            var formData = new FormData();
-            formData.append('name', $('#name').val());
-            formData.append('description', $('#description').val());
-            formData.append('date_product', $('#date_product').val());
-            formData.append('price', $('#price').val());
-            formData.append('categoryID', $('#categorySelect').val());
-            formData.append('tradeID', $('#trademarkSelect').val());
-
-            var imageFile = $('#image')[0].files[0];
-            if (imageFile) {
-                formData.append('image', imageFile);
-            }
-            formData.forEach(item => console.log("item", item));
-            $.ajax({
-                type: "POST",
-                enctype: "multipart/form-data",
-                url: '/api/v1/product/add',//API
-                data: formData,
-                processData: false,
-                contentType: false,
-            })
-                .done(function (response) {
-                    Toastify({//thông bao thêm  mới tc
-                        text: "Thêm mới thành công!",
-                        duration: 1500,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "green",
-                        stopOnFocus: true,
-                    }).showToast();
-
-                    setTimeout(function () {//trỏ qua lại trang 
-                        window.location.href = '/manager/listProduct';
-                    }, 1500);
-                })
-                .fail(function (xhr, status, error) {
-                    Toastify({
-                        text: "Đã xảy ra lỗi khi thêm mới sản phẩm",
-                        duration: 3000,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "red",
-                        stopOnFocus: true,
-                    }).showToast();
-                });
-        }
-    });
-</script>
 </body>
 </html>

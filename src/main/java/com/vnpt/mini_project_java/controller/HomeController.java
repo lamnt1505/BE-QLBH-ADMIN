@@ -67,6 +67,7 @@ public class HomeController {
         if (cookies != null) {
             for (int i = 0; i < cookies.length; ++i) {
                 if (cookies[i].getName().equals("accountName")) {
+                    System.out.println("Cookie accountName: " + cookies[i].getValue());
                     Optional<Account> optionalAccount = this.accountService.findByname(cookies[i].getValue());
                     if (optionalAccount.isPresent()) {
                         Account acc = optionalAccount.get();
@@ -100,8 +101,10 @@ public class HomeController {
 
         model.addAttribute("product", this.productService.findAll());
         model.addAttribute("category", this.categoryService.findAll());
+
         List<ProductVersion> productVersions = this.productVersionService.findAllByProductId(productID);
         model.addAttribute("productversions", productVersions);
+
         model.addAttribute("productdetail", this.productDetailService.findByIdProduct(productID));
 
         Optional<Product> productOptional = this.productService.findById(productID);
@@ -135,17 +138,8 @@ public class HomeController {
     @GetMapping("/product")
     public String getProduct(HttpServletRequest request, HttpServletResponse response, ModelMap model){
         getName(request, model);
-        model.addAttribute("product", this.productService.findAll());// tìm tất product
-        model.addAttribute("category", this.categoryService.findAll());// tên loại để hiển thị 
-        return "shop/product";
-    }
-
-    @GetMapping("/test")
-    public String getTest(HttpServletRequest request, HttpServletResponse response, ModelMap model){
-        getName(request, model);
         model.addAttribute("product", this.productService.findAll());
         model.addAttribute("category", this.categoryService.findAll());
-        return "shop/test";
+        return "shop/product";
     }
-
 }

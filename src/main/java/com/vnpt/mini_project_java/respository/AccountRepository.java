@@ -10,8 +10,7 @@ import java.util.Optional;
 
 @EnableJpaRepositories
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {// chứa câu lệnh SQL sử Jpa reposotory 
-    //Account findByAccountName (String accountName);
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "SELECT * FROM account  WHERE account_name = ?", nativeQuery = true)
     Optional<Account> findByname(String accountName);

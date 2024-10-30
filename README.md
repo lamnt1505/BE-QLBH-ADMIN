@@ -19,16 +19,16 @@ Lập trình 1 website thương mại điện tử chuyên bán Thiết bị đi
 - https://phongvu.vn/
 
 # Yêu cầu cơ bản
-- Chức năng đăng ký, đăng nhập, đăng xuất, phân quyền
-- Chức năng quản lý các danh mục: Loại sản phẩm, Sản phẩm
-- Màn hình chính: Liệt kê các sản phẩm nỗi bật, tìm kiếm sản phẩm, filter theo loại, giá, tính năng…
-- Chức năng xem chi tiết sản phẩm
-- Chức năng chọn sản phẩm để so sánh
-- Chức năng quản lý giỏ hàng: Thêm hàng vào giỏ, xóa, sửa… đặt hàng…
-- Chức năng quản lý đơn hàng theo người dùng
-- Chức năng tra cứu đơn hàng đã được đặt
-- Chức năng đánh giá sản phẩm.
-- Chức năng áp dụng mã giảm giá
+- Chức năng đăng ký, đăng nhập, đăng xuất, phân quyền - **đã làm**
+- Chức năng quản lý các danh mục: Loại sản phẩm, Sản phẩm - **đã làm**
+- Màn hình chính: Liệt kê các sản phẩm nỗi bật, tìm kiếm sản phẩm, filter theo loại, giá, tính năng… - **thiếu tìm kiếm**
+- Chức năng xem chi tiết sản phẩm - đã làm 
+- Chức năng chọn sản phẩm để so sánh - đã làm 
+- Chức năng quản lý giỏ hàng: Thêm hàng vào giỏ, xóa, sửa… đặt hàng - đã làm 
+- Chức năng quản lý đơn hàng theo người dùng - đã làm
+- Chức năng tra cứu đơn hàng đã được đặt - đã làm
+- Chức năng đánh giá sản phẩm.- đang làm
+- Chức năng áp dụng mã giảm giá - đang làm
 
 # Yêu cầu nâng cao
 - Đăng nhập bằng goolge, facebook…

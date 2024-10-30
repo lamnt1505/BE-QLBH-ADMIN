@@ -12,4 +12,8 @@ public interface StorageService {
 	StorageDTO createStorage(StorageDTO dto);
 
 	Storage updateStorage(long idImport, StorageDTO storageDTO);
+
+	Storage getImportById(long idImport);
+
+	void deleteStorageById(long id);
 }

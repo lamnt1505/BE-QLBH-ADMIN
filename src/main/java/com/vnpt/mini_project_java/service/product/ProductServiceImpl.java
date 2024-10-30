@@ -1,7 +1,8 @@
 package com.vnpt.mini_project_java.service.product;
 
-import com.vnpt.mini_project_java.criteria.ProductSearchCriteria;
+import com.vnpt.mini_project_java.dto.ProductSearchCriteriaDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import com.vnpt.mini_project_java.dto.CompareProductDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
@@ -75,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(ProductDTO dto, MultipartFile image) {
 
-        Long categoryId = dto.getCategoryID();// service impl=> viết xong câu lệnh servie => goi qua lớp service 
+        Long categoryId = dto.getCategoryID();
 
         System.out.println("CategoryId: " + categoryId);
 
@@ -118,18 +119,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(long productID, ProductDTO dto,MultipartFile image) {
-
         Optional<Product> optionalProduct = productRepository.findById(productID);
         if (!optionalProduct.isPresent()) {
             throw new RuntimeException("Product with ID " + productID + " not found");
         }
-
         Product product = optionalProduct.get();
         product.setProductName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setDateProduct(LocalDate.parse(dto.getDate_product(), dateTimeFormatter));
         product.setPrice(dto.getPrice());
-
         if (image != null && !image.isEmpty()) {
             String fileName = image.getOriginalFilename();
             Path uploadDir = Paths.get("src/main/resources/static/images");
@@ -142,14 +140,12 @@ public class ProductServiceImpl implements ProductService {
                 throw new RuntimeException("Failed to save image file", ex);
             }
         }
-
         if (dto.getCategoryID() != null) {
             Long categoryId = dto.getCategoryID();
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
             product.setCategory(category);
         }
-
         if (dto.getTradeID() != null) {
             Long tradeId = dto.getTradeID();
             Trademark trademark = trademarkReopsitory.findById(tradeId)
@@ -175,7 +171,19 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         productRepository.deleteById(id);
     }
+    @Override
+    public Page<ProductDTO> getPaginatedProducts(Pageable pageable) {
+        // Fetch the paginated products
+        Page<Product> productPage = productRepository.findAll(pageable);
 
+        // Convert the Page<Product> to Page<ProductDTO>
+        List<ProductDTO> productDTOs = productPage.getContent().stream()
+                .map(ProductDTO::new) // Use the ProductDTO constructor to map Product to ProductDTO
+                .collect(Collectors.toList());
+
+        // Return a new Page<ProductDTO>
+        return new PageImpl<>(productDTOs, pageable, productPage.getTotalElements());
+    }
     @Override
     public List<ProductDTO> getProductsByCategoryId(Long categoryID) {
         List<Product> products = productRepository.findByCategoryId(categoryID);
@@ -270,7 +278,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProducts(ProductSearchCriteria criteria) {
+    public List<Product> searchProducts(ProductSearchCriteriaDTO criteria) {
         Specification<Product> spec = ProductSpecifications.searchByCriteria(criteria);
         return productRepository.findAll(spec);
     }

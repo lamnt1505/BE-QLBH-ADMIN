@@ -7,10 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>CR Admin - Dashboard</title>
+  <title>Hệ Thống Quản Lí Mua Sắm Điện Tử</title>
   <link th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/highcharts/9.3.2/css/highcharts.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -19,6 +20,12 @@
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://code.highcharts.com/modules/export-data.js"></script>
   <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <style type="text/css">
+    .fas, .fa {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+    }
+  </style>
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -30,17 +37,16 @@
                th:replace="manager/fragment/listNav::nav"></nav>
           <div class="container-fluid">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-              <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+              <h1 class="h3 mb-0 text-gray-800">Thống Kê DashBoard</h1>
               <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                <i class="fas fa-download fa-sm text-white-50"></i> Tạo Mẫu
               </a>
             </div>
             <div class="row">
-              <!-- Area Chart -->
               <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Tổng quan về thu nhập</h6>
                     <div class="dropdown no-arrow">
                       <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,16 +62,13 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Card Body -->
                     <div id="container"></div>
                 </div>
               </div>
-              <!-- Pie Chart -->
               <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
-                  <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Nguồn doanh thu</h6>
                     <div class="dropdown no-arrow">
                       <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -81,7 +84,6 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Card Body -->
                   <div id="chartContainer1"></div>
                 </div>
               </div>
@@ -95,21 +97,22 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Sẵn sàng rời đi?</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+      <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc phiên hiện tại của mình.</div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+        <a class="btn btn-primary" id="logoutButton">Đăng Xuất</a>
       </div>
     </div>
   </div>
 </div>
 </body>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/logoutadmin.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>

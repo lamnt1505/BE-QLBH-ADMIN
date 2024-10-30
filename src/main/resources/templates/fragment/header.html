@@ -1,15 +1,13 @@
 <div th:fragment="header" class="header">
-    <!--Topbar-start -->
     <div class="header-area">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
                     <div class="user-menu">
                         <ul>
-                            <!--<li th:if="${accountName != null}"><a th:href="@{'/updateProfile/' + ${accountID}}"><i class="fa fa-user"></i> My Account</a></li> -->
-                            <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
-                            <li><a th:href="@{/cart}"><i class="fa fa-user"></i> My Cart</a></li>
-                            <li th:if="${accountName == null}"><a th:href="@{/login}"><i class="fa fa-user"></i> Login</a></li>
+                            <li><a href="#"><i class="fa fa-heart"></i>Danh Sách Yêu Thích</a></li>
+                            <li><a th:href="@{/cart}"><i class="fa fa-user"></i>Giỏ Hàng Của Tôi</a></li>
+                            <li th:if="${accountName == null}"><a th:href="@{/login}"><i class="fa fa-user"></i>Đăng Nhập</a></li>
                         </ul>
                     </div>
                 </div>
@@ -18,13 +16,13 @@
                         <ul>
                             <li th:if="${accountName != null}">
                                 <a th:href="@{'/updateProfile/' + ${accountID}}">
-                                    <i class="fa fa-user"></i> <span class="shop-menu-ttl" id="accountName"></span>
+                                    <i class="fa fa-user"></i> <span class="shop-menu-ttl" id="username" th:text="${accountName}"></span>
                                 </a>
                             </li>
                             <li th:if="${accountName != null}">
-                                <a th:href="@{/logout}" method="post">
-                                        <i class="fa fa-sign-out"></i> Đăng Xuất
-                                </a>
+                                <button class="btn btn-danger btn-sm" id="logoutButton">
+                                    <i class="fa fa-sign-out"></i> Đăng Xuất
+                                </button>
                             </li>
                         </ul>
                     </div>

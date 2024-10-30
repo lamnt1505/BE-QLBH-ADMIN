@@ -1,16 +1,12 @@
 package com.vnpt.mini_project_java.dto;
 
-
 import java.time.format.DateTimeFormatter;
-
-
 import com.vnpt.mini_project_java.entity.Storage;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 
 @Data
 @Getter
@@ -49,7 +45,6 @@ public class StorageDTO {
     	if(storage.getProduct() != null){
             this.productId = storage.getProduct().getProductID();
             this.product_name = storage.getProduct().getProductName();
-            //System.out.println("Product name: " + this.product_name);
         }
     }
 }

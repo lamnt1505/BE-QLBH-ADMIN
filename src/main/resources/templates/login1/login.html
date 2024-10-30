@@ -5,77 +5,41 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ustora Demo</title>
-
+    <title>Hệ Thống Mua Sắm Điện Tử</title>
     <link rel="icon" href="/static/images/shopping.png" type="image/x-icon">
-
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style3.css}">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
     <link rel="stylesheet" href="/resources/fonts/css/ionicons.min.css">
-
-    <style type="text/css">
-        .home {
-            width: 100%;
-            height: 40px;
-            text-align: center;
-            padding-top: 15px;
-        }
-        .home a {
-            text-decoration: none;
-            font-size: 20px;
-        }
-        .home a:hover {
-            color: red;
-            text-decoration: underline;
-        }
-        .form-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-        }
-        .form-wrapper input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .form-wrapper .toggle-password {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/login.css}">
 </head>
 <body>
 <div class="wrapper" th:style="'background-image: url(' + @{/resources/images/e-commerce-la-gi-02.png} + ');'">
-    <div class="inner">
+    <div class="inner" style="color: rgb(102,127,255);">
         <div class="image-holder" style="margin-top: -20px;">
             <img src="/resources/images/e-commerce.jpg" alt="">
         </div>
         <form id="loginForm" onsubmit="return false;" name="form">
-        
-            <h3 style="color: rgb(75,66,2);">Đăng nhập</h3>
-            
+            <h3 style="color: rgb(75,66,2);">ĐĂNG NHẬP 1</h3>
             <div class="spanerror" style="width: 320px; margin-top: -20px; height: 40px;">
                 <span id="error" style="font-size: 15px; padding-left: 56px;"></span>
             </div>
-            
             <div class="form-wrapper">
-                <input type="text" id="accountName" name="accountName" placeholder="Username or Phone" th:value="${accountName}" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;"><!--style="width:350px;"size="20"-->
-                <class><span class="icon fa fa-info"></span></class>
+                <input type="text" id="accountName" name="accountName" placeholder="Tên Đăng Nhập" th:value="${accountName}" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
+                <span class="input-group-text" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                    <i class="fa fa-info" style="color: #4b4202;"></i>
+                </span>
             </div>
-            
             <div class="form-wrapper">
-                <input type="password" id="accountPass" name="accountPass" placeholder="Enter your password" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
-                <span><i class="fa fa-eye toggle-password" id="togglePassIcon" style="cursor: pointer;"></i></span>
+                <input type="password" id="accountPass" name="accountPass" placeholder="Nhập Mật Khẩu" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
+                <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                    <i class="fa fa-eye toggle-password" id="togglePassIcon" style="color: #4b4202;"></i>
+                </span>
             </div>
-            
             <div style="width: 100%">
                 <button style="width: 50%; border-radius: 10px; background: rgb(3,40,248) " class="submit"  onclick="login()">Đăng nhập</button>
                 <a th:href="@{/registerd}"
@@ -83,15 +47,12 @@
                     <div style="width: 50%; border-radius: 10px; background: rgb(3,40,248); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;"> Đăng ký</div>
                 </a>
             </div>
-            
             <div class="home">
                 <a th:href="@{/index}">Trở về trang chủ</a>
             </div>
-            
         </form>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
@@ -100,128 +61,9 @@
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
 <script type="text/javascript" th:src="@{/resources/js/validateLogin.js}"></script>
-<script type="text/javascript">
-    const passwordField = document.getElementById("accountPass");
-    const togglePassIcon = document.getElementById("togglePassIcon");
-    togglePassIcon.addEventListener("click", function() {
-        // Toggle the type attribute of the password field
-        const currentType = passwordField.getAttribute("type");
-        if (currentType === "password") {
-            passwordField.setAttribute("type", "text");
-            togglePassIcon.classList.remove("fa-eye");
-            togglePassIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.setAttribute("type", "password");
-            togglePassIcon.classList.remove("fa-eye-slash");
-            togglePassIcon.classList.add("fa-eye");
-        }
-    });
-</script>
-<script type="text/javascript">
-    // Function to set a cookie
-    function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-
-   // Function to get a cookie
-    function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
-    }
-    function eraseCookie(name) {
-        document.cookie = name + '=; Max-Age=-99999999;';
-    }
-    var rememberMeCheckbox = document.querySelector('input[name="ck"]');
-    var accountNameInput = document.getElementById('accountName');
-    var accountPassInput = document.getElementById('accountPass');
-    var savedAccountName = getCookie('savedAccountName');
-
-    if (rememberMeCheckbox) {
-        rememberMeCheckbox.addEventListener('change', function () {
-            if (this.checked) {
-                
-                setCookie('savedAccountName', accountNameInput.value, 7); // Expires in 7 days
-            } else {
-                eraseCookie('savedAccountName');
-            }
-        });
-
-        
-        if (savedAccountName) {
-            accountNameInput.value = savedAccountName;
-            rememberMeCheckbox.checked = true;
-        }
-    }
-</script>
-<script type="text/javascript">
-    function login() {
-        var accountName = $("#accountName").val();
-        var accountPass = $("#accountPass").val();
-        
-        $.ajax({
-            type: "POST",
-            url: "/api/v1/account/login",
-            contentType: "application/json",
-            data: JSON.stringify({ accountName: accountName, accountPass: accountPass }),
-            success: function(response) {
-                // Ensure that response is parsed correctly
-                var rs = typeof response === "string" ? JSON.parse(response) : response;
-                
-                if (rs.status) {
-                    console.log("Login successful");
-                    sessionStorage.setItem("accountName", accountName); // Use accountName directly
-                    
-                    // Show success message
-                    Toastify({
-                        text: "Đăng Nhập Thành Công",
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "center",
-                        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-                        stopOnFocus: true,
-                    }).showToast();
-                    
-                    // Redirect based on isAdmin flag
-                    setTimeout(function() {
-                        if (rs.isAdmin) {
-                            window.location.href = "/manager"; 
-                        } else {
-                            window.location.href = "/index"; 
-                        }
-                    }, 1000);
-                    
-                } else {
-                    $("#error").text(rs.message); 
-                }
-            },
-            error: function(error) {
-                console.log(error);
-                if (error.status === 401) {
-                    $("#error").text("Session expired. Please log in again.");
-                    setTimeout(function() {
-                        window.location.href = "/login";
-                    }, 2000);
-                } else {
-                    $("#error").text("An error occurred. Please try again.");
-                }
-            }
-        });
-    }
-</script>
+<script type="text/javascript" th:src="@{/resources/js/Login.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/checkbox.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/eye.js}"></script>
 </body>
 </html>

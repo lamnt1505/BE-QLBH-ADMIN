@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Hệ Thống Quản Lí Mua Sắm Điện Tử</title>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-    <!-- Custom styles for this template-->
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <style type="text/css">
         .pagination .page-link {
@@ -22,7 +26,11 @@
             transition: all 0.3s ease;
             padding: 10px 15px;
         }
-
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
         .pagination .page-link:hover {
             background-color: #f1f1f1;
             color: #0056b3;
@@ -56,11 +64,15 @@
         .pagination .page-link {
             margin: 0 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #007bff;
         }
         .pagination-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        .pagination {
+            margin-bottom: 0;
         }
         .form-group label {
             margin-right: 10px;
@@ -101,7 +113,7 @@
                 <div class="row">
                     <p class="card-description">
                         <a class="btn btn-primary"
-                           th:href="@{/manager/addStorage}">
+                           th:href="@{/manager/addImport}">
                             <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Số Lượng
                         </a>
                     </p>
@@ -117,89 +129,114 @@
                         </thead>
                         <tbody id="storage-table"></tbody>
                     </table>
-                    <ul class="pagination justify-content-center" style="margin-top: 25px;">
-                        <li>
-                            <a class="page-link" href="#" aria-label="First" title='Go to first page'>First</a>
-                        </li>
-                        <il>
-                            <a class="page-link" aria-label="Previous" title='Go to previous page'>
-                                <span aria-hidden="true">«</span>
-                                <span class="sr-only"> Previous </span>
-                            </a>
-                        </il>
-                        <li>
-                            <a class="page-link">
-                                <span>1</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="page-link" aria-label="Next" title='Go to next page'>
-                                <span aria-hidden="true">»</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="page-link" href="#" aria-label="Last" title='Go to last page'> Last </a>
-                        </li>
-                    </ul>
-                    <div class="form-group">
-                        <label for="pageSize">Bản Ghi:</label>
-                        <select id="pageSize" class="form-control" style="width: 80px; display: inline-block;">
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                        </select>
+                    <div class="d-flex justify-content-between align-items-center" style="margin-top: 25px;">
+                        <ul class="pagination mb-0">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="First" title="Go to first page">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Previous" title="Go to previous page">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Next" title="Go to next page">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Last" title="Go to last page">Last</a>
+                            </li>
+                        </ul>
+                        <div class="form-group ml-3 mb-0">
+                            <label for="pageSize" class="mr-2">Bản Ghi:</label>
+                            <select id="pageSize" class="form-control" style="width: 80px; display: inline-block;">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
                     </div>
-                    <form id="update-category-form" enctype="multipart/form-data">
-                        <div class="modal fade" id="update-category-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                             aria-hidden="true" >
+                    <form id="update-import-form" enctype="multipart/form-data">
+                        <div class="modal fade" id="update-import-dialog" tabindex="-1" role="dialog"
+                             aria-labelledby="updateImportModalLabel"
+                             aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Update Storage</h5>
+                                        <h5 class="modal-title" id="updateImportModalLabel">Cập Nhật Lưu Trữ Kho Hàng</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body" >
+                                    <div class="modal-body">
                                         <div class="col-md-12">
-                                            <input type="hidden" class="form-control" id="id">
+                                            <input type="hidden" class="form-control" id="idImport" name="idImport">
                                             <div class="form-group">
-                                                <label for="name">Name</label>
-                                                <input type="name" class="form-control" id="name" placeholder="Name">
+                                                <label>Mã Sản Phẩm: </label>
+                                                <select id="product-select" class="form-control" disabled></select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="quantity">Số Lượng Kho: </label>
+                                                <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Nhập Số Lượng">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="createDate">Ngày Nhập Kho: </label>
+                                                <input type="date" class="form-control" id="createDate" name="createDate">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="updateDate">Ngày Xuất Kho: </label>
+                                                <input type="date" class="form-control" id="updateDate" name="updateDate">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="users">Người Quản Lý: </label>
+                                                <input type="text" class="form-control" id="users" name="users" placeholder="Mã Người Quản Lý">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button onclick="saveCategory()" type="button" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <i class="fas fa-info-circle"></i> Đóng
+                                        </button>
+                                        <button onclick="updateImport()" type="button" class="btn btn-primary">
+                                            <i class="fas fa-check"></i> Cập Nhật Lưu Trữ
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 <footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Sẵn sàng rời đi?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc phiên hiện tại của mình.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+                <a class="btn btn-primary" id="logoutButton">Đăng Xuất</a>
             </div>
         </div>
     </div>
@@ -209,159 +246,11 @@
 <script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="text/javascript" th:src="@{/resources/js/logoutadmin.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/import_crud.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/liststo.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/dataTables.bootstrap4.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
-<script type="text/javascript">
-    async function showUpdateCategoryForm(id) {
-        try {
-            const urlGetCategoryDetail = "/api/v1/category/" + id + "/get";
-            const category = await doGetAjax(urlGetCategoryDetail);
-            console.log("category", category);
-            bindingCategoryToForm(category);
-            $('#update-category-dialog').modal('show');
-        } catch (error) {
-            console.error("An error occurred:", error);
-        }
-    }
-
-    function bindingCategoryToForm(category){
-        if (category) {
-            $('#id').val(category.id);
-            $('#name').val(category.name);
-        }
-    }
-
-    function saveCategory() {
-
-        const id = $('#id').val();
-        const name = $('#name').val();
-
-        const formData = new FormData();
-        formData.append('id', id);
-        formData.append('name', name);
-
-        const url = '/api/v1/category/' + id + '/update';
-        doPostAjax(url, formData)
-            .then(response => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Cập nhật danh mục thành công ✔️!',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    window.location.reload();
-                });
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: 'Đã xảy ra lỗi khi cập nhật danh mục',
-                });
-            });
-    }
-
-    function renderTable() {
-        $.ajax({
-            url: "/api/v1/storage/Listgetall",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                var table = $("#storage-table");
-                table.empty();
-                table.append("");
-                $.each(data, function (index, storage) {
-                    var productName = storage.product_name ? storage.product_name : "N/A";
-                    table.append("<tr>" +
-                        "<td>" + (storage.users ? storage.users : "N/A") + "</td>" +
-                        "<td>" + productName + "</td>" +
-                        "<td>" + (storage.createDate ? storage.createDate : "N/A") + "</td>" +
-                        "<td>" + (storage.updateDate ? storage.updateDate : "N/A") + "</td>" +
-                        "<td>" + (storage.quantity ? storage.quantity : "N/A") + "</td>" + // Hiển thị số lượng
-                        "<td>" +
-                        "<button class='btn btn-info' onclick=\"showStorageDetails(" + storage.id + ")\">Chi tiết</button>" +
-                        "</td>" +
-                        "<td>" +
-                        "<button class='btn btn-primary' onclick=\"showUpdateStorageForm(" + storage.id + ")\">Cập nhật</button>" +
-                        "</td>" +
-                        "<td>" +
-                        "<button class='btn btn-danger' onclick=\"deleteStorage(" + storage.id + ")\">Xóa</button>" +
-                        "</td>" +
-                        "</tr>");
-                });
-            },
-            error: function () {
-                alert("Error while retrieving categories.");
-            }
-        });
-    }
-
-    function deleteCategory(id) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Bạn có chắc muốn xóa danh mục này không?',
-            showCancelButton: true,
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const url = '/api/v1/category/' + id + '/delete/';
-                doDeleteAjax(url)
-                    .then(response => {
-                        if (response.status === 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Xóa danh mục thành công ✔️!',
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                renderTable();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi!',
-                                text: response.message
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        alert(error.message);
-                    });
-            }
-        });
-    }
-
-    async function doDeleteAjax(url) {
-        return $.ajax({
-            url: url,
-            type: 'DELETE',
-            dataType: 'json',
-        });
-    }
-
-    async function doPostAjax(url, formData) {
-        return $.ajax({
-            url: url,
-            type: 'PUT',
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            data: formData
-        });
-    }
-
-    async function doGetAjax(url, params = {}) {
-        return $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            data: params
-        });
-    }
-</script>
 </body>
 </html>

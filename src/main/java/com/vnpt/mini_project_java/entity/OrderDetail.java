@@ -1,5 +1,6 @@
 package com.vnpt.mini_project_java.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,7 @@ public class OrderDetail {
     @JoinColumn(name = "productID", insertable = true, updatable = true)
     private Product product;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;

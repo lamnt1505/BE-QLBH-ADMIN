@@ -28,7 +28,6 @@ public class ProductVersion {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
     @JoinColumn(name = "product_id")
     private Product product;
 }

@@ -81,10 +81,22 @@ public class StorageServiceImpl implements StorageService {
 					.orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
 			storage.setProduct(product);
 		}
-		
-		System.out.println("StorageDTO: " + storageDTO);
-		System.out.println("idImport: " + idImport);
-		
 		return storageRepository.save(storage);
+	}
+	@Override
+	public Storage getImportById(long idImport) {
+		Optional<Storage> result = storageRepository.findById(idImport);
+		if (result.isPresent()) {
+			return result.get();
+		} else {
+			throw new RuntimeException("Product not found with ID: " + idImport);
+		}
+	}
+
+	@Override
+	public void deleteStorageById(long idImport) {
+		Storage storage = storageRepository.findById(idImport)
+				.orElseThrow(() -> new RuntimeException("Storage not found with id: " + idImport));
+		storageRepository.deleteById(idImport);
 	}
 }

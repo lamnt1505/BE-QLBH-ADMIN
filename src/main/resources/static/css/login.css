@@ -1,0 +1,55 @@
+.input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 350px;
+}
+
+.input-group .form-control {
+    border: none;
+    padding: 10px;
+    width: 100%;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border: none;
+    padding-left: 5px;
+}
+
+.fa-info {
+    color: red;
+    font-size: 16px;
+}
+.home {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    padding-top: 15px;
+}
+.home a {
+    text-decoration: none;
+    font-size: 20px;
+}
+.home a:hover {
+    color: red;
+    text-decoration: underline;
+}
+.form-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+}
+.form-wrapper input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+}
+.form-wrapper .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

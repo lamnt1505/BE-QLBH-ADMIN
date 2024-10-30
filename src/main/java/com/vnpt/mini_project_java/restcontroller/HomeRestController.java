@@ -1,10 +1,8 @@
 package com.vnpt.mini_project_java.restcontroller;
 
-import com.vnpt.mini_project_java.criteria.ProductSearchCriteria;
+import com.vnpt.mini_project_java.dto.ProductSearchCriteriaDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.entity.*;
-import com.vnpt.mini_project_java.entity.Product.CartUpdateStatus;
-import com.vnpt.mini_project_java.respository.ProductRepository;
 import com.vnpt.mini_project_java.service.account.AccountService;
 import com.vnpt.mini_project_java.service.order.OrderService;
 import com.vnpt.mini_project_java.service.orderDetail.OrderDetailService;
@@ -16,8 +14,8 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class HomeRestController {
 
 	@Autowired
@@ -275,7 +273,6 @@ public class HomeRestController {
 		return "1";
 	}
 
-
 	@PostMapping("/cancel-order")
 	public ResponseEntity<String> cancelOrder(@RequestParam(name = "orderID") Long orderID) {
 		try {
@@ -293,18 +290,22 @@ public class HomeRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi");
 		}
 	}
-	
+
 	@PostMapping("/search")
-    public ResponseEntity<?> searchProducts(@RequestBody ProductSearchCriteria criteria, Pageable pageable) {
-        try {
-            Specification<Product> spec = ProductSpecifications.searchByCriteria(criteria);
-            Page<Product> products = productService.findAll(spec, pageable);
-            System.out.println("page" + products);
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("An error occurred while processing your request");
-        }
-    }
+	public ResponseEntity<?> searchProducts(@RequestBody ProductSearchCriteriaDTO criteria, Pageable pageable) {
+		try {
+			Specification<Product> spec = ProductSpecifications.searchByCriteria(criteria);
+
+			Page<Product> products = productService.findAll(spec, pageable);
+
+			Page<ProductDTO> productDTOs = products.map(ProductDTO::new);
+
+			return ResponseEntity.ok(productDTOs);
+		} catch (Exception e) {
+			System.out.println("Lỗi" + e);
+			return ResponseEntity.internalServerError().body("Đã xảy ra lỗi khi xử lý yêu cầu của bạn\n");
+		}
+	}
 	
 	private boolean cancelOrderLogic(Order order) {
 		Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -317,5 +318,4 @@ public class HomeRestController {
 			return false;
 		}
 	}
-
 }

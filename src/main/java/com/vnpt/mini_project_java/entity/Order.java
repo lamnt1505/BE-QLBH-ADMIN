@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Table(name = "order_info")
 @Getter
 @Setter
+@ToString(exclude = {"account", "orderDetails"})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,8 +54,8 @@ public class Order {
                 "orderID=" + orderID +
                 ", orderDateImport=" + orderDateImport +
                 ", orderTotal=" + orderTotal +
-                ", account=" + account +
-                ", orderDetails=" + orderDetails +
+                ", accountID=" + (account != null ? account.getAccountID() : "null") +
+                ", orderDetailsSize=" + (orderDetails != null ? orderDetails.size() : "null") +
                 '}';
     }
 

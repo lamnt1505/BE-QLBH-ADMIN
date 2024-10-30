@@ -9,12 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -25,7 +30,10 @@ public class AccountServiceImpl implements AccountService{
     
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
+
+	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
@@ -58,15 +66,40 @@ public class AccountServiceImpl implements AccountService{
     }
 
 	@Override
-	public String addAccount(AccountDTO accountDTO) {
+	public String addAccount(AccountDTO accountDTO, MultipartFile image) {
 
 		if (accountRepository.findByAccountName(accountDTO.getAccountName()) != null) {
-			return null;
+			throw new RuntimeException("Tài khoản đã tồn tại");
 		}
+
 		Account account = new Account();
 		account.setAccountID(accountDTO.getAccountID());
 		account.setAccountName(accountDTO.getAccountName());
 		account.setAccountPass(this.passwordEncoder.encode(accountDTO.getAccountPass()));
+		account.setDateOfBirth(LocalDate.parse(accountDTO.getDateOfBirth(),dateTimeFormatter));
+		account.setEmail(accountDTO.getEmail());
+		account.setUsername(accountDTO.getUsername());
+		account.setPhoneNumber(accountDTO.getPhoneNumber());
+		account.setLocal(accountDTO.getLocal());
+
+		String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();// xử lý tên file để tránh bị lặp
+		Path uploadDir = Paths.get("src/main/resources/static/images");
+
+		if (!Files.exists(uploadDir)) {
+			try {
+				Files.createDirectories(uploadDir);
+			} catch (IOException ex) {
+				throw new RuntimeException("Không thể tạo thư mục upload", ex);
+			}
+		}
+		Path filePath = uploadDir.resolve(fileName);
+		try {
+			image.transferTo(filePath);
+		} catch (IOException ex) {
+			throw new RuntimeException("Không thể lưu file hình ảnh", ex);
+		}
+		String imagePath = fileName;
+		account.setImage(imagePath);
 
 		accountRepository.save(account);
 		
@@ -87,7 +120,6 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println("Encoded password: " + encodedPassword);
 				if (isPwdRight) {
 					Optional<Account> acccount = accountRepository.findOneByAccountNameAndAccountPass(loginDTO.getAccountName(), encodedPassword);
-					
 					if (acccount.isPresent()) {
 						Account acc = acccount.get();
 						boolean isAdmin = acc.getIsAdmin();
@@ -96,10 +128,10 @@ public class AccountServiceImpl implements AccountService{
 						return new LoginMesage("Login Failed", false, false);
 					}
 				} else {
-					return new LoginMesage("Incorrect password. Please check again!", false, false);
+					return new LoginMesage("Mật khẩu không chính xác.Vui lòng kiểm tra lại!", false, false);
 				}
 			} else {
-				return new LoginMesage("Email or login account is incorrect", false, false);
+				return new LoginMesage("Email hoặc tài khoản đăng nhập không chính xác", false, false);
 			}
 	}
 }	

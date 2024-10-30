@@ -2,10 +2,10 @@ package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.dto.TrademarkDTO;
 import com.vnpt.mini_project_java.entity.Trademark;
-import com.vnpt.mini_project_java.service.product.ProductService;
 import com.vnpt.mini_project_java.service.trademark.TrademarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/trademark")
+@RequestMapping(value = "/api/trademark", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TrademarkRestController {
 
     @Autowired
@@ -50,11 +50,11 @@ public class TrademarkRestController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<TrademarkDTO> updateTrademark(@PathVariable long id, TrademarkDTO trademarkDTO){
+    public ResponseEntity<TrademarkDTO> updateTrademark(@PathVariable long id,@RequestBody TrademarkDTO trademarkDTO){
        try{
            Trademark trademark = trademarkService.updateTramemark(id,trademarkDTO);
            TrademarkDTO updateDTO = new TrademarkDTO(trademark);
-           System.out.println(updateDTO);
+           System.out.println("Updated Trademark: " + trademark.getTradeName());
            return ResponseEntity.ok(updateDTO);
        }catch (EntityNotFoundException ex){
            System.out.println("Error" + ex.getMessage());

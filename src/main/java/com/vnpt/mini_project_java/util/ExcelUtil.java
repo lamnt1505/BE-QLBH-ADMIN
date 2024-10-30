@@ -13,6 +13,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,19 @@ public class ExcelUtil {
 
                 String name = nameCell.getStringCellValue();
                 String description = descriptionCell.getStringCellValue();
-                LocalDate dateProduct = dateCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                //LocalDate dateProduct = dateCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate dateProduct = null;
+                if (dateCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(dateCell)) {
+                    dateProduct = dateCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                } else if (dateCell.getCellType() == CellType.STRING) {
+                    String dateStr = dateCell.getStringCellValue();
+                    try {
+                        dateProduct = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    } catch (DateTimeParseException e) {
+                        System.err.println("Invalid date format at row " + row.getRowNum() + ": " + dateStr);
+                        continue;
+                    }
+                }
                 double price = priceCell.getNumericCellValue();
                 Long categoryId = (long) categoryIdCell.getNumericCellValue();
                 String categoryName = categoryNameCell.getStringCellValue();

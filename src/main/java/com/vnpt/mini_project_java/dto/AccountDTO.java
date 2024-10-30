@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +36,10 @@ public class AccountDTO {
 
     private String imageBase64;
 
+    private String local;
+
+    private String email;
+
     private boolean isAdmin;
 
 
@@ -42,11 +47,16 @@ public class AccountDTO {
     }
 
     public AccountDTO(Account account,Long accountID, String accountName, String accountPass, String accountStatus,
-                      Set<Cart> carts, Set<ProductVote> productVotes, Set<Order> orders, boolean isAdmin, String dateOfBirth) {
+                      Set<Cart> carts, Set<ProductVote> productVotes, Set<Order> orders, boolean isAdmin, String dateOfBirth,
+                      String username, String email, String phoneNumber, String local) {
         this.accountID = accountID;
         this.accountName = accountName;
         this.accountPass = accountPass;
         this.dateOfBirth = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(account.getDateOfBirth());
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.local = local;
         this.isAdmin = isAdmin;
         String imagePath = "src/main/resources/static/images/" + account.getImage();
         try {

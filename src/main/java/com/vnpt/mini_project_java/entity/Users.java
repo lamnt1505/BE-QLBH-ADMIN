@@ -19,11 +19,11 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
 
+    private String userPass;
+
     private String accountName;
 
 	private String phone;
-	
-    private String userPass;
 
     @Column(columnDefinition = "bit default 1")
     private boolean role;
@@ -33,10 +33,13 @@ public class Users {
     
 	private boolean gender;
 	
-	@Column(name = "date_product")
+	@Column(name = "birthday")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthday;
 	
 	@Column(columnDefinition = "nvarchar(150)")
 	private String address;
+
+    @Column(name = "email")
+    private String email;
 }

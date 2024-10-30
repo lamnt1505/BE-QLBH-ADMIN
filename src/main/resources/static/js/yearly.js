@@ -4,7 +4,6 @@ $(document).ready(function() {
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-
             renderChart(data);
         },
         error: function() {
@@ -16,28 +15,69 @@ $(document).ready(function() {
 function renderChart(data) {
     var year = data.map(item => item.year);
     var orderCount = data.map(item => item.orderCount);
-
     Highcharts.chart('container', {
         chart: {
-            type: 'spline'
+            backgroundColor: '#667fff',
+            type: 'spline',
+            borderRadius: 10,
         },
         title: {
-            text: 'Yearly Statistics'
+            text: 'Thống Kê Hàng Năm',
+            style: {
+                fontSize: '20px',
+                color: '#333'
+            }
         },
         xAxis: {
             categories: year,
             title: {
-                text: 'Year'
-            }
+                text: 'Năm',
+                style: {
+                    fontSize: '14px',
+                    color: '#666'
+                }
+            },
+            lineColor: '#999',
+            tickColor: '#999'
         },
         yAxis: {
             title: {
-                text: 'Order Count'
+                text: 'Số Lượng Đơn Hàng',
+                style: {
+                    fontSize: '14px',
+                    color: '#666'
+                }
+            },
+            gridLineDashStyle: 'dash',
+            gridLineColor: '#ddd',
+            tickInterval: 10,
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' đơn hàng'
+        },
+        plotOptions: {
+            spline: {
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        color: '#333'
+                    }
+                },
+                enableMouseTracking: true
             }
         },
         series: [{
-            name: 'Order Count',
-            data: orderCount
+            name: 'Số Lượng Đơn Hàng',
+            data: orderCount,
+            color: '#007bff',
+            marker: {
+                radius: 5,
+                symbol: 'circle',
+                fillColor: '#fff',
+                lineWidth: 2,
+                lineColor: '#007bff'
+            }
         }]
     });
 }

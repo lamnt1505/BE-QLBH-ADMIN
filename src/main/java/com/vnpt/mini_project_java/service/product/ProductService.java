@@ -1,6 +1,6 @@
 package com.vnpt.mini_project_java.service.product;
 
-import com.vnpt.mini_project_java.criteria.ProductSearchCriteria;
+import com.vnpt.mini_project_java.dto.ProductSearchCriteriaDTO;
 import com.vnpt.mini_project_java.dto.CompareProductDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
 
@@ -22,13 +22,16 @@ public interface ProductService {
     List<CompareProductDTO> getAllCompare();
 
 
-    ProductDTO createProduct(ProductDTO dto, MultipartFile image);// từ lớp service này mình gọi qua để sử dụng api 
+    ProductDTO createProduct(ProductDTO dto, MultipartFile image);
 
     void deleteProductById(long id);
 
     Product updateProduct(long id, ProductDTO dto,MultipartFile image);
 
     Product getProductById(long productID);
+
+
+    Page<ProductDTO> getPaginatedProducts(Pageable pageable);
 
     List<ProductDTO> getProductsByCategoryId(Long categoryID);
 
@@ -55,7 +58,7 @@ public interface ProductService {
 
     List<Product> compareList = new ArrayList<>();
 
-    List<Product> searchProducts(ProductSearchCriteria criteria);
+    List<Product> searchProducts(ProductSearchCriteriaDTO criteria);
 
 	Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 }

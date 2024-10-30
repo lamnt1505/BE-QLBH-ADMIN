@@ -3,17 +3,15 @@ package com.vnpt.mini_project_java.restcontroller;
 import javax.persistence.EntityNotFoundException;
 
 import com.vnpt.mini_project_java.dto.CategoryDTO;
+import com.vnpt.mini_project_java.dto.ProductDTO;
+import com.vnpt.mini_project_java.entity.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.vnpt.mini_project_java.dto.StorageDTO;
 import com.vnpt.mini_project_java.entity.Storage;
@@ -24,6 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/storage", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StorageRestcontroller {
+
+	private static final Logger logger = LoggerFactory.getLogger(ProductRestController.class);
 
 	@Autowired
 	private final StorageService storageService;
@@ -44,7 +44,7 @@ public class StorageRestcontroller {
     }
 
     @PostMapping("/add")
-	public ResponseEntity<StorageDTO> createStorage(@RequestBody StorageDTO dto) {
+	public ResponseEntity<StorageDTO> createStorage(@ModelAttribute StorageDTO dto) {
 		try {
 			StorageDTO createdStorage = storageService.createStorage(dto);
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdStorage);
@@ -54,7 +54,7 @@ public class StorageRestcontroller {
 	}
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<StorageDTO> updateStorage(@PathVariable long id, StorageDTO storageDTO){
+    public ResponseEntity<StorageDTO> updateStorage(@PathVariable long id,@ModelAttribute  StorageDTO storageDTO){
     	try {
     		Storage storage = storageService.updateStorage(id, storageDTO);
     		
@@ -66,5 +66,22 @@ public class StorageRestcontroller {
             
 		}
     }
-    
+	@DeleteMapping ("/delete/{id}")
+	public ResponseEntity<String> deleteProduct(@PathVariable long id) {
+		try {
+			logger.info("Người dùng {} đang xóa sản phẩm có ID: {}",id);
+			storageService.deleteStorageById(id);
+			return ResponseEntity.ok().body("{\"status\":\"success\"}");
+		} catch (EntityNotFoundException ex) {
+			//System.out.println("Error" + ex.getMessage());
+			return ResponseEntity.noContent().build();
+		}
+	}
+
+	@GetMapping("/{id}/get")
+	public ResponseEntity<StorageDTO> getStorageById(@PathVariable(name = "id") Long idImport) {
+		Storage storage = storageService.getImportById(idImport);
+		StorageDTO storageResponse = new StorageDTO(storage);
+		return ResponseEntity.ok().body(storageResponse);
+	}
 }
