@@ -42,8 +42,18 @@ public class ProductDTO {
     private String memory;
     
     private String color;
+
+    private String productBluetooth;
+
+    private String productScreen;
+
+    private String productWifi;
+
+    private String productCamera;
     
     private Long tradeID;
+
+    private Long productDetailID;
 
     private Long versionID;
 
@@ -53,8 +63,9 @@ public class ProductDTO {
 
     private double price;
 
-    @JsonManagedReference
     private Set<ProductVersionDTO> productVersions;
+
+    private Set<ProductDetailDTO> productDetails;
 
     @Transient
     private int amount;
@@ -93,6 +104,9 @@ public class ProductDTO {
                 .map(ProductVersionDTO::new)
                 .collect(Collectors.toSet());
 
-        System.out.println("Product Versions Retrieved: " + this.productVersions);
+        this.productDetails = product.getProductDetails().stream()
+                .map(ProductDetailDTO::new)
+                .collect(Collectors.toSet());
+        System.out.println("Product Versions Retrieved: " + this.productDetails);
     }
 }

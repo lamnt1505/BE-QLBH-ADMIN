@@ -51,7 +51,13 @@ public class Product {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ProductVersion> productVersions = new HashSet<>();
+    @JsonIgnore
+    private Set<ProductVersion> productVersions;
+
+    @JsonManagedReference
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ProductDetail> productDetails ;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -59,10 +65,6 @@ public class Product {
     @JoinColumn(name = "trade_id")
     private Trademark trademark;
 
-    @JsonManagedReference
-    @JsonIgnore
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ProductDetail> productDetails = new HashSet<>();
 
     @JsonManagedReference
     @JsonIgnore

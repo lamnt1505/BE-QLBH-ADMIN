@@ -24,6 +24,8 @@ public class ProductSearchCriteriaDTO {
 
     private List<Long> versionID;
 
+    private List<Long> productDetailID;
+
     private Long productID;
     
     private String color;
@@ -38,16 +40,19 @@ public class ProductSearchCriteriaDTO {
 
     private Set<ProductVersionDTO> productVersions;
 
+    private Set<ProductDetailDTO> productDetails;
+
     public ProductSearchCriteriaDTO() {
     }
 
-    public ProductSearchCriteriaDTO(List<Long> categoryID,List<Long> versionID,List<Long> tradeID, Long productID, String categoryName, String memory, String color, String price,
+    public ProductSearchCriteriaDTO(List<Long> categoryID,List<Long> versionID, List<Long> productDetailID, List<Long> tradeID, Long productID, String categoryName, String memory, String color, String price,
                                     String productCamera, String productScreen, String productBluetooth, String productName) {
         this.productName = productName;
         this.categoryID = categoryID;
         this.tradeID = tradeID;
         this.productID = productID;
         this.versionID = versionID;
+        this.productDetailID = productDetailID;
         this.categoryName = categoryName;
         this.memory = memory;
         this.color = color;

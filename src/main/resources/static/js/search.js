@@ -59,11 +59,35 @@ function loadDropdownData() {
         console.error("Lỗi khi lấy dữ liệu phiên bản sản phẩm: ", error);
     });
 }
+$(document).ready(function() {
+    $.ajax({
+        url: "/api/v1/productdetail/Listgetall",
+        method: "GET",
+        dataType: "json"
+    }).done(function(response) {
+        response.forEach(function(productDetail) {
+            $('#details-Dropdown').append(
+                '<li><label class="dropdown-item">' +
+                '<input type="checkbox" class="detail-checkbox" id="product-' + productDetail.productDetailID + '" value="' + productDetail.productDetailID + '"> ' +
+                ' - Camera: ' + productDetail.productCamera + ' - Wifi: ' + productDetail.productWifi +
+                ' - Scereen: ' + productDetail.productScreen + ' - Bluetooh: ' + productDetail.productBluetooth +
+                '</label></li>'
+            );
+        });
+    }).fail(function(error) {
+        console.error("Lỗi khi lấy dữ liệu danh mục: ", error);
+    });
+});
 function searchProducts() {
 
     let selectedTrademarks = [];
     $('.trademark-checkbox:checked').each(function() {
         selectedTrademarks.push($(this).val());
+    });
+
+    let selectedDetails = [];
+    $('.detail-checkbox:checked').each(function() {
+        selectedDetails.push($(this).val());
     });
 
     let selectedCategories = [];
@@ -79,7 +103,8 @@ function searchProducts() {
     let criteria = {
         tradeID: selectedTrademarks,
         categoryID: selectedCategories,
-        versionID: selectedVersions
+        versionID: selectedVersions,
+        productDetailID: selectedDetails
     };
 
     console.log("Dữ liệu tìm kiếm gửi đến API:", criteria);

@@ -17,6 +17,7 @@ public class ProductVote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_vote_id")
     private Long productVoteID;
+
     private String deristion;
 
     @JsonBackReference

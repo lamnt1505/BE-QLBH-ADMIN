@@ -2,6 +2,9 @@ package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.dto.AccountDTO;
 import com.vnpt.mini_project_java.dto.LoginDTO;
+import com.vnpt.mini_project_java.dto.ProductDTO;
+import com.vnpt.mini_project_java.entity.Account;
+import com.vnpt.mini_project_java.entity.Product;
 import com.vnpt.mini_project_java.response.LoginMesage;
 import com.vnpt.mini_project_java.service.account.AccountService;
 
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,8 +40,12 @@ public class AccountRestController {
 	
 	@Autowired
     private AccountService accountService;
-	
-	@PostMapping(path = "/save", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @GetMapping("/Listgetall")
+    public ResponseEntity<List<AccountDTO>> getList() {
+        List<AccountDTO> accountDTOS = accountService.getAllAccountDTO();
+        return ResponseEntity.ok(accountDTOS);
+    }
+	@PostMapping(path = "/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Map<String, String>> addAccount(@ModelAttribute  AccountDTO accountDTO, @RequestParam("image") MultipartFile image){
         try {
             String accountName = accountService.addAccount(accountDTO, image);
@@ -51,20 +59,49 @@ public class AccountRestController {
         }
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateAccount(
+            @PathVariable("id") Long accountID,
+            @ModelAttribute AccountDTO accountDTO,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        try {
+            accountDTO.setAccountID(accountID);
+            accountService.updateAccount(accountID,accountDTO, image);
+            return ResponseEntity.ok("Cập nhật tài khoản thành công");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi cập nhật tài khoản");
+        }
+    }
+    @GetMapping("/{id}/get")
+    public ResponseEntity<AccountDTO> getProductById(@PathVariable(name = "id") Long accountID) {
+        Account account = accountService.getAccountById(accountID);
+        AccountDTO accountResponse = new AccountDTO(account);
+        return ResponseEntity.ok().body(accountResponse);
+    }
     @PostMapping(path = "/login")
     public ResponseEntity<LoginMesage> loginEmployee(@RequestBody LoginDTO loginDTO , HttpServletResponse response){
+
     	LoginMesage  loginResponse = accountService.loginAccount(loginDTO);
     	HttpHeaders headers = new HttpHeaders();
+
     	if (loginResponse.isSuccess()) {
+
             Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
             cookie.setPath("/");
             cookie.setHttpOnly(true);
             cookie.setMaxAge(24 * 60 * 60);
             response.addCookie(cookie);
+
             if (loginResponse.isAdmin()) {
-            	headers.setLocation(URI.create("/user"));
-            } else {
                 headers.setLocation(URI.create("/admin"));
+            } else if (loginResponse.isUser()) {
+                headers.setLocation(URI.create("/user"));
+            } else if (loginResponse.isUserVip()) {
+                headers.setLocation(URI.create("/user-vip"));
+            } else {
+                headers.setLocation(URI.create("/"));
             }
             logger.info("Người dùng đã đăng nhập thành công", loginDTO.getAccountName(), java.time.LocalDateTime.now());
         } else {
@@ -73,6 +110,7 @@ public class AccountRestController {
         ResponseEntity<LoginMesage> entity = new ResponseEntity<>(loginResponse,headers,HttpStatus.OK);
         return entity;
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {

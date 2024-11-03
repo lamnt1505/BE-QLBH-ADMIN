@@ -7,29 +7,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hệ Thống Mua Sắm Điện Tử</title>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
-          type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet'
-          type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet'
-          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
-
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
-
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
+    <style type="text/css">
+        /* Thêm CSS cho giao diện */
         .center-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 60vh;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .auth-wrap {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .auth-col h2 {
+            text-align: center;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #495057;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        #imagePreview {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -85,40 +142,66 @@
         </div>
     </div>
 </div>
-    <main class="center-wrapper">
-        <section >
+<main class="center-wrapper">
+    <section>
         <div class="auth-wrap">
             <div class="auth-col">
                 <h2>CẬP NHẬT TÀI KHOẢN</h2>
-                <form th:action="@{/updateProfile}" th:object="${account}" method="post" role="form">
-                    <input type="hidden" th:field="*{accountID}">
-                    <p>
-                        <label for="accountName">Username:</label>
-                        <input type="text" id="accountName" name="accountName"
-                               placeholder="Tài Khoản"
-                               th:required="required" th:field="*{accountName}" readonly="readonly">
-                    </p>
-                    <p>
-                        <label for="accountPhone">Phone:</label>
-                        <input type="text" id="accountPhone" name="accountPhone"
-                               placeholder="Họ và Tên"
-                               th:required="required" th:field="*{accountPhone}">
-                    </p>
-                    <p>
-                        <label for="accountPass">Password:</label>
-                        <input type="password" id="accountPass" name="accountPass"
-                               placeholder="Nhập Mật Khẩu Mới"
-                               th:required="required" th:field="*{accountPass}">
+                <form id="accountForm">
+                    <input type="hidden" id="accountID" th:value="${account.accountID}">
 
-                    </p>
-                    <p class="auth-submit">
-                        <button class="add_to_cart_button">Cập Nhật</button>
-                    </p>
+                    <div class="form-group">
+                        <label for="accountName">Tên tài khoản</label>
+                        <input type="text" id="accountName" class="form-control" placeholder="Nhập tên tài khoản" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Số điện thoại</label>
+                        <input type="tel" id="phoneNumber" class="form-control" placeholder="Nhập số điện thoại">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Họ và Tên</label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Nhập họ và tên">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="Nhập email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="local">Địa chỉ</label>
+                        <input type="text" id="local" class="form-control" placeholder="Nhập địa chỉ">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateOfBirth">Ngày sinh</label>
+                        <input type="date" id="dateOfBirth" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountPass">Mật khẩu mới (để trống nếu không thay đổi)</label>
+                        <input type="password" id="accountPass" class="form-control" placeholder="Nhập mật khẩu mới">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmAccountPass">Xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirmAccountPass" class="form-control" placeholder="Xác nhận mật khẩu mới">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Ảnh đại diện</label>
+                        <input type="file" id="image" class="form-control" accept="image/*">
+                        <img id="imagePreview" src="#" alt="Profile Image" style="display: none;">
+                    </div>
+
+                    <button type="button" id="updateButton" class="btn btn-primary">Cập nhật</button>
                 </form>
             </div>
         </div>
     </section>
-    </main>
+</main>
 <footer th:replace="fragment/footer::footer"></footer>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
@@ -126,7 +209,19 @@
 <script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/bxslider.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/updateProfile.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="text/javascript">
+    document.getElementById('image').addEventListener('change', function (event) {
+        const [file] = event.target.files;
+        if (file) {
+            const preview = document.getElementById('imagePreview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+</script>
 </body>
 </html>

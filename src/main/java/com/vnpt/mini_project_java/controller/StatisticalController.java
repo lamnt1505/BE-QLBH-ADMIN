@@ -46,10 +46,12 @@ public class StatisticalController {
         if (accountName != null) {
             Optional<Account> userOptional = this.accountService.findByname(accountName);
             if (userOptional.isPresent()) {
-                Account user = userOptional.get();
-                if (user.getIsAdmin()) {
+                Account account = userOptional.get();
+                String imageBase64 = account.getImageBase64();
+                if (account.isAdmin()) {
                     model.addAttribute("username", accountName);
-                    model.addAttribute("accountName", user.getAccountName());
+                    model.addAttribute("accountName", account.getAccountName());
+                    model.addAttribute("image", imageBase64);
                     model.addAttribute("years", statisticalService.statisticalForYear());
                     model.addAttribute("products", statisticalService.statisticalForProduct());
                     model.addAttribute("months", statisticalService.statisticalForMonth());

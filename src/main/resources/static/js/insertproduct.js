@@ -15,6 +15,9 @@ $(document).on('click', '.procart', function (e) {
             backgroundColor: 'green',
             stopOnFocus: true,
         }).showToast();
+        $.get("/cart/quantity", function(cartQuantity) {
+            $("#cartQuantity").text(cartQuantity);
+        });
     })
         .fail(function (error) {
             Toastify({

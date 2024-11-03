@@ -145,10 +145,12 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <h8 style="color: black;">Xin Chào:
+                <h8 style="color: #4a4a4a; font-weight: bold; font-size: 1.2rem;">
+                    <i class="fas fa-user-circle" style="color: #4caf50; margin-right: 8px;"></i>
+                        Xin Chào:
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${accountName}"></span>
                 </h8>
-                <img class="img-profile rounded-circle" th:src="'data:image/jpeg;base64,' + ${imageUrl}" alt="User Image">
+                <img class="img-profile rounded-circle" th:src="'data:image/jpeg;base64,' + ${image}" alt="User Image">
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">

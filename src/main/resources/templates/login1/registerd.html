@@ -7,75 +7,13 @@
     <title>Hệ Thống Mua Sắm Điện Tử</title>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style3.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/registerd.css}">
     <link rel="stylesheet" href="/resources/fonts/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #eaeaea;
-            margin: 0;
-            padding: 50px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .form-wrapper {
-            position: relative;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            transition: border-color 0.3s;
-        }
-
-        .form-wrapper input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            outline: none;
-            border-radius: 5px;
-        }
-
-        .form-wrapper input:focus {
-            border-color: rgb(8, 167, 100);
-        }
-
-        .form-wrapper i {
-            position: absolute;
-            top: 12px;
-            right: 10px;
-            font-size: 18px;
-            color: #ccc;
-        }
-
-        .auth-submit {
-            background-color: rgb(8, 167, 100);
-            color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .auth-submit:hover {
-            background-color: #0a5f3b;
-        }
-
-        .error {
-            color: red;
-            font-size: 12px;
-            height: 18px;
-        }
-    </style>
 </head>
 <body>
-
 <div class="wrapper" th:style="'background-image: url(' + @{/resources/images/e-commerce-la-gi-02.png} + ');'" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
     <div class="inner" style="width: 600px; display: flex; justify-content: center; align-items: center; background-color: #f9f9f9; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
         <form id="registrationForm" enctype="multipart/form-data" style="width: 100%;">
@@ -157,45 +95,6 @@
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-    function registerAccount() {
-        var formData = new FormData(document.getElementById("registrationForm"));
-        $.ajax({
-            type: "POST",
-            url: "/api/v1/account/save",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                Toastify({
-                    text: "Đã Đăng Ký Thành Công",
-                    duration: 3000,
-                    close: true,
-                    gravity: "top",
-                    position: "center",
-                    backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-                    stopOnFocus: true,
-                }).showToast();
-                setTimeout(function() {
-                    window.location.href = "/login";
-                }, 3000);
-            },
-            error: function(xhr, status, error) {
-                console.log("Status: " + status);
-                console.log("Error: " + error);
-                console.log("Response: " + xhr.responseText);
-                Toastify({
-                    text: "Đăng Ký Thất Bại: " + xhr.responseText,
-                    duration: 3000,
-                    close: true,
-                    gravity: "top",
-                    position: "center",
-                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-                    stopOnFocus: true,
-                }).showToast();
-            }
-        });
-    }
-</script>
+<script type="text/javascript" th:src="@{/resources/js/registerd.js}"></script>
 </body>
 </html>

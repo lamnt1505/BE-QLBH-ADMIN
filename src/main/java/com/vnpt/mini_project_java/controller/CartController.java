@@ -55,7 +55,7 @@ public class CartController {
                 Optional<Account> accountOptional = this.accountService.findByname(cookies[i].getValue());
                 if (accountOptional.isPresent()) {
                     Account account = accountOptional.get();
-                    model.addAttribute("accountName", account.getAccountName());
+                    model.addAttribute("accountName", account.getUsername());
                     id = account.getAccountID();
                 }
 
@@ -82,7 +82,7 @@ public class CartController {
         for (int i = 0; i < cookies.length; i++) {
             if (cookies[i].getName().equals("accountName")) {
                 Account account = this.accountService.findByname(cookies[i].getValue()).get();
-                model.addAttribute("accountName", account.getAccountName());
+                model.addAttribute("accountName", account.getUsername());
                 if (account != null) {
                     id = account.getAccountID();
                 }

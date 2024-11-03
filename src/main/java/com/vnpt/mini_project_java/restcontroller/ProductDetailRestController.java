@@ -6,6 +6,7 @@ import com.vnpt.mini_project_java.service.productDetail.ProductDetailService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/productdetail")
+@RequestMapping(value = "/api/v1/productdetail", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductDetailRestController {
     @Autowired
     private ProductDetailService productDetailService;

@@ -53,7 +53,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 orElseThrow(() -> new RuntimeException("Product not found with id:" + productId));
 
         ProductDetail productDetail = new ProductDetail();
-        productDetail.setProductDetailID(dto.getId());
+        productDetail.setProductDetailID(dto.getProductDetailID());
         productDetail.setProductCamera(dto.getProductCamera());
         productDetail.setProductWifi(dto.getProductWifi());
         productDetail.setProductScreen(dto.getProductScreen());

@@ -20,50 +20,65 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class AccountServiceImpl implements AccountService{
-    
-	
+public class AccountServiceImpl implements AccountService {
+
+
 	@Autowired
-    private final AccountRepository accountRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	private final AccountRepository accountRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-    public AccountServiceImpl(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
-    @Override
-    public List<Account> findAll() {
-        return accountRepository.findAll();
-    }
+	public AccountServiceImpl(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    @Override
-    @Query(value = "SELECT * FROM account  WHERE account_phone = ?", nativeQuery = true)
-    public Optional<Account> findByphone(String phone) {
-        return accountRepository.findByphone(phone);
-    }
+	@Override
+	public List<Account> findAll() {
+		return accountRepository.findAll();
+	}
 
-    @Override
-    public Account findByAccountName(String accountName){
-        return accountRepository.findByAccountName(accountName);
-    }
+	@Override
+	@Query(value = "SELECT * FROM account  WHERE account_phone = ?", nativeQuery = true)
+	public Optional<Account> findByphone(String phone) {
+		return accountRepository.findByphone(phone);
+	}
 
-    @Override
-    public Optional<Account> findByname(String accountName) {
-        return accountRepository.findByname(accountName);
-    }
+	@Override
+	public Account findByAccountName(String accountName) {
+		return accountRepository.findByAccountName(accountName);
+	}
 
-    @Override
-    public Optional<Account> findById(Long accountID) {
-        return accountRepository.findById(accountID);
-    }
+	@Override
+	public Optional<Account> findByname(String accountName) {
+		return accountRepository.findByname(accountName);
+	}
+	@Override
+	public List<AccountDTO> getAllAccountDTO() {
+		List<Account> accounts = accountRepository.findAll();
+		return accounts.stream().map(AccountDTO::new).collect(Collectors.toList());
+	}
+	@Override
+	public Optional<Account> findById(Long accountID) {
+		return accountRepository.findById(accountID);
+	}
+	@Override
+	public Account getAccountById(long accountID) {
+		Optional<Account> result = accountRepository.findById(accountID);
+		if (result.isPresent()) {
+			return result.get();
+		} else {
+			throw new RuntimeException("Product not found with ID: " + accountID);
+		}
+	}
 
 	@Override
 	public String addAccount(AccountDTO accountDTO, MultipartFile image) {
@@ -73,65 +88,112 @@ public class AccountServiceImpl implements AccountService{
 		}
 
 		Account account = new Account();
+
 		account.setAccountID(accountDTO.getAccountID());
 		account.setAccountName(accountDTO.getAccountName());
 		account.setAccountPass(this.passwordEncoder.encode(accountDTO.getAccountPass()));
-		account.setDateOfBirth(LocalDate.parse(accountDTO.getDateOfBirth(),dateTimeFormatter));
+		account.setDateOfBirth(LocalDate.parse(accountDTO.getDateOfBirth(), dateTimeFormatter));
 		account.setEmail(accountDTO.getEmail());
 		account.setUsername(accountDTO.getUsername());
 		account.setPhoneNumber(accountDTO.getPhoneNumber());
 		account.setLocal(accountDTO.getLocal());
 
-		String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();// xử lý tên file để tránh bị lặp
-		Path uploadDir = Paths.get("src/main/resources/static/images");
+		account.setTypeAccount("USER");
 
-		if (!Files.exists(uploadDir)) {
-			try {
-				Files.createDirectories(uploadDir);
-			} catch (IOException ex) {
-				throw new RuntimeException("Không thể tạo thư mục upload", ex);
+		if (image != null && !image.isEmpty()) {
+			String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+			Path uploadDir = Paths.get("src/main/resources/static/images");
+
+			if (!Files.exists(uploadDir)) {
+				try {
+					Files.createDirectories(uploadDir);
+				} catch (IOException ex) {
+					throw new RuntimeException("Không thể tạo thư mục upload", ex);
+				}
 			}
+			Path filePath = uploadDir.resolve(fileName);
+			try {
+				image.transferTo(filePath);
+			} catch (IOException ex) {
+				throw new RuntimeException("Không thể lưu file hình ảnh", ex);
+			}
+			String imagePath = fileName;
+			account.setImage(imagePath);
 		}
-		Path filePath = uploadDir.resolve(fileName);
-		try {
-			image.transferTo(filePath);
-		} catch (IOException ex) {
-			throw new RuntimeException("Không thể lưu file hình ảnh", ex);
-		}
-		String imagePath = fileName;
-		account.setImage(imagePath);
 
 		accountRepository.save(account);
-		
 		return account.getAccountName();
 	}
 
 	@Override
+	public void updateAccount(long accountID,AccountDTO accountDTO, MultipartFile image) {
+		Account account = accountRepository.findById(accountDTO.getAccountID())
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với ID: " + accountDTO.getAccountID()));
+
+		account.setAccountName(accountDTO.getAccountName());
+		account.setAccountPass(passwordEncoder.encode(accountDTO.getAccountPass()));
+		account.setDateOfBirth(LocalDate.parse(accountDTO.getDateOfBirth(), DateTimeFormatter.ISO_DATE));
+		account.setEmail(accountDTO.getEmail());
+		account.setUsername(accountDTO.getUsername());
+		account.setPhoneNumber(accountDTO.getPhoneNumber());
+		account.setLocal(accountDTO.getLocal());
+
+		if (image != null && !image.isEmpty()) {
+			String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+			Path uploadDir = Paths.get("src/main/resources/static/images");
+
+			try {
+				if (!Files.exists(uploadDir)) {
+					Files.createDirectories(uploadDir);
+				}
+				Path filePath = uploadDir.resolve(fileName);
+				image.transferTo(filePath);
+				account.setImage(fileName);
+			} catch (IOException e) {
+				throw new RuntimeException("Không thể lưu hình ảnh", e);
+			}
+		}
+		accountRepository.save(account);
+	}
+
+	@Override
 	public LoginMesage loginAccount(LoginDTO loginDTO) {
-			String msg = "";
-			
-			Account account1 = accountRepository.findByAccountName(loginDTO.getAccountName());
-			
-			if (account1 != null) {
-				String password = loginDTO.getAccountPass();
-				String encodedPassword = account1.getAccountPass();
-				Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-				System.out.println("Entered password: " + password);
-				System.out.println("Encoded password: " + encodedPassword);
-				if (isPwdRight) {
-					Optional<Account> acccount = accountRepository.findOneByAccountNameAndAccountPass(loginDTO.getAccountName(), encodedPassword);
-					if (acccount.isPresent()) {
-						Account acc = acccount.get();
-						boolean isAdmin = acc.getIsAdmin();
-						return new LoginMesage("Login Success", true, isAdmin);
+		String msg = "";
+
+		Account account1 = accountRepository.findByAccountName(loginDTO.getAccountName());
+
+		if (account1 != null) {
+			String password = loginDTO.getAccountPass();
+			String encodedPassword = account1.getAccountPass();
+
+			Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
+
+			if (isPwdRight) {
+				Optional<Account> acccount = accountRepository.findOneByAccountNameAndAccountPass(loginDTO.getAccountName(), encodedPassword);
+				if (acccount.isPresent()) {
+					Account acc = acccount.get();
+
+					String typeAccount = acc.getTypeAccount();
+
+					boolean isAdmin = typeAccount.equals(Account.ADMIN);
+					boolean isUser = typeAccount.equals(Account.USER);
+					boolean isUserVip = typeAccount.equals(Account.USER_VIP);
+
+					if (isAdmin) {
+						return new LoginMesage("Login Success", true, true, false, false);
+					} else if (isUser || isUserVip) {
+						return new LoginMesage("Login Success", true, false, true, false);
 					} else {
-						return new LoginMesage("Login Failed", false, false);
+						return new LoginMesage("Login Success", true, false, false, true);
 					}
 				} else {
-					return new LoginMesage("Mật khẩu không chính xác.Vui lòng kiểm tra lại!", false, false);
+					return new LoginMesage("Login Failed", false, false, false, false);
 				}
 			} else {
-				return new LoginMesage("Email hoặc tài khoản đăng nhập không chính xác", false, false);
+				return new LoginMesage("Incorrect password. Please check again!", false, false, false, false);
 			}
+		} else {
+			return new LoginMesage("Email or login account is incorrect", false, false, false, false);
+		}
 	}
-}	
+}

@@ -46,18 +46,17 @@ public class AccountDTO {
     public AccountDTO() {
     }
 
-    public AccountDTO(Account account,Long accountID, String accountName, String accountPass, String accountStatus,
-                      Set<Cart> carts, Set<ProductVote> productVotes, Set<Order> orders, boolean isAdmin, String dateOfBirth,
-                      String username, String email, String phoneNumber, String local) {
-        this.accountID = accountID;
-        this.accountName = accountName;
-        this.accountPass = accountPass;
+    public AccountDTO(Account account) {
+        this.accountID = account.getAccountID();
+        this.accountName = account.getAccountName();
+        this.accountPass = account.getAccountPass();
         this.dateOfBirth = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(account.getDateOfBirth());
-        this.username = username;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.local = local;
-        this.isAdmin = isAdmin;
+        this.username = account.getUsername();
+        this.email = account.getEmail();
+        this.phoneNumber = account.getPhoneNumber();
+        this.local = account.getLocal();
+        this.isAdmin = account.isAdmin();
+
         String imagePath = "src/main/resources/static/images/" + account.getImage();
         try {
             Path path = Paths.get(imagePath);

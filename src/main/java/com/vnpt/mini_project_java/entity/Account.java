@@ -58,16 +58,25 @@ public class Account {
     @Column(name = "date_of_birth")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
-    
-    @Column(name = "is_admin", columnDefinition = "bit default 1")
-    private Boolean  isAdmin;
-    
-    public Account(Long accountID, String accountName, String accountPhone, String accountPass, boolean isAdmin, String image,
-                   String username, String email, String phoneNumber, String local, LocalDate dateOfBirth, Set<Cart> carts, Set<ProductVote> productVotes, Set<Order> orders) {
+
+    @Column(name = "type_account")
+    private String typeAccount;
+
+    public static final String ADMIN = "ADMIN";
+
+    public static final String USER = "USER";
+
+    public static final String USER_VIP = "USER_VIP";
+
+    public Account() {
+    }
+
+    public Account(Long accountID, String accountName, String accountPass, String image,
+                   String username, String email, String phoneNumber, String local, LocalDate dateOfBirth, Set<Cart> carts, Set<ProductVote> productVotes,
+                   Set<Order> orders, String typeAccount) {
         this.accountID = accountID;
         this.accountName = accountName;
         this.accountPass = accountPass;
-        this.isAdmin = isAdmin;
         this.image = image;
         this.username = username;
         this.email = email;
@@ -77,10 +86,8 @@ public class Account {
         this.carts = carts;
         this.productVotes = productVotes;
         this.orders = orders;
+        this.typeAccount = typeAccount;
     }
-
-    public Account() {
-	}
 
 	@JsonManagedReference
     @JsonBackReference
@@ -97,9 +104,6 @@ public class Account {
     @OneToMany(mappedBy ="account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();
 
-	public boolean hasPermission(String string) {
-		return false;
-	}
 
     private String getImagesDir() {
         return System.getProperty("user.dir") + "/src/main/resources/static/images";
@@ -126,5 +130,17 @@ public class Account {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isAdmin() {
+        return ADMIN.equals(typeAccount);
+    }
+
+    public boolean isUser() {
+        return USER.equals(typeAccount);
+    }
+
+    public boolean isUserVip() {
+        return USER_VIP.equals(typeAccount);
     }
 }

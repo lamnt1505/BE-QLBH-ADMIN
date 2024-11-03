@@ -76,10 +76,12 @@ public class ManagerController {
                     Optional<Account> userOptional = accountService.findByname(cookie.getValue());
                     if (userOptional.isPresent()) {
                         Account account = userOptional.get();
+						String imageBase64 = account.getImageBase64();
 						model.addAttribute("account", account);
                         model.addAttribute("accountName", accountName);
                         model.addAttribute("fullname", account.getAccountName());
-                        if (account.getIsAdmin()) {
+						model.addAttribute("image", imageBase64);
+                        if (account.isAdmin()) {// này đang bị lỗi
                         	return "manager/category/listCategory";
                         } else {
                         	return "manager/category/listCategory";
@@ -96,20 +98,39 @@ public class ManagerController {
 	@GetMapping("/index")
 	public String getIndex(ModelMap model, @CookieValue(value = "accountName", required = true) String username) {
 	    Optional<Account> userOptional = accountService.findByname(username);
+
 	    if (userOptional.isPresent()) {
 	        Account user = userOptional.get();
+			String imageBase64 = user.getImageBase64();
 	        List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
 	        model.addAttribute("categoryList", categoryList);
 	        model.addAttribute("accountName", user.getAccountName());
 	        model.addAttribute("accountID", user.getAccountID());
-			model.addAttribute("imageUrl", "data:image/jpeg;base64," + user.getImageBase64());
+			model.addAttribute("image", imageBase64);
 	        return "manager/home/index";
 	    } else {
 	        return "redirect:/login";
 	    }
 	}
-
-
+	@GetMapping("/listAccount")
+	public String getAccount(ModelMap model, HttpServletRequest request) {
+		String accountName = getAccountNameFromCookies(request);
+		if (accountName != null) {
+			Optional<Account> userOptional = accountService.findByname(accountName);
+			if (userOptional.isPresent()) {
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
+				return "manager/account/listAccount";
+			} else {
+				return "manager/account/listAccount";
+			}
+		} else {
+			return "redirect:/login";
+		}
+	}
 	@GetMapping("/listProduct")
 	public String getProduct(ModelMap model, HttpServletRequest request) {
 	    List<ProductDTO> productList = productService.getAllProductDTO();
@@ -119,8 +140,10 @@ public class ManagerController {
 	        Optional<Account> userOptional = accountService.findByname(accountName);
 	        if (userOptional.isPresent()) {
 	            Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
 	            model.addAttribute("accountName", accountName);
 	            model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 	        } else {
 	            return "redirect:/login";
 	        }
@@ -147,11 +170,15 @@ public class ManagerController {
 	public String addProduct(ModelMap model, HttpServletRequest request) {
 	    String accountName = getAccountNameFromCookies(request);
 	    if (accountName != null) {
-	        Optional<Users> userOptional = this.userService.findByname(accountName);
+			Optional<Account> userOptional = accountService.findByname(accountName);
 	        if (userOptional.isPresent()) {
-	            Users user = userOptional.get();
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
 	            getName(request, model);
 	            model.addAttribute("product", new ProductDTO());
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 	            return "manager/product/addProduct";
 	        } else {
 	        	return "manager/product/addProduct";
@@ -165,11 +192,16 @@ public class ManagerController {
 	public String getCategory(ModelMap model, HttpServletRequest request) {
 	    String accountName = getAccountNameFromCookies(request);
 	    if (accountName != null) {
-	        Optional<Users> userOptional = this.userService.findByname(accountName);
+			Optional<Account> userOptional = accountService.findByname(accountName);
 	        if (userOptional.isPresent()) {
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
 	            List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
-	            getName(request, model);
+	            //getName(request, model);
 	            model.addAttribute("categoryList", categoryList);
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 	            return "manager/category/listCategory";
 	        } else {
 	        	return "manager/category/listCategory";
@@ -183,10 +215,15 @@ public class ManagerController {
 	public String addCategory(ModelMap model, HttpServletRequest request) {
 	    String accountName = getAccountNameFromCookies(request);
 	    if (accountName != null) {
-	        Optional<Users> userOptional = this.userService.findByname(accountName);
+			Optional<Account> userOptional = accountService.findByname(accountName);
 	        if (userOptional.isPresent()) {
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
 	            getName(request, model);
 	            model.addAttribute("category", new CategoryDTO());
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 	            return "manager/category/addCategory";
 	        } else {
 	        	return "manager/category/addCategory";
@@ -195,13 +232,19 @@ public class ManagerController {
 	        return "redirect:/login";
 	    }
 	}
+
 	@GetMapping("/addImport")
 	public String addImport(ModelMap model, HttpServletRequest request) {
 		String accountName = getAccountNameFromCookies(request);
 		if (accountName != null) {
-			Optional<Users> userOptional = this.userService.findByname(accountName);
+			Optional<Account> userOptional = accountService.findByname(accountName);
 			if (userOptional.isPresent()) {
 				getName(request, model);
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 				model.addAttribute("storage", new StorageDTO());
 				return "manager/storage/addImport";
 			} else {
@@ -211,13 +254,19 @@ public class ManagerController {
 			return "redirect:/login";
 		}
 	}
+
 	@GetMapping("/listStorage")
 	public String getStorage(ModelMap model,
 							 @CookieValue(value = "accountName", required = false) String accountName,
 							 HttpServletRequest request) {
 		if (accountName != null) {
-			Optional<Users> userOptional = this.userService.findByname(accountName);
+			Optional<Account> userOptional = accountService.findByname(accountName);
 			if (userOptional.isPresent()) {
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 				List<StorageDTO> storageList = storageService.getAllStorageDTO();
 				getName(request, model);
 				model.addAttribute("storageList", storageList);
@@ -234,11 +283,15 @@ public class ManagerController {
 	                           @CookieValue(value = "accountName", required = false) String accountName,
 	                           HttpServletRequest request) {
 	    if (accountName != null) {
-	        Optional<Users> userOptional = this.userService.findByname(accountName);
+			Optional<Account> userOptional = accountService.findByname(accountName);
 	        if (userOptional.isPresent()) {
-	            Users user = userOptional.get();
+				Account account = userOptional.get();
+				String imageBase64 = account.getImageBase64();
+				model.addAttribute("accountName", accountName);
+				model.addAttribute("fullname", account.getAccountName());
+				model.addAttribute("image", imageBase64);
 	            List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
-	            getName(request, model);
+	            //getName(request, model);
 	            model.addAttribute("categoryList", categoryList);
 	            return "manager/trademark/listTrademark";
 	        } else {
@@ -251,14 +304,19 @@ public class ManagerController {
 
 	@GetMapping("/addTrademark")
 	public String addTrademark(ModelMap model, HttpServletRequest request,
-			@CookieValue(value = "accountName", required = false) String username) {
+			@CookieValue(value = "accountName", required = false) String accountName) {
 		Cookie[] cookies = request.getCookies();
+		Optional<Account> userOptional = accountService.findByname(accountName);
 	    if (cookies != null) {
 	        for (Cookie cookie : cookies) {
 	            if (cookie.getName().equals("accountName")) {
-	                Optional<Users> userOptional = this.userService.findByname(cookie.getValue());
+
 	                if (userOptional.isPresent()) {
-	                    Users user = userOptional.get();
+						Account account = userOptional.get();
+						String imageBase64 = account.getImageBase64();
+						model.addAttribute("accountName", accountName);
+						model.addAttribute("fullname", account.getAccountName());
+						model.addAttribute("image", imageBase64);
 	                    getName(request, model);
 	                    model.addAttribute("trademark", new TrademarkDTO());
 	                    return "manager/trademark/addTrademark";
@@ -281,8 +339,10 @@ public class ManagerController {
 	                Optional<Account> accountOptional = this.accountService.findByname(cookie.getValue());
 	                if (accountOptional.isPresent()) {
 	                    Account account = accountOptional.get();
+						String imageBase64 = account.getImageBase64();
 	                    model.addAttribute("accountName", username);
 	                    model.addAttribute("fullname", account.getAccountName());
+						model.addAttribute("image", imageBase64);
 	                    List<Order> list = this.orderService.listOrder();
 	                    model.addAttribute("listOrder", list);
 	                    return "manager/order/order";
@@ -307,9 +367,10 @@ public class ManagerController {
 	            if (cookie.getName().equals("accountName")) {
 	                Optional<Account> userOptional = this.accountService.findByname(cookie.getValue());
 	                if (userOptional.isPresent()) {
-	                    Account user = userOptional.get();
+						Account account = userOptional.get();
+						String imageBase64 = account.getImageBase64();
 	                    model.addAttribute("accountName", username);
-	                    model.addAttribute("fullname", user.getAccountName());
+	                    model.addAttribute("fullname", account.getAccountName());
 	                    List<OrderDetail> list = this.orderDetailService.findDetailByInvoiceId(id);
 	                    List<Product> productorder = new ArrayList<>();
 	                    for (OrderDetail orderDetail : list) {

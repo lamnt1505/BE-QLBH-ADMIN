@@ -19,10 +19,10 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">Điều Hướng Người Dùng</h2>
                         <ul>
-                            <li><a href="#">Tài Khoản Của Tôi</a></li>
-                            <li><a href="#">Lịch Sử Mua Hàng</a></li>
+                            <li><a th:href="@{'/updateProfile/' + ${accountID}}">Tài Khoản Của Tôi</a></li>
+                            <li><a th:href="@{/cart}">Lịch Sử Mua Hàng</a></li>
                             <li><a href="#">Danh Sách Yêu Thích</a></li>
-                            <li><a href="#">Liên Hệ Nhà Cung Cấp</a></li>
+                            <li><a th:href="@{/index/contact}">Liên Hệ Nhà Cung Cấp</a></li>
                             <li><a th:href="@{/index}">Trang Đầu</a></li>
                         </ul>
                     </div>
@@ -31,11 +31,11 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">Loại Sản Phẩm</h2>
                         <ul>
-                            <li><a href="#">Mobile Phone</a></li>
-                            <li><a href="#">Home accesseries</a></li>
-                            <li><a href="#">LED TV</a></li>
-                            <li><a href="#">Computer</a></li>
-                            <li><a href="#">Gadets</a></li>
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright">
-                        <p>&copy; 2015 uCommerce. All Rights Reserved. <a href="http://www.freshdesignweb.com" target="_blank">freshDesignweb.com</a></p>
+                        <p>&copy; 2024 uCommerce. All Rights Reserved. <a href="http://www.freshdesignweb.com" target="_blank">freshDesignweb.com</a></p>
                     </div>
                 </div>
 

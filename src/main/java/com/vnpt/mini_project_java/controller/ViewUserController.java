@@ -48,9 +48,9 @@ public class ViewUserController {
         for (int i = 0; i < cookies.length; ++i) {
             if (cookies[i].getName().equals("accountName")) {
                 Optional<Account> accountOptional = this.accountService.findByname(cookies[i].getValue());
-                Account acc = accountOptional.orElse(null); // hoặc accountOptional.orElseGet(() -> null)
+                Account acc = accountOptional.orElse(null);
                 if (acc != null) {
-                    modelMap.addAttribute("accountName", acc.getAccountName());
+                    modelMap.addAttribute("accountName", acc.getUsername());
                     modelMap.addAttribute("accountID", acc.getAccountID());
                 }
                 break;

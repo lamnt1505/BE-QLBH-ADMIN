@@ -51,7 +51,7 @@ public class HomeController {
                 Optional<Account> accountOptional = this.accountService.findByname(cookies[i].getValue());
                 Account acc = accountOptional.orElse(null);
                 if (acc != null) {
-                    modelMap.addAttribute("accountName", acc.getAccountName());
+                    modelMap.addAttribute("accountName", acc.getUsername());
                     modelMap.addAttribute("accountID", acc.getAccountID());
                 }
                 break;
@@ -76,7 +76,7 @@ public class HomeController {
                             session.setAttribute("cart", new ArrayList<>());
                         }
 
-                        modelMap.addAttribute("accountName", acc.getAccountName());
+                        modelMap.addAttribute("accountName", acc.getUsername());
                         modelMap.addAttribute("accountID", acc.getAccountID());
                     }
                 }
@@ -141,5 +141,20 @@ public class HomeController {
         model.addAttribute("product", this.productService.findAll());
         model.addAttribute("category", this.categoryService.findAll());
         return "shop/product";
+    }
+    
+    @GetMapping("/introduce")
+    public String getIntroduce(HttpServletRequest request, HttpServletResponse response, ModelMap model){
+        getName(request, model);
+        model.addAttribute("product", this.productService.findAll());
+        model.addAttribute("category", this.categoryService.findAll());
+        return "shop/introduce";
+    }
+    @GetMapping("/contact")
+    public String getContact(HttpServletRequest request, HttpServletResponse response, ModelMap model){
+        getName(request, model);
+        model.addAttribute("product", this.productService.findAll());
+        model.addAttribute("category", this.categoryService.findAll());
+        return "shop/contact";
     }
 }

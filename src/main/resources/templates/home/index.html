@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hệ Thống Mua Sắm Điện Tử</title>
 
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
-          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
@@ -24,15 +23,6 @@
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            var accountName = sessionStorage.getItem("accountName");
-            //console.log("Login successful" + accountName);
-            if (accountName) {
-                document.getElementById("accountName").innerText = accountName;
-            }
-        });
-    </script>
     <style type="text/css">
         @keyframes highlight {
             0% { transform: scale(1); }
@@ -72,7 +62,7 @@
                 <div class="shopping-item">
                     <a th:href="@{/cart}">
                         Giỏ Hàng
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fa fa-shopping-cart"></i>(<span id="cartQuantity">0</span>)
                     </a>
                 </div>
             </div>
@@ -105,8 +95,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#">Giới Thiệu</a></li>
-                    <li><a href="#">Liên Hệ</a></li>
+                    <li><a th:href="@{/index/introduce}">Giới Thiệu</a></li>
+                    <li><a th:href="@{/index/contact}">Liên Hệ</a></li>
                 </ul>
             </div>
         </div>
@@ -187,7 +177,7 @@
                 <div class="single-promo promo4">
                     <i class="fa fa-gift"></i>
                     <h4>Sản Phẩm Mới</h4>
-                    <p>Kiểm Tra Những Sản Phẩm Mới Nhất Của Chúng Tôi</p>
+                    <p>Sản Phẩm Mới Nhất Của Chúng Tôi</p>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 spring:
   thymeleaf:
     cache: false
-    check-template-location: false
+    check-template-location: true
   servlet:
     multipart:
       enabled: true

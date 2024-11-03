@@ -68,7 +68,7 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a th:href="@{/cart}">Giỏ Hàng<i class="fa fa-shopping-cart"></i></a>
+                    <a th:href="@{/cart}">Giỏ Hàng<i class="fa fa-shopping-cart"></i></a>(<span id="cartQuantity">0</span>)
                 </div>
             </div>
         </div>
@@ -100,8 +100,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#">Giới Thiệu</a></li>
-                    <li><a href="#">Liên Hệ</a></li>
+                    <li><a th:href="@{/index/introduce}">Giới Thiệu</a></li>
+                    <li><a th:href="@{/index/contact}">Liên Hệ</a></li>
                 </ul>
             </div>
         </div>
@@ -120,24 +120,29 @@
 </div>
     <div class="single-product-area">
     <div class="zigzag-bottom"></div>
-    <div class="container">
+    <div class="container mt-4">
         <div class="row">
-            <div class="single-shop-product" th:each="product : ${showProductByIdCategory}">
-                <div class="col-md-3 col-sm-6">
+            <div class="col-md-3 col-sm-6 mb-4" th:each="product : ${showProductByIdCategory}">
+                <div class="card shadow-sm border-0 h-100">
                     <div class="product-upper">
-                        <img th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}" alt="">
+                        <img class="card-img-top img-fluid" th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}" alt="Product Image" style="border-radius: 8px;">
                     </div>
-                    <h2><a th:href="@{'/index/showProductSingle/'+${product.productID}}" th:text="${product.productName}"></a></h2>
-                    <div class="product-carousel-price">
-                        <ins th:text="${product.price}"></ins> <del>$999.00</del>
-                    </div>
-                    <div class="product-option-shop">
-                        <a class="add_to_cart_button procart" th:attr="data-productid=${product.productID}">
-                            Thêm Vào Giỏ Hàng</a>
-                        <a class="btn btn-secondary compare-btn addToCompare" th:attr="data-productid=${product.productID}"> + </a>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            <a th:href="@{'/index/showProductSingle/'+${product.productID}}" th:text="${product.productName}" class="text-dark"></a>
+                        </h5>
+                        <p class="product-carousel-price">
+                            <ins th:text="${product.price}" class="text-primary font-weight-bold"></ins>
+                            <del class="text-muted ml-2">$999.00</del>
+                        </p>
+                        <div class="product-option-shop d-flex justify-content-center mt-3">
+                            <a class="add_to_cart_button procart" th:attr="data-productid=${product.productID}">Thêm Vào Giỏ Hàng</a>
+                            <a class="btn btn-outline-secondary compare-btn addToCompare" th:attr="data-productid=${product.productID}"> + </a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -238,18 +243,18 @@
             var id = comparedProducts[i];
             var product = listProduct.find(item => item.id === id);
             if (product) {
-                var html = '<div class="product">' +
-                    '<h2 class="product-name">' + product.name +
-                    '<img class="product-image" src="data:image/png;base64,' +
-                    product.imageBase64 + '" alt="Product Image">' +
-                    '</h2>' +
+                var html = '<div class="product" style="width: 100%; position: relative; border: 1px solid #ddd; padding: 16px; margin-bottom: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                    '<h2 class="product-name" style="text-align: center; font-size: 16px; margin-bottom: 8px;">' + product.name + '</h2>' +
+                    '<div style="display: flex; justify-content: center;">' +
+                    '<img class="product-image" src="data:image/png;base64,' + product.imageBase64 + '" alt="Product Image" style="max-width: 100%; height: auto; border-radius: 8px; object-fit: cover;">' +
+                    '</div>' +
                     '</div>';
                 container.append(html);
             }
         }
         if (comparedProducts.length === 2) {
-            var compareDiv = '<div class="compare-section">' +
-                '<button class="btn btn-primary cmprBtn compareTwoProducts"> So Sánh </button>' +
+            var compareDiv = '<div class="compare-section" style="position: fixed; top: 16px; right: 16px;">' +
+                '<button class="btn btn-primary cmprBtn compareTwoProducts">So Sánh</button>' +
                 '</div>';
             container.append(compareDiv);
         }

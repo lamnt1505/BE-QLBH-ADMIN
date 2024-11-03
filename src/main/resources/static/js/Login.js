@@ -8,11 +8,11 @@ function login() {
         contentType: "application/json",
         data: JSON.stringify({ accountName: accountName, accountPass: accountPass }),
         success: function(response) {
-            var rs = typeof response === "string" ? JSON.parse(response) : response;
-
-            if (rs.status) {
+            if (response.success) {
                 console.log("Login successful");
-                sessionStorage.setItem("accountName", accountName); // Use accountName directly
+                sessionStorage.setItem("accountName", accountName);
+                sessionStorage.setItem("typeAccount", response.typeAccount);
+
                 Toastify({
                     text: "Đăng Nhập Thành Công",
                     duration: 3000,
@@ -22,16 +22,20 @@ function login() {
                     backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
                     stopOnFocus: true,
                 }).showToast();
+
                 setTimeout(function() {
-                    if (rs.isAdmin) {
+                    if (response.isAdmin) {
                         window.location.href = "/manager";
-                    } else {
+                    } else if (response.isUser) {
                         window.location.href = "/index";
+                    } else if (response.isUserVip) {
+                        window.location.href = "/index";
+                    } else {
+                        window.location.href = "/";
                     }
                 }, 1000);
-
             } else {
-                $("#error").text(rs.message);
+                $("#error").text(response.message);
             }
         },
         error: function(error) {

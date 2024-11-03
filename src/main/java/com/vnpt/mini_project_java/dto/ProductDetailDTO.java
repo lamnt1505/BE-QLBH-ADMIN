@@ -9,23 +9,30 @@ import lombok.Setter;
 @Setter
 @Data
 public class ProductDetailDTO {
-    private Long id;
+
+    private Long productDetailID;
+
     private String productCamera;
+
     private String productWifi;
+
     private String productScreen;
+
     private String productBluetooth;
+
     private Long productID;
 
     public ProductDetailDTO() {
     }
 
     public ProductDetailDTO(ProductDetail productDetail){
-        this.id = productDetail.getProductDetailID();
+        this.productDetailID = productDetail.getProductDetailID();
         this.productCamera = productDetail.getProductCamera();
         this.productWifi = productDetail.getProductWifi();
         this.productScreen = productDetail.getProductScreen();
         this.productBluetooth = productDetail.getProductBluetooth();
         this.productID = productDetail.getProduct().getProductID();
+        System.out.println("Mapping ProductVersionDTO: versionID=" + productDetailID + ", memory=" + productCamera + ", color=" + productWifi);
     }
 
 }

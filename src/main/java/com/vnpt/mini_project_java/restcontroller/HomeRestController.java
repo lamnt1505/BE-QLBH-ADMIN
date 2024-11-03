@@ -137,20 +137,26 @@ public class HomeRestController {
 	@ResponseBody
 	public Product.CartUpdateStatus saveCartToSession(@RequestParam(name = "productID") long productID,
 			@RequestParam int amount, HttpSession session, HttpServletRequest request) {
+
 		Logger logger = LoggerFactory.getLogger(this.getClass());
 		Product productOrder = this.productService.findByIdProduct(productID);
+
 		if (productOrder == null) {
 			return Product.CartUpdateStatus.PRODUCT_NOT_FOUND;
 		}
+
 		if (amount <= 0) {
 			return Product.CartUpdateStatus.INVALID_AMOUNT;
 		}
+
 		List<Product> cart = (List<Product>) session.getAttribute("cart");
 		if (cart == null) {
 			cart = new ArrayList<>();
 			session.setAttribute("cart", cart);
 		}
+
 		boolean productFoundInCart = false;
+
 		for (Product item : cart) {
 			if (item.getProductID().equals(productOrder.getProductID())) {
 				item.setAmount(item.getAmount() + amount);
@@ -158,11 +164,14 @@ public class HomeRestController {
 				break;
 			}
 		}
+
 		if (!productFoundInCart) {
 			productOrder.setAmount(amount);
 			cart.add(productOrder);
 		}
+
 		session.setAttribute("currentStep", 1);
+
 		Cookie[] cookies = request.getCookies();
 		long accountId = -1;
 		if (cookies != null) {
@@ -176,12 +185,15 @@ public class HomeRestController {
 				}
 			}
 		}
+
 		String username = (accountId != -1) ? accountService.findById(accountId).get().getAccountName() : "unknown";
 		String productName = productOrder.getProductName();
 		String logMessage = "Người dùng '" + username + "' đã mua " + amount + " Đơn Vị Sản Phẩm '" + productName
 				+ "' Vào Gio Hang.";
 		logToConsoleAndFile(logMessage);
+
 		return Product.CartUpdateStatus.SUCCESS;
+
 	}
 	
 	@PostMapping(value = "/updatequantities")
@@ -317,5 +329,15 @@ public class HomeRestController {
 			logger.error("Lỗi khi thực hiện hủy đơn hàng", e);
 			return false;
 		}
+	}
+
+	@GetMapping("/cart/quantity")
+	@ResponseBody
+	public int getCartQuantity(HttpSession session) {
+		List<Product> cart = (List<Product>) session.getAttribute("cart");
+		if (cart == null) {
+			return 0;
+		}
+		return cart.stream().mapToInt(Product::getAmount).sum();
 	}
 }

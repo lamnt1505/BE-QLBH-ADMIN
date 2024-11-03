@@ -21,9 +21,15 @@ public interface AccountService {
 
     Optional<Account> findByname(String accountName);
 
+    List<AccountDTO> getAllAccountDTO();
+
     Optional<Account> findById(Long accountID);
-    
+
+    Account getAccountById(long accountID);
+
     String addAccount(AccountDTO accountDTO, MultipartFile image);
+
+    void updateAccount(long accountID, AccountDTO accountDTO, MultipartFile image);
 
     LoginMesage loginAccount(LoginDTO loginDTO);
 

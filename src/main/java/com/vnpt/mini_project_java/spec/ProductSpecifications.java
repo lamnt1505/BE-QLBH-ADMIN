@@ -35,6 +35,11 @@ public class ProductSpecifications {
                 predicates.add(productVersionsJoin.get("versionID").in(criteria.getVersionID()));
             }
 
+            if (criteria.getProductDetailID() != null && !criteria.getProductDetailID().isEmpty()) {
+                Join<Product, ProductDetail> productProductDetailJoin = root.join("productDetails", JoinType.LEFT);
+                predicates.add(productProductDetailJoin.get("productDetailID").in(criteria.getProductDetailID()));
+            }
+
             if (criteria.getProductName() != null && !criteria.getProductName().isEmpty()) {
                 try {
                     Predicate productNamePredicate = criteriaBuilder.like(
