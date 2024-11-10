@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: "/api/v1/account/Listgetall",
+        url: "/api/v1/category/Listgetall",
         type: "GET",
         dataType: "json",
         success: function (data) {

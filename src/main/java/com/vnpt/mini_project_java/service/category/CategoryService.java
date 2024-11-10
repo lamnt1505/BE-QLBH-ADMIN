@@ -23,6 +23,8 @@ public interface CategoryService {
 
     List<CategoryDTO> getAllCategoryDTO();
 
+    Page<CategoryDTO> getPaginatedCategorys(Pageable pageable);
+
     Category getCategoryById(long id);
 
     Category updateCategory(long categoryID, CategoryDTO dto);

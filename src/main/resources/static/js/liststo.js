@@ -15,7 +15,6 @@ $(document).ready(function () {
                 var table = $("#storage-table");
                 table.empty();
 
-
                 $.each(data.slice(0, pageSize), function (index, storage) {
                     var productName = storage.product_name ? storage.product_name : "N/A";
                     var row = "<tr>" +

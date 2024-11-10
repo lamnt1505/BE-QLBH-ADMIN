@@ -67,11 +67,17 @@ $(document).ready(function() {
     }).done(function(response) {
         response.forEach(function(productDetail) {
             $('#details-Dropdown').append(
-                '<li><label class="dropdown-item">' +
-                '<input type="checkbox" class="detail-checkbox" id="product-' + productDetail.productDetailID + '" value="' + productDetail.productDetailID + '"> ' +
-                ' - Camera: ' + productDetail.productCamera + ' - Wifi: ' + productDetail.productWifi +
-                ' - Scereen: ' + productDetail.productScreen + ' - Bluetooh: ' + productDetail.productBluetooth +
-                '</label></li>'
+                `<li>
+                    <label class="dropdown-item">
+                        <input type="checkbox" class="detail-checkbox" id="product-${productDetail.productDetailID}" value="${productDetail.productDetailID}">
+                        <div style="margin-left: 20px;">
+                            <span><strong>Camera:</strong> ${productDetail.productCamera}</span><br>
+                            <span><strong>Wifi:</strong> ${productDetail.productWifi}</span><br>
+                            <span><strong>Screen:</strong> ${productDetail.productScreen}</span><br>
+                            <span><strong>Bluetooth:</strong> ${productDetail.productBluetooth}</span>
+                        </div>
+                    </label>
+                </li>`
             );
         });
     }).fail(function(error) {
@@ -110,7 +116,7 @@ function searchProducts() {
     console.log("Dữ liệu tìm kiếm gửi đến API:", criteria);
 
     $.ajax({
-        url: "/search",
+        url: "/dossier-statistic/search",
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify(criteria),
@@ -123,9 +129,7 @@ function searchProducts() {
     });
 }
 function renderProductModal(products) {
-
     $('#productModalBody').empty();
-
     if (!products.content || products.content.length === 0) {
         $('#productModalBody').append( '<tr><td colspan="5">Không tìm thấy sản phẩm phù hợp</td></tr>');
     }else{

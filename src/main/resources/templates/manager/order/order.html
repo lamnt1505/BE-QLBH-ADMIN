@@ -17,6 +17,7 @@
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -37,7 +38,9 @@
                             <th>Mã Hóa Đơn</th>
                             <th>Ngày Đặt Hàng</th>
                             <th>Tên Khách Hàng</th>
+                            <th>Số Điện Thoại</th>
                             <th>Tổng Tiền</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -49,7 +52,12 @@
                             </a></td>
                             <td th:text="${order.orderDateImport}">
                             <td th:text="${order.account != null ? order.account.accountName : 'N/A'}"></td>
-                            <td th:text="${order.orderTotal}"></td>
+                            <td th:text="${order.account != null ? order.account.phoneNumber : 'N/A'}"></td>
+                            <td th:text="${order.orderDateImport}"></td>
+                            <td th:text="${order.status}" class="status"></td>
+                            <td>
+                                <button th:attr="data-orderid=${order.orderID}" type="button" class="btn btn-primary editmodal" data-toggle="modal" data-target="#exampleModal-3">Duyệt</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -59,6 +67,31 @@
     </div>
 </div>
 <footer class="sticky-footer bg-white" th:replace="manager/fragment/footer::footer"></footer>
+<div class="modal fade" id="exampleModal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-3" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel-3">Trạng thái</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group text-center">
+                    <select class="form-control optionorder">
+                        <option selected value="Chờ duyệt">Chờ duyệt</option>
+                        <option value="Hoàn thành">Hoàn thành</option>
+                        <option value="Đã hủy">Đã hủy</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success submitstatus">Duyệt</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Thoát</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -78,8 +111,12 @@
 </div>
 </body>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/logoutadmin.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/order.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

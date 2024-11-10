@@ -15,35 +15,37 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class LoginDTO {
-	
-	   	private String  accountName;
 
-	    private String  accountPass;
+    private String accountName;
 
-	    private boolean isAdmin;
+    private String accountPass;
 
-		private String email;
+    private boolean isAdmin;
 
-		private String phoneNumber;
+    private String email;
 
-		private String phone;
-		
-		private String  userPass;
-		
-		private LocalDate dateOfBirth;
+    private String phoneNumber;
 
-		public LoginDTO(String accountName, String phoneNumber, String accountPass, boolean isAdmin,String phone,
-						String email, LocalDate dateOfBirth, String userPass) {
-			this.accountName = accountName;
-			this.accountPass = accountPass;
-			this.phone = phone;
-			this.userPass = userPass;
-			this.phoneNumber = phoneNumber;
-			this.dateOfBirth = dateOfBirth;
-			this.email = email;
-			this.isAdmin = isAdmin;
-		}
+    private String phone;
 
-		public LoginDTO() {
-		}
+    private String userPass;
+
+    private LocalDate dateOfBirth;
+
+    private String captcha;
+
+    public LoginDTO(String accountName, String phoneNumber, String accountPass, boolean isAdmin, String phone,
+                    String email, LocalDate dateOfBirth, String userPass) {
+        this.accountName = accountName;
+        this.accountPass = accountPass;
+        this.phone = phone;
+        this.userPass = userPass;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.isAdmin = isAdmin;
+    }
+
+    public LoginDTO() {
+    }
 }

@@ -40,7 +40,7 @@ function getProducts() {
         type: "GET",
         contentType: "application/json;",
         dataType: 'json',
-        url: "/index/listProductAjax",
+        url: "/dossier-statistic/list--Product",
         success: function (result) {
             listProduct = result;
             pageTotal = listProduct.length / pageProduct;
@@ -101,7 +101,7 @@ function showListProductByIdFilter() {
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
-        url: "/index/listProductByIdCategoryFilter/" + id,
+        url: "/dossier-statistic/list--ProductById--Category--Filter/" + id,
         success: function (result) {
             listProduct = result;
             pageTotal = listProduct.length / pageProduct;
@@ -120,7 +120,7 @@ function listProductNewBest() {
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
         async: false,
-        url: "/index/listProductNewBest",
+        url: "/dossier-statistic/list--Product--NewBest",
         success: function (result) {
             listProduct = result;
             pageCheck = 1;
@@ -138,7 +138,7 @@ function listProductPriceDesc() {
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
-        url: "/index/listProductPriceDesc",
+        url: "/dossier-statistic/list--Product--PriceDesc",
         success: function (result) {
             listProduct = result;
             pageCheck = 1;
@@ -155,7 +155,7 @@ function listProductPriceAsc() {
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
-        url: "/index/listProductPriceAsc",
+        url: "/dossier-statistic/list--Product--PriceAsc",
         success: function (result) {
             listProduct = result;
             pageCheck = 1;

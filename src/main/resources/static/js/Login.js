@@ -1,15 +1,18 @@
 function login() {
     var accountName = $("#accountName").val();
     var accountPass = $("#accountPass").val();
+    var captchaInput = $("#captchaInput").val();
 
     $.ajax({
         type: "POST",
         url: "/api/v1/account/login",
         contentType: "application/json",
-        data: JSON.stringify({ accountName: accountName, accountPass: accountPass }),
+        data: JSON.stringify({ accountName: accountName, accountPass: accountPass, captcha: captchaInput }),
         success: function(response) {
-            if (response.success) {
-                console.log("Login successful");
+            if (response.isCaptchaValid === false) {
+                $("#error").text("Captcha không hợp lệ. Vui lòng thử lại.");
+                refreshCaptcha();
+            }else if (response.success) {
                 sessionStorage.setItem("accountName", accountName);
                 sessionStorage.setItem("typeAccount", response.typeAccount);
 
@@ -39,7 +42,6 @@ function login() {
             }
         },
         error: function(error) {
-            console.log(error);
             if (error.status === 401) {
                 $("#error").text("Session expired. Please log in again.");
                 setTimeout(function() {
@@ -50,4 +52,7 @@ function login() {
             }
         }
     });
+}
+function refreshCaptcha() {
+    $("#captchaImage").attr("src", "/api/v1/account/captcha?" + new Date().getTime());
 }

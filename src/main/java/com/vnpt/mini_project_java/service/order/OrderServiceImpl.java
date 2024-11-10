@@ -1,6 +1,7 @@
 package com.vnpt.mini_project_java.service.order;
 
 import com.vnpt.mini_project_java.entity.Order;
+import com.vnpt.mini_project_java.entity.Storage;
 import com.vnpt.mini_project_java.respository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,6 @@ public class OrderServiceImpl implements OrderService {
     public <S extends Order> S save(S entity) {
         return orderRepository.save(entity);
     }
-
     @Override
     public List<Order> listOrder() {
         return orderRepository.findAll();
@@ -43,4 +43,5 @@ public class OrderServiceImpl implements OrderService {
     public void delete(Order entity) {
         orderRepository.delete(entity);
     }
+
 }

@@ -8,6 +8,10 @@ import com.vnpt.mini_project_java.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +25,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/category")
+@RequestMapping(value = "/api/v1/category", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryRestController {
 
     @Autowired
@@ -104,5 +108,17 @@ public class CategoryRestController {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/paginated")
+    public Page<CategoryDTO> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "categoryID,asc") String[] sort) {
+
+        Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort[0]));
+
+        return categoryService.getPaginatedCategorys(pageable);
     }
 }

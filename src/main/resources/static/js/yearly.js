@@ -11,7 +11,6 @@ $(document).ready(function() {
         }
     });
 });
-
 function renderChart(data) {
     var year = data.map(item => item.year);
     var orderCount = data.map(item => item.orderCount);

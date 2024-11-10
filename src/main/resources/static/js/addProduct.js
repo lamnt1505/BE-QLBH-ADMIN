@@ -1,9 +1,41 @@
 $(document).ready(function () {
     $('#productForm').submit(function (event) {
         event.preventDefault();
-        ajaxPost();
+        if (validateProductForm()) {
+            ajaxPost();
+        }
     });
+    function validateProductForm() {
+        var isValid = true;
 
+        if ($('#name').val().trim() === "") {
+            alert("Tên sản phẩm không được để trống.");
+            isValid = false;
+        }
+        if ($('#description').val().trim() === "") {
+            alert("Miêu tả không được để trống.");
+            isValid = false;
+        }
+        if ($('#date_product').val() === "") {
+            alert("Ngày sản xuất không được để trống.");
+            isValid = false;
+        }
+        var price = $('#price').val();
+        if (price === "" || price <= 0) {
+            alert("Giá sản phẩm phải là số dương và không được để trống.");
+            isValid = false;
+        }
+        if ($('#categorySelect').val() === "") {
+            alert("Vui lòng chọn loại sản phẩm.");
+            isValid = false;
+        }
+        if ($('#trademarkSelect').val() === "") {
+            alert("Vui lòng chọn thương hiệu.");
+            isValid = false;
+        }
+
+        return isValid;
+    }
     function ajaxPost() {
         var formData = new FormData();
         formData.append('name', $('#name').val());

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,12 +52,10 @@ public class AccountServiceImpl implements AccountService {
 	public Optional<Account> findByphone(String phone) {
 		return accountRepository.findByphone(phone);
 	}
-
 	@Override
 	public Account findByAccountName(String accountName) {
 		return accountRepository.findByAccountName(accountName);
 	}
-
 	@Override
 	public Optional<Account> findByname(String accountName) {
 		return accountRepository.findByname(accountName);
@@ -79,7 +78,6 @@ public class AccountServiceImpl implements AccountService {
 			throw new RuntimeException("Product not found with ID: " + accountID);
 		}
 	}
-
 	@Override
 	public String addAccount(AccountDTO accountDTO, MultipartFile image) {
 
@@ -120,11 +118,9 @@ public class AccountServiceImpl implements AccountService {
 			String imagePath = fileName;
 			account.setImage(imagePath);
 		}
-
 		accountRepository.save(account);
 		return account.getAccountName();
 	}
-
 	@Override
 	public void updateAccount(long accountID,AccountDTO accountDTO, MultipartFile image) {
 		Account account = accountRepository.findById(accountDTO.getAccountID())
@@ -155,10 +151,14 @@ public class AccountServiceImpl implements AccountService {
 		}
 		accountRepository.save(account);
 	}
-
 	@Override
-	public LoginMesage loginAccount(LoginDTO loginDTO) {
+	public LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session) {
 		String msg = "";
+
+		String sessionCaptcha = (String) session.getAttribute("captcha");
+		if (sessionCaptcha == null || !sessionCaptcha.equals(loginDTO.getCaptcha())) {
+			return new LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.", false, false, false, false, false);
+		}
 
 		Account account1 = accountRepository.findByAccountName(loginDTO.getAccountName());
 
@@ -180,20 +180,20 @@ public class AccountServiceImpl implements AccountService {
 					boolean isUserVip = typeAccount.equals(Account.USER_VIP);
 
 					if (isAdmin) {
-						return new LoginMesage("Login Success", true, true, false, false);
+						return new LoginMesage("Login Success", true, true, false, true, true); // captcha valid and admin
 					} else if (isUser || isUserVip) {
-						return new LoginMesage("Login Success", true, false, true, false);
+						return new LoginMesage("Login Success", true, false, true, true, true); // captcha valid and user/vip
 					} else {
-						return new LoginMesage("Login Success", true, false, false, true);
+						return new LoginMesage("Login Success", true, false, false, true, true); // captcha valid, non-admin
 					}
 				} else {
-					return new LoginMesage("Login Failed", false, false, false, false);
+					return new LoginMesage("Đăng Nhập Không Thành Công", false, false, false, false, false);
 				}
 			} else {
-				return new LoginMesage("Incorrect password. Please check again!", false, false, false, false);
+				return new LoginMesage("Mật Khẩu Không Chính Xác.Vui Lòng Thử Lại!", false, false, false, false, false);
 			}
 		} else {
-			return new LoginMesage("Email or login account is incorrect", false, false, false, false);
+			return new LoginMesage("Email hoặc tài khoản đăng nhập không chính xác", false, false, false, false, false);
 		}
 	}
 }

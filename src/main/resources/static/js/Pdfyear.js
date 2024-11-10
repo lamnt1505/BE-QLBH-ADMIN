@@ -18,7 +18,6 @@ document.getElementById('exportPDF').addEventListener('click',function (){
                 stopOnFocus: true
             }).showToast();
         }else {
-            //console.error('Error generating product statistics report');
             Toastify({
                 text: 'Lỗi Xuất Danh Sách',
                 duration: 3000,

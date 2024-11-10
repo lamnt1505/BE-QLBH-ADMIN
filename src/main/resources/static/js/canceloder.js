@@ -6,7 +6,7 @@ $(document).ready(function () {
         if (confirm("Bạn có chắc muốn hủy đơn hàng?")) {
             $.ajax({
                 type: "POST",
-                url: "/cancel-order",
+                url: "/dossier-statistic/cancel-order",
                 data: {
                     orderID: orderID
                 },

@@ -135,12 +135,11 @@ public class ViewUserController {
     }
 
 	
-	  @GetMapping("/registerd") public String registerd(Model model) {
+    @GetMapping("/registerd") public String registerd(Model model) {
 		 model.addAttribute("category", this.categoryService.findAll());
 		 model.addAttribute("account", new Account()); 
 		 return "login1/registerd"; 
 	  }
-
 
     @GetMapping("/updateProfile/{accountID}")
     public String updateCus(ModelMap model, @PathVariable(name = "accountID") long accountID, HttpServletRequest request) {

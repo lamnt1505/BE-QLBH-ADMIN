@@ -33,11 +33,18 @@ public class StorageServiceImpl implements StorageService {
 		this.storageRepository = storageRepository;
 		this.productRepository = productRepository;
 	}
-
+	@Override
+	public Storage findQuatityProduct(long product_id) {
+		return storageRepository.findQuatityProduct(product_id);
+	}
 	@Override
 	public List<StorageDTO> getAllStorageDTO() {
 		List<Storage> products = storageRepository.findAll();
 		return products.stream().map(StorageDTO::new).collect(Collectors.toList());
+	}
+	@Override
+	public <S extends Storage> S save(S entity) {
+		return storageRepository.save(entity);
 	}
 
 	@Override

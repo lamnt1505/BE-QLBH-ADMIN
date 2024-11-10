@@ -18,7 +18,6 @@ document.getElementById('btn2').addEventListener('click', function() {
                 stopOnFocus: true
             }).showToast();
         } else {
-            //console.error('Error generating month statistics report');
             Toastify({
                 text: 'Lỗi Xuất Danh Sách',
                 duration: 3000,

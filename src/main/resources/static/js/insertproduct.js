@@ -3,7 +3,7 @@ $(document).on('click', '.procart', function (e) {
     console.log("Clicked");
     var amount = 1;
     var productID = $(this).data('productid');
-    $.post("/insertproduct", {
+    $.post("/dossier-statistic/insert-product", {
         productID: productID,
         amount: 1,
     }, function (data, status) {
@@ -15,7 +15,7 @@ $(document).on('click', '.procart', function (e) {
             backgroundColor: 'green',
             stopOnFocus: true,
         }).showToast();
-        $.get("/cart/quantity", function(cartQuantity) {
+        $.get("/dossier-statistic/cart/quantity", function(cartQuantity) {
             $("#cartQuantity").text(cartQuantity);
         });
     })

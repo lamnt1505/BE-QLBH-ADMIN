@@ -26,12 +26,16 @@ public class LoginMesage {
     @JsonProperty("status")
     private Boolean status;
 
-    public LoginMesage(String message, Boolean status, boolean isAdmin,boolean isUser, boolean isUserVip) {
+    @JsonProperty("isCaptchaValid")
+    private boolean isCaptchaValid;
+
+    public LoginMesage(String message, Boolean status, boolean isAdmin,boolean isUser, boolean isUserVip, boolean isCaptchaValid) {
         this.message = message;
         this.status = status;
         this.isAdmin = isAdmin;
         this.isUser = isUser;
         this.isUserVip = isUserVip;
+        this.isCaptchaValid = isCaptchaValid;
     }
 
 

@@ -7,7 +7,11 @@ import com.vnpt.mini_project_java.entity.Storage;
 
 public interface StorageService {
 
-	List<StorageDTO> getAllStorageDTO();
+    Storage findQuatityProduct(long product_id);
+
+    List<StorageDTO> getAllStorageDTO();
+
+	<S extends Storage> S save(S entity);
 
 	StorageDTO createStorage(StorageDTO dto);
 

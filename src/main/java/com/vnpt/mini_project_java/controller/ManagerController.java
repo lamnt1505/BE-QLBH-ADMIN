@@ -81,7 +81,7 @@ public class ManagerController {
                         model.addAttribute("accountName", accountName);
                         model.addAttribute("fullname", account.getAccountName());
 						model.addAttribute("image", imageBase64);
-                        if (account.isAdmin()) {// này đang bị lỗi
+                        if (account.isAdmin()) {
                         	return "manager/category/listCategory";
                         } else {
                         	return "manager/category/listCategory";
@@ -174,7 +174,7 @@ public class ManagerController {
 	        if (userOptional.isPresent()) {
 				Account account = userOptional.get();
 				String imageBase64 = account.getImageBase64();
-	            getName(request, model);
+	            //getName(request, model);
 	            model.addAttribute("product", new ProductDTO());
 				model.addAttribute("accountName", accountName);
 				model.addAttribute("fullname", account.getAccountName());
@@ -219,7 +219,7 @@ public class ManagerController {
 	        if (userOptional.isPresent()) {
 				Account account = userOptional.get();
 				String imageBase64 = account.getImageBase64();
-	            getName(request, model);
+	            //getName(request, model);
 	            model.addAttribute("category", new CategoryDTO());
 				model.addAttribute("accountName", accountName);
 				model.addAttribute("fullname", account.getAccountName());
@@ -239,7 +239,7 @@ public class ManagerController {
 		if (accountName != null) {
 			Optional<Account> userOptional = accountService.findByname(accountName);
 			if (userOptional.isPresent()) {
-				getName(request, model);
+				//getName(request, model);
 				Account account = userOptional.get();
 				String imageBase64 = account.getImageBase64();
 				model.addAttribute("accountName", accountName);
@@ -268,7 +268,7 @@ public class ManagerController {
 				model.addAttribute("fullname", account.getAccountName());
 				model.addAttribute("image", imageBase64);
 				List<StorageDTO> storageList = storageService.getAllStorageDTO();
-				getName(request, model);
+				//getName(request, model);
 				model.addAttribute("storageList", storageList);
 				return "manager/storage/listStorage";
 			} else {
@@ -317,7 +317,7 @@ public class ManagerController {
 						model.addAttribute("accountName", accountName);
 						model.addAttribute("fullname", account.getAccountName());
 						model.addAttribute("image", imageBase64);
-	                    getName(request, model);
+	                    //getName(request, model);
 	                    model.addAttribute("trademark", new TrademarkDTO());
 	                    return "manager/trademark/addTrademark";
 	                } else {

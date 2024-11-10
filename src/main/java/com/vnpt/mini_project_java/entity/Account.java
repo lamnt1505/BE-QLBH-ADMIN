@@ -28,7 +28,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 public class Account {
-    
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
@@ -54,6 +53,8 @@ public class Account {
 
     @Column(name = "local")
     private String local;
+
+    private String captcha;
 
     @Column(name = "date_of_birth")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

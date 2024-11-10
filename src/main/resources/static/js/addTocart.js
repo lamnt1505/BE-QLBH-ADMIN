@@ -10,7 +10,7 @@ $(document).ready(function () {
             productID: productID,
             amount: amount
         };
-        $.post("/updatequantities", product).done(function(data, status) {
+        $.post("/dossier-statistic/update--quantities", product).done(function(data, status) {
                 if (data == "0") {
                     Toastify({
                         text: 'Có lỗi hoặc số lượng đang nhỏ hơn 0! Vui lòng thử lại...',
@@ -30,7 +30,6 @@ $(document).ready(function () {
                         stopOnFocus: true,
                     }).showToast();
                 } else if (data == "2") {
-                    // Hiển thị thông báo thành công bằng Toastify và reload trang sau khi hoàn thành
                     Toastify({
                         text: 'Sản phẩm đã được loại khỏi giỏ hàng!',
                         duration: 1500,
@@ -55,7 +54,7 @@ $(document).ready(function () {
             });
     });
     $("#submitorders").click(function (e) {
-        $.post("/orders")
+        $.post("/dossier-statistic/orders")
             .done(function (data, status) {
                 if (data == "0") {
                     Toastify({
@@ -126,8 +125,7 @@ $(document).ready(function () {
                 productID: productID,
                 amount: amount
          };
-            
-            $.post("/updatequantities", product).done(function(data, status) {
+            $.post("/dossier-statistic/update--quantities", product).done(function(data, status) {
                 if (data == "0") {
                     Toastify({
                         text: 'Có lỗi hoặc số lượng đang nhỏ hơn 0! Vui lòng thử lại...',
@@ -169,7 +167,6 @@ $(document).ready(function () {
                     }).showToast();
                 }
             });
-
         });
 });
 

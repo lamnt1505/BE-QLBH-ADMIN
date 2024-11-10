@@ -24,27 +24,43 @@
             <img src="/resources/images/e-commerce.jpg" alt="">
         </div>
         <form id="loginForm" onsubmit="return false;" name="form">
-            <h3 style="color: rgb(75,66,2);">ĐĂNG NHẬP 1</h3>
+            <h3 style="color: rgb(75,66,2);">ĐĂNG NHẬP</h3>
             <div class="spanerror" style="width: 320px; margin-top: -20px; height: 40px;">
                 <span id="error" style="font-size: 15px; padding-left: 56px;"></span>
             </div>
             <div class="form-wrapper">
-                <input type="text" id="accountName" name="accountName" placeholder="Tên Đăng Nhập" th:value="${accountName}" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
-                <span class="input-group-text" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                <input type="text" id="accountName" name="accountName" placeholder="Tên Đăng Nhập"
+                       th:value="${accountName}"
+                       style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
+                <span class="input-group-text"
+                      style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
                     <i class="fa fa-info" style="color: #4b4202;"></i>
                 </span>
             </div>
             <div class="form-wrapper">
-                <input type="password" id="accountPass" name="accountPass" placeholder="Nhập Mật Khẩu" style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
+                <input type="password" id="accountPass" name="accountPass" placeholder="Nhập Mật Khẩu"
+                       style="width: 100%; max-width: 350px; padding: 10px; border-radius: 5px;">
                 <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
                     <i class="fa fa-eye toggle-password" id="togglePassIcon" style="color: #4b4202;"></i>
                 </span>
             </div>
+            <!-- Captcha Section -->
+            <div class="form-wrapper">
+                <img id="captchaImage" src="/api/v1/account/captcha?ts=" + new Date().getTime() alt="Captcha Image">
+                <button type="button" onclick="refreshCaptcha()">Tải lại mã</button>
+            </div>
+            <div class="form-wrapper">
+                <input type="text" id="captchaInput" name="captchaInput" placeholder="Nhập mã xác nhận">
+            </div>
             <div style="width: 100%">
-                <button style="width: 50%; border-radius: 10px; background: rgb(3,40,248) " class="submit"  onclick="login()">Đăng nhập</button>
+                <button style="width: 50%; border-radius: 10px; background: rgb(3,40,248) " class="submit"
+                        onclick="login()">Đăng nhập
+                </button>
                 <a th:href="@{/registerd}"
                    style="text-align: center; color: white; font-size: 18px; text-decoration: none;">
-                    <div style="width: 50%; border-radius: 10px; background: rgb(3,40,248); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;"> Đăng ký</div>
+                    <div style="width: 50%; border-radius: 10px; background: rgb(3,40,248); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;">
+                        Đăng ký
+                    </div>
                 </a>
             </div>
             <div class="home">
@@ -65,5 +81,11 @@
 <script type="text/javascript" th:src="@{/resources/js/Login.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/checkbox.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/eye.js}"></script>
+<script type="text/javascript">
+    function refreshCaptcha() {
+        var captchaImage = document.getElementById('captchaImage');
+        captchaImage.src = '/api/v1/account/captcha?' + new Date().getTime();
+    }
+</script>
 </body>
 </html>

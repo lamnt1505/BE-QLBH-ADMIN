@@ -14,7 +14,7 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (data) {
-                allProducts = data; // Store fetched products in the array
+                allProducts = data;
                 var table = $("#product-table");
                 table.empty();
 

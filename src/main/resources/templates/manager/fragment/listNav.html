@@ -147,7 +147,6 @@
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <h8 style="color: #4a4a4a; font-weight: bold; font-size: 1.2rem;">
                     <i class="fas fa-user-circle" style="color: #4caf50; margin-right: 8px;"></i>
-                        Xin Chào:
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${accountName}"></span>
                 </h8>
                 <img class="img-profile rounded-circle" th:src="'data:image/jpeg;base64,' + ${image}" alt="User Image">
@@ -156,6 +155,9 @@
                  aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Hồ Sơ Cá Nhân
+                </a>
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Cài Đặt
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" th:href="@{/logout}" data-toggle="modal" data-target="#logoutModal">

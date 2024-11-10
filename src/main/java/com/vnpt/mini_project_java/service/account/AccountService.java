@@ -8,6 +8,7 @@ import com.vnpt.mini_project_java.response.LoginMesage;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public interface AccountService {
 
     void updateAccount(long accountID, AccountDTO accountDTO, MultipartFile image);
 
-    LoginMesage loginAccount(LoginDTO loginDTO);
+    LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session);
 
 
 }

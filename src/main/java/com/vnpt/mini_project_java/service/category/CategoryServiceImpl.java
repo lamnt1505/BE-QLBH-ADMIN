@@ -4,6 +4,9 @@ import com.vnpt.mini_project_java.dto.CategoryDTO;
 import com.vnpt.mini_project_java.entity.Category;
 import com.vnpt.mini_project_java.respository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +36,20 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDTO> getAllCategoryDTO(){
         List<Category> categories = categoryRepository.findAll();
         return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CategoryDTO> getPaginatedCategorys(Pageable pageable) {
+        // Fetch the paginated products
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+
+        // Convert the Page<Product> to Page<ProductDTO>
+        List<CategoryDTO> categoryDTOS = categoryPage.getContent().stream()
+                .map(CategoryDTO::new) // Use the ProductDTO constructor to map Product to ProductDTO
+                .collect(Collectors.toList());
+
+        // Return a new Page<ProductDTO>
+        return new PageImpl<>(categoryDTOS, pageable, categoryPage.getTotalElements());
     }
 
     @Override

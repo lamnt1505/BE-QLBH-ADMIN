@@ -5,7 +5,6 @@ $(document).ready(function() {
             url: `/api/v1/account/${accountID}/get`,
             type: 'GET',
             success: function(accountDTO) {
-
                 $('#accountName').val(accountDTO.accountName);
                 $('#username').val(accountDTO.username);
                 $('#phoneNumber').val(accountDTO.phoneNumber);

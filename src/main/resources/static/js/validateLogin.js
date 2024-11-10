@@ -2,7 +2,6 @@ function clear() {
     document.getElementById("accountName").innerHTML = "";
     document.getElementById("accountName").innerHTML = "";
 }
-
 function checkempty1(form) {
     clear();
     if (form.accountName.value.trim() == "") {

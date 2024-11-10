@@ -60,7 +60,6 @@ $(document).ready(function () {
                 }, 1500);
             })
             .fail(function (xhr, status, error) {
-                // Show error message
                 Toastify({
                     text: "Đã xảy ra lỗi khi thêm mới lưu trữ",
                     duration: 3000,
