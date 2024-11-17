@@ -32,7 +32,7 @@ public class StatisticalController {
         for(int i = 0; i < cookies.length; ++i){
             if(cookies[i].getName().equals("accountName")){
                 Account users = this.accountService.findByname(cookies[i].getValue()).get();
-                modelMap.addAttribute("accountName", users.getAccountName());
+                modelMap.addAttribute("accountName", users.getUsername());
                 modelMap.addAttribute("accountID",users.getAccountID());
             }
         }
@@ -50,8 +50,9 @@ public class StatisticalController {
                 String imageBase64 = account.getImageBase64();
                 if (account.isAdmin()) {
                     model.addAttribute("username", accountName);
-                    model.addAttribute("accountName", account.getAccountName());
+                    model.addAttribute("accountName", account.getUsername());
                     model.addAttribute("image", imageBase64);
+                    model.addAttribute("quarters", statisticalService.statisticalForQuarter());
                     model.addAttribute("years", statisticalService.statisticalForYear());
                     model.addAttribute("products", statisticalService.statisticalForProduct());
                     model.addAttribute("months", statisticalService.statisticalForMonth());
@@ -68,5 +69,4 @@ public class StatisticalController {
             return "redirect:/login";
         }
     }
-
 }

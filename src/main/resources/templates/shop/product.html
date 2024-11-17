@@ -9,18 +9,28 @@
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
-    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/product.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/product.css}">
+    <style type="text/css">
+        .dropdown-item {
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+        .dropdown-item:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="fragment/header::header"></div>
@@ -192,18 +202,53 @@
     </div>
 </div>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/bxslider.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/search.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/product.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(document).on('click', '.addToFavorite', function() {
+        var productID = $(this).data('productid');
+        var accountID = /*[[${accountID}]]*/ '0';
+
+        if (!accountID || accountID === 0) {
+            alert("Account ID is missing. Please log in.");
+            return;
+        }
+
+        console.log("Account ID:", accountID);
+        console.log("Product ID:", productID);
+
+        $.ajax({
+            url: "/dossier-statistic/add--favorite",
+            method: "POST",
+            data: {
+                accountID: accountID,
+                productID: productID
+            },
+            success: function(response) {
+                //console.log("Server response:", response);
+                alert(response);
+            },
+            error: function(xhr) {
+                if (xhr.status === 200) {
+                    console.log("AJAX treated as success due to 200 status in error callback:", xhr.responseText);
+                    alert(xhr.responseText);
+                } else {
+                    //console.log("AJAX Error:", xhr.status, xhr.responseText);
+                    alert("Có lỗi xảy ra khi thêm vào danh sách yêu thích.");
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

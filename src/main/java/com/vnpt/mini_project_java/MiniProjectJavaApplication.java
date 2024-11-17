@@ -15,7 +15,7 @@ public class MiniProjectJavaApplication {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
-    public static void main(String[] args) {//lớp chính có lơp này có đầu tiên 
+    public static void main(String[] args) {
         SpringApplication.run(MiniProjectJavaApplication.class, args);
     }
 }

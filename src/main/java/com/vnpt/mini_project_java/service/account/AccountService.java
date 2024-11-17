@@ -34,5 +34,4 @@ public interface AccountService {
 
     LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session);
 
-
 }

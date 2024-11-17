@@ -61,7 +61,7 @@ public class HomeController {
 
     @GetMapping()
     public String homeuser(ModelMap modelMap, HttpServletRequest request,
-                           @CookieValue(value ="accountName", required = false) String accountName,
+                           @CookieValue(value = "accountName", required = false) String accountName,
                            HttpServletResponse response, HttpSession session) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -81,12 +81,11 @@ public class HomeController {
                     }
                 }
             }
-        }else {
+        } else {
             if (session.getAttribute("cart") == null) {
                 session.setAttribute("cart", new ArrayList<>());
             }
         }
-
         modelMap.addAttribute("product", this.productService.findAll());
         modelMap.addAttribute("category", this.categoryService.findAll());
 
@@ -95,12 +94,7 @@ public class HomeController {
 
     @GetMapping(value = "/showProductSingle/{productID}")
     public String ShowProductByIdProductDetail(ModelMap model, @PathVariable("productID") long productID
-            ,HttpServletRequest request, HttpServletResponse response) {
-
-        getName(request, model);
-
-        model.addAttribute("product", this.productService.findAll());
-        model.addAttribute("category", this.categoryService.findAll());
+            , HttpServletRequest request, HttpServletResponse response) {
 
         List<ProductVersion> productVersions = this.productVersionService.findAllByProductId(productID);
         model.addAttribute("productversions", productVersions);
@@ -136,25 +130,58 @@ public class HomeController {
     }
 
     @GetMapping("/product")
-    public String getProduct(HttpServletRequest request, HttpServletResponse response, ModelMap model){
-        getName(request, model);
-        model.addAttribute("product", this.productService.findAll());
-        model.addAttribute("category", this.categoryService.findAll());
+    public String getProduct(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accountName")) {
+                    System.out.println("Cookie accountName: " + cookie.getValue());
+
+                    Optional<Account> optionalAccount = this.accountService.findByname(cookie.getValue());
+
+                    if (optionalAccount.isPresent()) {
+                        Account acc = optionalAccount.get();
+                        modelMap.addAttribute("accountName", acc.getUsername());
+                        modelMap.addAttribute("accountID", acc.getAccountID());
+                        return "shop/product";
+                    }
+                }
+            }
+        }
+        modelMap.addAttribute("product", this.productService.findAll());
+        modelMap.addAttribute("category", this.categoryService.findAll());
         return "shop/product";
     }
-    
+
     @GetMapping("/introduce")
-    public String getIntroduce(HttpServletRequest request, HttpServletResponse response, ModelMap model){
-        getName(request, model);
-        model.addAttribute("product", this.productService.findAll());
-        model.addAttribute("category", this.categoryService.findAll());
+    public String getIntroduce(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         return "shop/introduce";
     }
+
     @GetMapping("/contact")
-    public String getContact(HttpServletRequest request, HttpServletResponse response, ModelMap model){
-        getName(request, model);
-        model.addAttribute("product", this.productService.findAll());
-        model.addAttribute("category", this.categoryService.findAll());
+    public String getContact(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         return "shop/contact";
+    }
+
+    @GetMapping("/favorites")
+    public String getFavoritePage(ModelMap modelMap, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accountName")) {
+                    System.out.println("Cookie accountName: " + cookie.getValue());
+
+                    Optional<Account> optionalAccount = this.accountService.findByname(cookie.getValue());
+
+                    if (optionalAccount.isPresent()) {
+                        Account acc = optionalAccount.get();
+                        modelMap.addAttribute("accountName", acc.getUsername());
+                        modelMap.addAttribute("accountID", acc.getAccountID());
+                        return "shop/favorites--list";
+                    }
+                }
+            }
+        }
+        return "shop/favorites--list";
     }
 }

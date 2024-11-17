@@ -17,6 +17,7 @@ public class LoginMesage {
     
     @JsonProperty("isAdmin")
     private boolean isAdmin;
+
     @JsonProperty("isUser")
     private boolean isUser;
 

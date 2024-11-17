@@ -198,16 +198,35 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <div class="about-content">
-                    <h2 class="section-title">Chào Mừng Đến Với Cửa Hàng Của Chúng Tôi</h2>
-                    <p>Chúng tôi tự hào mang đến cho bạn những sản phẩm chất lượng, uy tín và dịch vụ tận tâm. Tại đây, bạn sẽ tìm thấy các sản phẩm công nghệ tiên tiến nhất, cùng với những ưu đãi hấp dẫn chỉ có tại cửa hàng của chúng tôi. Hãy khám phá và trải nghiệm mua sắm dễ dàng, nhanh chóng với nhiều tiện ích vượt trội.</p>
-                    <p>Chúng tôi luôn nỗ lực không ngừng để mang lại trải nghiệm mua sắm tuyệt vời nhất, từ các sản phẩm công nghệ đến phụ kiện, đảm bảo chất lượng với giá cả phải chăng.</p>
-                    <a th:href="@{/index/product}" class="btn btn-primary">Khám Phá Ngay</a>
+                <div class="contact-content">
+                    <h2 class="section-title">Liên Hệ Với Chúng Tôi</h2>
+                    <p>Chúng tôi luôn sẵn sàng lắng nghe ý kiến và hỗ trợ mọi thắc mắc từ quý khách hàng. Nếu có bất kỳ câu hỏi nào về sản phẩm, dịch vụ, hoặc cần hỗ trợ tư vấn, hãy liên hệ với chúng tôi qua thông tin dưới đây:</p>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li><strong>Địa chỉ:</strong> Số 59, Đường Yên Khê 2, Phường Thanh Khê Đông, Quận Thanh Khê, TP. Đà Nẵng</li>
+                        <li><strong>Số điện thoại:</strong> 0123 456 789</li>
+                        <li><strong>Email:</strong> contact@cuahang.com</li>
+                        <li><strong>Giờ làm việc:</strong> Thứ Hai - Thứ Sáu: 9:00 - 18:00</li>
+                    </ul>
+                    <p>Đội ngũ chăm sóc khách hàng của chúng tôi sẽ phản hồi trong thời gian sớm nhất. Rất mong được phục vụ bạn một cách tận tình và chuyên nghiệp nhất.</p>
+                    <a th:href="@{/index/contact}" class="btn btn-primary">Liên Hệ Ngay</a>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="about-image">
-                    <img src="/resources/images/e-commerce.jpg" alt="Giới Thiệu Cửa Hàng" class="img-responsive" style="border-radius: 8px;">
+                <div class="favorite-products">
+                    <h2 class="section-title">Sản Phẩm Tôi Yêu Thích</h2>
+                    <div id="favoriteList">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Hình ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
+                            </tr>
+                            </thead>
+                            <tbody id="favoriteTableBody">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -412,7 +431,48 @@
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/datatables/dataTables.bootstrap4.js}"></script>
+<script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    function loadFavoriteProducts() {
+        var accountID = /*[[${accountID}]]*/ '0';
+        console.log(accountID);
+        $.ajax({
+            url: "/dossier-statistic/list--favorite",
+            method: "GET",
+            data: { accountID: accountID },
+            success: function(response) {
+                var productList = response;
+                var htmlContent = '';
+
+                if (productList.length > 0) {
+                    productList.forEach(function(product) {
+                        htmlContent += `
+                        <tr>
+                            <td><img src="data:image/png;base64,${product.imageBase64}" alt="${product.name}" class="img-responsive" style="width: 80px; height: auto; border-radius: 8px;"></td>
+                            <td>${product.name}</td>
+                            <td>${product.price} VND</td>
+                        </tr>
+                    `;
+                    });
+                } else {
+                    htmlContent = '<tr><td colspan="4">Chưa có sản phẩm yêu thích nào.</td></tr>';
+                }
+
+                $('#favoriteTableBody').html(htmlContent);
+            },
+            error: function() {
+                console.error("AJAX Error:", status, error);
+                alert("Lỗi khi tải danh sách yêu thích.");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        loadFavoriteProducts();
+    });
+</script>
 </body>
 </html>

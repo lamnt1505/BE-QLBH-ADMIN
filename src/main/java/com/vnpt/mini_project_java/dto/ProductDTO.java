@@ -107,6 +107,6 @@ public class ProductDTO {
         this.productDetails = product.getProductDetails().stream()
                 .map(ProductDetailDTO::new)
                 .collect(Collectors.toSet());
-        System.out.println("Product Versions Retrieved: " + this.productDetails);
+        //System.out.println("Product Versions Retrieved: " + this.productDetails);
     }
 }

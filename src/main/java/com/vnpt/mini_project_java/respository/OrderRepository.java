@@ -2,6 +2,7 @@ package com.vnpt.mini_project_java.respository;
 
 import com.vnpt.mini_project_java.entity.Order;
 import com.vnpt.mini_project_java.projections.StatisticalForMonthProjections;
+import com.vnpt.mini_project_java.projections.StatisticalForQuarterProjections;
 import com.vnpt.mini_project_java.projections.StatisticalForYearProjections;
 import com.vnpt.mini_project_java.projections.StatisticalProductProjections;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -44,6 +45,16 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
             " GROUP BY " +
             "MONTH(order_import),YEAR(order_import)";
 
+    String STATICTICAL_FOR_QUARTER_QUERY = "SELECT YEAR(order_import) AS year, " +
+            "QUARTER(order_import) AS quarter, " +
+            "COUNT(order_info.order_id) AS orderCount, " +
+            "SUM(order_total) AS total, " +
+            "MIN(order_total) AS minTotal, " +
+            "MAX(order_total) AS maxTotal " +
+            "FROM order_info " +
+            "JOIN order_detail ON order_info.order_id = order_detail.order_id " +
+            "GROUP BY YEAR(order_import), QUARTER(order_import)";
+
     @Query(value = STATICTICAL_FOR_PRODUCT_QUERY, nativeQuery = true)
     List<StatisticalProductProjections> statisticalForProduct();
 
@@ -52,6 +63,9 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @Query(value = STATISCAL_FOR_MONTH_QUERY, nativeQuery = true)
     List<StatisticalForMonthProjections> statisticalForMonth();
+
+    @Query(value = STATICTICAL_FOR_QUARTER_QUERY, nativeQuery = true)
+    List<StatisticalForQuarterProjections> statisticalForQuarter();
 
     @Query(value = "select * from order_info where account_id = ?", nativeQuery = true)
     List<Order> findOrderByAccount(long orderID);

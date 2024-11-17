@@ -28,7 +28,7 @@
                  th:replace="manager/fragment/listNav::nav"></nav>
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Thống Kê</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Thống Kê Dịch Vụ</h1>
                 </div>
                 <nav>
                     <div class="row d-flex justify-content nav nav-tabs" id="nav-tab" role="tablist">
@@ -39,6 +39,10 @@
                         <a class="nav-item nav-link" id="nav-profile-tab"
                            data-toggle="tab" href="#nav-profile" role="tab"
                            aria-controls="nav-profile" aria-selected="false">Doanh Thu Theo Năm
+                        </a>
+                        <a class="nav-item nav-link" id="nav-profile-tab"
+                           data-toggle="tab" href="#nav-check" role="tab"
+                           aria-controls="nav-profile" aria-selected="false">Doanh Thu Theo Qúy
                         </a>
                         <a class="nav-item nav-link"
                            id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
@@ -99,6 +103,39 @@
                         <div>
                             <button class="btn btn-primary mr-2" id="exportExcel"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu Excel </button>
                             <button class="btn btn-primary" id="exportPDF"><i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu PDF </button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-check" role="tabpanel"
+                         aria-labelledby="nav-profile-tab">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Năm</th>
+                                    <th>Quý</th>
+                                    <th>Số Lượng Giao Dịch</th>
+                                    <th>Tổng Doanh Thu</th>
+                                    <th>Doanh Thu Thấp Nhất</th>
+                                    <th>Doanh Thu Cao Nhất</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="quarter : ${quarters}">
+                                    <td class="py-1" th:text="${quarter.year}"></td>
+                                    <td class="py-1" th:text="${quarter.quarter}"></td>
+                                    <td th:text="${quarter.orderCount}"></td>
+                                    <td th:text="${quarter.total}"></td>
+                                    <td th:text="${quarter.minTotal}"></td>
+                                    <td th:text="${quarter.maxTotal}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <button class="btn btn-primary mr-2" id="exportExcel">
+                                <i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu Excel
+                            </button>
+                            <button class="btn btn-primary" id="exportPDF">
+                                <i class="fas fa-download fa-sm text-white-50"></i> Xuất Dữ Liệu PDF
+                            </button>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel"

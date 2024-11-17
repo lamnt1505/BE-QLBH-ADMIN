@@ -16,6 +16,18 @@
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/login.css}">
+    <style type="text/css">
+        .link-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .link-wrapper a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper" th:style="'background-image: url(' + @{/resources/images/e-commerce-la-gi-02.png} + ');'">
@@ -25,8 +37,8 @@
         </div>
         <form id="loginForm" onsubmit="return false;" name="form">
             <h3 style="color: rgb(75,66,2);">ĐĂNG NHẬP</h3>
-            <div class="spanerror" style="width: 320px; margin-top: -20px; height: 40px;">
-                <span id="error" style="font-size: 15px; padding-left: 56px;"></span>
+            <div class="spanerror" style="width: 320px; margin: 10px auto; height: auto; text-align: center;">
+                <span id="error" style="font-size: 15px; color: red; font-weight: bold;"></span>
             </div>
             <div class="form-wrapper">
                 <input type="text" id="accountName" name="accountName" placeholder="Tên Đăng Nhập"
@@ -44,7 +56,6 @@
                     <i class="fa fa-eye toggle-password" id="togglePassIcon" style="color: #4b4202;"></i>
                 </span>
             </div>
-            <!-- Captcha Section -->
             <div class="form-wrapper">
                 <img id="captchaImage" src="/api/v1/account/captcha?ts=" + new Date().getTime() alt="Captcha Image">
                 <button type="button" onclick="refreshCaptcha()">Tải lại mã</button>
@@ -63,8 +74,9 @@
                     </div>
                 </a>
             </div>
-            <div class="home">
+            <div class="link-wrapper">
                 <a th:href="@{/index}">Trở về trang chủ</a>
+                <a th:href="@{/forgot}" style="margin-right: 20px;">Quên mật khẩu</a>
             </div>
         </form>
     </div>

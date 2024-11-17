@@ -3,13 +3,11 @@ package com.vnpt.mini_project_java.controller;
 
 import com.vnpt.mini_project_java.entity.Account;
 import com.vnpt.mini_project_java.entity.Product;
-import com.vnpt.mini_project_java.entity.Users;
 import com.vnpt.mini_project_java.service.account.AccountService;
 import com.vnpt.mini_project_java.service.category.CategoryService;
 import com.vnpt.mini_project_java.service.product.ProductService;
 import com.vnpt.mini_project_java.service.productDetail.ProductDetailService;
 import com.vnpt.mini_project_java.service.productVersion.ProductVersionService;
-import com.vnpt.mini_project_java.service.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -33,9 +29,6 @@ public class ViewUserController {
 
     @Autowired
     AccountService accountService;
-
-    @Autowired
-    UserService userService;
 
     @Autowired
     ProductVersionService productVersionService;
@@ -80,60 +73,13 @@ public class ViewUserController {
         return "login1/login";
     }
 
-    boolean loginFailed = false;
-    @PostMapping("/login")
-    public String login(@RequestParam("accountName") String accountName,
-                        @RequestParam("accountName") String loginInput,
-                        @RequestParam("accountPass") String accountPass,
-                        @RequestParam(value = "rememberMe", defaultValue = "false") boolean rememberMe,
-                        HttpServletResponse response,
-                        ModelMap model) {
-        Optional<Users> optionalUsers = userService.findByname(accountName);
-        if (optionalUsers.isPresent()) {
-            Users users = optionalUsers.get();
-            if (users.getUserPass().equals(accountPass)) {
-                Cookie cookie = new Cookie("accountName", users.getAccountName());
-                cookie.setMaxAge(7 * 24 * 60 * 60);
-                response.addCookie(cookie);
-                return "redirect:/manager/index";
-            } else {
-                model.addAttribute("errorpass", "Mật Khẩu Không Chính Xác");
-                return "login1/login";
-            }
-        } else {
-            Optional<Account> optionalByName = accountService.findByname(loginInput);
-            Optional<Account> optionalByPhone = accountService.findByphone(loginInput);
-            if (optionalByName.isPresent() || optionalByPhone.isPresent()) {
-                if (optionalByName.isPresent() && optionalByName.get().getAccountPass().equals(accountPass)) {
-                    Cookie cookie = new Cookie("accountName", optionalByName.get().getAccountName());
-                    cookie.setMaxAge(7 * 24 * 60 * 60);
-                    response.addCookie(cookie);
-                    return "redirect:/index";
-                } else if (optionalByPhone.isPresent() && optionalByPhone.get().getAccountPass().equals(accountPass)) {
-                    Cookie cookie = new Cookie("accountName", optionalByPhone.get().getAccountName());
-                    cookie.setMaxAge(7 * 24 * 60 * 60);
-                    response.addCookie(cookie);
-                    return "redirect:/index";
-                } else {
-                    loginFailed = true;
-                    model.addAttribute("loginInput", loginInput);
-                    model.addAttribute("error", "Mật khẩu không chính xác");
-                    return "login1/login";
-                }
-            } else {
-                loginFailed = true;
-                model.addAttribute("loginInput", loginInput);
-                model.addAttribute("error", "Tài khoản hoặc số điện thoại không tồn tại");
-                if (rememberMe) {
-                    Cookie cookie = new Cookie("accountName", accountName);
-                    cookie.setMaxAge(30 * 24 * 60 * 60);
-                    response.addCookie(cookie);
-                }
-                return "login1/login";
-            }
-        }
+    @GetMapping("/forgot")
+    public String forgot(Model model) {
+        loginFailed = false;
+        return "login1/forgot--password";
     }
 
+    boolean loginFailed = false;
 	
     @GetMapping("/registerd") public String registerd(Model model) {
 		 model.addAttribute("category", this.categoryService.findAll());
@@ -147,26 +93,6 @@ public class ViewUserController {
         model.addAttribute("account", this.accountService.findById(accountID).orElse(null));
         getName(request, model);
         return "login1/updateProfile";
-    }
-
-    @PostMapping("/updateProfile")
-    public String updateCus(@ModelAttribute("accountID") @Valid Account account,
-                            @CookieValue(value = "accountName", required = false) String accountName,
-                            HttpServletRequest request, ModelMap model) {
-        return "redirect:/index";
-    }
-
-    @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
-    public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                cookie.setValue("");
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-            }
-        }
-        return "redirect:/index";
     }
 
 }

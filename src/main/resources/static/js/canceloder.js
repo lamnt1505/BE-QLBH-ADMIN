@@ -11,19 +11,35 @@ $(document).ready(function () {
                     orderID: orderID
                 },
                 success: function (response) {
-                    alert("Đơn hàng đã được hủy thành công");
+                    Toastify({
+                        text: "Đơn hàng đã được hủy thành công",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #4CAF50, #2E7D32)",
+                        close: true
+                    }).showToast();
                     button.text("Đã hủy");
                     button.prop("disabled", true);
                     button.removeClass("cancel-order-button");
                 },
                 error: function (xhr, status, error) {
+                    let errorMessage = "";
                     if (xhr.status === 404) {
-                        alert("Lỗi: Đơn hàng không tìm thấy");
+                        errorMessage = "Lỗi: Đơn hàng không tìm thấy";
                     } else if (xhr.status === 400) {
-                        alert("Lỗi: Đơn hàng không thể hủy bỏ");
+                        errorMessage = "Lỗi: Đơn hàng không thể hủy bỏ";
                     } else {
-                        alert("Lỗi: " + xhr.responseText);
+                        errorMessage = "Lỗi: " + xhr.responseText;
                     }
+                    Toastify({
+                        text: errorMessage,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                        close: true
+                    }).showToast();
                 }
             });
         }

@@ -12,6 +12,8 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <!-- Bootstrap JS + Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
@@ -19,71 +21,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!--<style type     .progressbar {
-            counter-reset: step;
-            padding: 0;
-        }
-        .progressbar li:first-child:after {
-            content: none;
-        }
-        .progressbar li.active:after,
-        .progressbar li.complete:after {
-            background: #3aac5d;
-        }
-
-        .progressbar li.active:before,
-        .progressbar li.complete:before {
-            background: #3aac5d;
-            border-color: #3aac5d;
-            color: #fff;
-        }
-
-        .progressbar li.active {
-            color: #3aac5d;
-            font-weight: 700;
-        }
-
-        .progressbar li.complete {
-            color: #333;
-            font-weight: 700;
-        }
-        .progressbar li {
-            float: left;
-            list-style: none;
-            position: relative;
-            text-align: center;
-            width: calc(100% / 5);
-        }
-        .progressbar li:before {
-            background: #fff;
-            border: 2px solid #bebebe;
-            border-radius: 50%;
-            color: #bebebe;
-            content: counter(step);
-            counter-increment: step;
-            display: block;
-            font-weight: 700;
-            height: 30px;
-            line-height: 27px;
-            margin: 0 auto 10px;
-            text-align: center;
-            width: 30px;
-        }
-        .progressbar li:after {
-            background: #979797;
-            content: '';
-            height: 3px;
-            left: -50%;
-            position: absolute;
-            top: 15px;
-            width: 100%;
-            z-index: -1;
-        }="text/css">
-    </style>-->
 </head>
 <body>
 <div th:replace="fragment/header::header"></div>
@@ -197,14 +137,14 @@
                         <form action="#">
                             <table cellspacing="0" class="shop_table cart" th:if="${#lists.size(session.cart) > 0}">
                                 <thead>
-                                <tr>
-                                    <th class="product-remove">&nbsp;</th>
-                                    <th class="product-thumbnail">&nbsp;</th>
-                                    <th class="product-name">Sản Phẩm</th>
-                                    <th class="product-price">Giá Tiền</th>
-                                    <th class="product-quantity">Số Lượng</th>
-                                    <th class="product-subtotal">Tổng</th>
-                                </tr>
+                                    <tr>
+                                        <th class="product-remove">&nbsp;</th>
+                                        <th class="product-thumbnail">&nbsp;</th>
+                                        <th class="product-name">Sản Phẩm</th>
+                                        <th class="product-price">Giá Tiền</th>
+                                        <th class="product-quantity">Số Lượng</th>
+                                        <th class="product-subtotal">Tổng</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="cart_item" th:each="product : ${session.cart}">
@@ -245,8 +185,8 @@
                                 <tr>
                                     <td class="actions" colspan="6">
                                         <div class="coupon">
-                                            <label>Coupon:</label>
-                                            <input type="text" placeholder="Coupon code" value="" class="input-text">
+                                            <label>Phiếu giảm giá:</label>
+                                            <input type="text" placeholder="Mã phiếu giảm giá" value="" class="input-text">
                                             <input type="submit" value="Apply Coupon" name="apply_coupon"
                                                    class="button">
                                         </div>
@@ -257,13 +197,6 @@
                                 </tbody>
                             </table>
                         </form>
-                        <!--<ul class="progressbar">
-                            <li class="complete">Step 1</li>
-                            <li class="complete">Step 2</li>
-                            <li class="active">Step 3</li>
-                            <li>Step 4</li>
-                            <li>Step 5</li>
-                        </ul>-->
                         <div class="row" th:unless="${#lists.size(session.cart) > 0}">
                             <div class="text-center">
                                 <h2>Chưa Chọn Sản Phẩm Nào!</h2>  <div class="icon">📝</div>
@@ -281,7 +214,7 @@
                                             <th>Ngày Đặt Hàng</th>
                                             <th>Trạng Thái</th>
                                             <th>Tổng Cộng</th>
-                                            <th>Hủy Đơn Hàng</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-center" th:each="oneinvoice : ${orders}">
@@ -301,6 +234,7 @@
                                         </td>
                                         <td>
                                             <button class="cancel-order-button"
+                                                    th:if="${oneinvoice.status != 'Hoàn thành'}"
                                                     th:attr="data-orderid=${oneinvoice.orderID}">Hủy Đơn Hàng
                                             </button>
                                         </td>
@@ -324,6 +258,7 @@
 <script type="text/javascript" th:src="@{/resources/js/jquery.sticky.js}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/canceloder.js}"></script>
 </body>

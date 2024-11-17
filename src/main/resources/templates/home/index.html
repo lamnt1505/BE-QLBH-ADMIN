@@ -10,11 +10,14 @@
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap JS + Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/responsive.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/index.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style1.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -22,30 +25,10 @@
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
-    <style type="text/css">
-        @keyframes highlight {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); color: #4CAF50; }
-            100% { transform: scale(1); }
-        }
-
-        .highlight {
-            animation: highlightAnimation 1s ease-in-out;
-        }
-        .shopping-item {
-            position: relative;
-            padding: 10px;
-        }
-        #cartQuantity {
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-    </style>
 </head>
 <body>
 <div th:replace="fragment/header::header"></div>
-    <div class="site-branding-area">
+<div class="site-branding-area">
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
@@ -69,7 +52,7 @@
         </div>
     </div>
 </div>
-    <div class="mainmenu-area">
+<div class="mainmenu-area">
     <div class="container">
         <div class="row">
             <div class="navbar-header">
@@ -86,7 +69,7 @@
                     <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
                     <li class=""><a th:href="@{/cart}">Giỏ Hàng</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Loại<b class="caret"></b></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">Loại Sản Phẩm<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li th:each="cate : ${category}">
                                 <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
@@ -102,7 +85,7 @@
         </div>
     </div>
 </div>
-    <div class="slider-area">
+<div class="slider-area">
     <div class="block-slider block-slider4">
         <ul id="bxslider-home4" class="slider-list">
             <li class="slider-item">
@@ -112,7 +95,8 @@
                         iPhone <span class="primary">6 <strong>Plus</strong></span>
                     </h2>
                     <h4 class="caption subtitle">Dual SIM</h4>
-                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
                 </div>
             </li>
             <li class="slider-item">
@@ -122,7 +106,8 @@
                         by one, get one <span class="primary">50% <strong>off</strong></span>
                     </h2>
                     <h4 class="caption subtitle">school supplies & backpacks.*</h4>
-                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
                 </div>
             </li>
             <li class="slider-item">
@@ -132,7 +117,8 @@
                         Apple <span class="primary">Store <strong>iPod</strong></span>
                     </h2>
                     <h4 class="caption subtitle">Chọn Mục</h4>
-                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
                 </div>
             </li>
             <li class="slider-item">
@@ -142,13 +128,14 @@
                         Apple <span class="primary">Store <strong>iPod</strong></span>
                     </h2>
                     <h4 class="caption subtitle">& Phone</h4>
-                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay Bây Giờ</a>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
                 </div>
             </li>
         </ul>
     </div>
 </div>
-    <div class="promo-area">
+<div class="promo-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
@@ -156,72 +143,73 @@
                 <div class="single-promo promo1">
                     <i class="fa fa-refresh"></i>
                     <h4>Hoàn trả trong 30 ngày</h4>
-                    <p>Mua Sắm Với Trang Web Đáng Tin Cậy</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo2">
                     <i class="fa fa-truck"></i>
                     <h4>Miễn Phí Vận Chuyển</h4>
-                    <p>Với Tất Cả Các Đơn Hàng Trên $50</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo3">
                     <i class="fa fa-lock"></i>
                     <h4>Thanh Toán An Toàn</h4>
-                    <p>Thông Tin Của Bạn Được An Toàn</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo4">
                     <i class="fa fa-gift"></i>
                     <h4>Sản Phẩm Mới</h4>
-                    <p>Sản Phẩm Mới Nhất Của Chúng Tôi</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-    <div class="maincontent-area">
-        <div class="zigzag-bottom"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="latest-product" >
-                        <h2 class="section-title">Sản Phẩm Mới Nhất</h2>
-                        <div class="product-carousel" th:each="product : ${product}">
-                            <div class="single-product">
-                                <div class="product-f-image">
-                                    <img th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}" alt=""
-                                         style="height: 200px">
-                                    <div class="product-hover">
-                                        <a class="add-to-cart-link procart" th:attr="data-productid=${product.productID}">
-                                            <i class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng
-                                        </a>
-                                        <a th:href="@{'/index/showProductSingle/'+${product.productID}}" class="view-details-link"><i class="fa fa-link"></i>
-                                            Chi Tiết Sản Phẩm</a>
+<!-- End promo area -->
+<div class="maincontent-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="latest-product">
+                    <h2 class="section-title">Sản Phẩm Mới Nhất</h2>
+                    <!-- Carousel Container -->
+                    <div class="product-carousel owl-carousel">
+                                    <!-- Vòng lặp sản phẩm -->
+                                    <div class="single-product" th:each="product : ${product}">
+                                        <div class="product-f-image">
+                                            <!-- Hiển thị ảnh sản phẩm -->
+                                            <img th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}"
+                                                 alt="">
+                                            <div class="product-hover">
+                                                <a class="add-to-cart-link procart"
+                                                   th:attr="data-productid=${product.productID}"><i
+                                                        class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng</a>
+                                                <a th:href="@{'/index/showProductSingle/'+${product.productID}}"
+                                                   class="view-details-link"><i class="fa fa-link"></i>Chi Tiết Sản Phẩm</a>
+                                            </div>
+                                        </div>
+                                        <h2><a th:text="${product.productName}"></a></h2>
+                                        <div class="product-carousel-price">
+                                            <ins th:text="${product.price}"></ins>
+                                            <del>$100.00</del>
+                                        </div>
                                     </div>
-                                </div>
-                                <h2><a th:text="${product.productName}"></a></h2>
-                                <div class="product-carousel-price">
-                                    <ins th:text="${product.price}"></ins>
-                                    <del>$100.00</del>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="brands-area">
+<!-- End promo area -->
+<div class="brands-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="brand-wrapper">
-                    <div class="brand-list">
+                    <div class="brand-list owl-carousel">
                         <img src="/resources/img/brand1.png" alt="">
                         <img src="/resources/img/brand2.png" alt="">
                         <img src="/resources/img/brand3.png" alt="">
@@ -236,7 +224,7 @@
         </div>
     </div>
 </div>
-    <div class="product-widget-area">
+<div class="product-widget-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
@@ -407,14 +395,16 @@
 </div>
 <footer th:replace="fragment/footer::footer"></footer>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
-<script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/bxslider.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/product-carousel.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/brand-list.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
 </body>
 </html>

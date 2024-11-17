@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+
 @UtilityClass
 public class ProductSpecifications {
     public static Specification<Product> searchByCriteria(ProductSearchCriteriaDTO criteria){

@@ -1,0 +1,126 @@
+@keyframes highlight {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+        color: #4CAF50;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.shopping-item {
+    position: relative;
+    padding: 10px;
+}
+
+#cartQuantity {
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.single-product {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.single-product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.product-f-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-f-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-f-image:hover .product-hover {
+    opacity: 1;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+}
+
+.product-carousel-price {
+    font-size: 14px;
+    color: #999;
+    margin: 5px 0;
+}
+
+.product-carousel-price ins {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.product-carousel-price del {
+    color: #aaa;
+    text-decoration: line-through;
+}
+.owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.owl-nav .owl-prev, .owl-nav .owl-next {
+    background: #f7f7f7;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.owl-nav .owl-prev, .owl-nav .owl-next {
+    display: block;
+    pointer-events: auto;
+    opacity: 1;
+}
+.owl-prev {
+    left: -50px;
+}
+.owl-next {
+    right: -50px;
+}
+

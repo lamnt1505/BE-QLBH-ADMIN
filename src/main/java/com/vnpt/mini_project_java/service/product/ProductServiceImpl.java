@@ -44,8 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     public ProductServiceImpl(ProductRepository productRepository, TrademarkReopsitory trademarkReopsitory,
-                              CategoryRepository categoryRepository,
-                              ProductDetailRepository productDetailRepository) {
+                              CategoryRepository categoryRepository) {
         super();
         this.productRepository = productRepository;
         this.trademarkReopsitory = trademarkReopsitory;
@@ -173,17 +172,15 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public Page<ProductDTO> getPaginatedProducts(Pageable pageable) {
-        // Fetch the paginated products
         Page<Product> productPage = productRepository.findAll(pageable);
 
-        // Convert the Page<Product> to Page<ProductDTO>
         List<ProductDTO> productDTOs = productPage.getContent().stream()
-                .map(ProductDTO::new) // Use the ProductDTO constructor to map Product to ProductDTO
+                .map(ProductDTO::new)
                 .collect(Collectors.toList());
 
-        // Return a new Page<ProductDTO>
         return new PageImpl<>(productDTOs, pageable, productPage.getTotalElements());
     }
+
     @Override
     public List<ProductDTO> getProductsByCategoryId(Long categoryID) {
         List<Product> products = productRepository.findByCategoryId(categoryID);

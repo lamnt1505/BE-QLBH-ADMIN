@@ -41,7 +41,6 @@ public class ExcelUtil {
 
                 String name = nameCell.getStringCellValue();
                 String description = descriptionCell.getStringCellValue();
-                //LocalDate dateProduct = dateCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 LocalDate dateProduct = null;
                 if (dateCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(dateCell)) {
                     dateProduct = dateCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -101,12 +100,10 @@ public class ExcelUtil {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Statistical Product");
 
-
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(1).setCellValue("Product Name");
         headerRow.createCell(2).setCellValue("Total Quantity");
         headerRow.createCell(3).setCellValue("Total Revenue");
-
 
         int rowNum = 1;
         for (StatisticalProductProjections statistic : statistics) {

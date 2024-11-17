@@ -34,6 +34,11 @@ $(document).ready(function () {
             isValid = false;
         }
 
+        if ($('#image').get(0).files.length === 0) {
+            alert("Vui lòng chọn hình ảnh sản phẩm.");
+            isValid = false;
+        }
+
         return isValid;
     }
     function ajaxPost() {

@@ -32,7 +32,7 @@ public class ProductDetailDTO {
         this.productScreen = productDetail.getProductScreen();
         this.productBluetooth = productDetail.getProductBluetooth();
         this.productID = productDetail.getProduct().getProductID();
-        System.out.println("Mapping ProductVersionDTO: versionID=" + productDetailID + ", memory=" + productCamera + ", color=" + productWifi);
+        //System.out.println("Mapping ProductVersionDTO: versionID=" + productDetailID + ", memory=" + productCamera + ", color=" + productWifi);
     }
 
 }

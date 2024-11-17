@@ -5,24 +5,30 @@
                 <div class="col-md-8">
                     <div class="user-menu">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i>Danh Sách Yêu Thích</a></li>
-                            <li><a th:href="@{/cart}"><i class="fa fa-user"></i>Giỏ Hàng Của Tôi</a></li>
+                            <li><a th:href="@{index/favorites}"><i class="fa fa-heart"></i>Danh Sách Yêu Thích</a></li>
+                            <li><a th:href="@{/cart}"><i class="fa fa-cart-plus"></i>Giỏ Hàng Của Tôi</a></li>
                             <li th:if="${accountName == null}"><a th:href="@{/login}"><i class="fa fa-user"></i>Đăng Nhập</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="header-links pull-right">
-                        <ul>
-                            <li th:if="${accountName != null}">
-                                <a th:href="@{'/updateProfile/' + ${accountID}}">
-                                    <i class="fa fa-user"></i> <span class="shop-menu-ttl" id="username" th:text="${accountName}"></span>
+                        <ul class="nav">
+                            <li class="nav-item dropdown" th:if="${accountName != null}">
+                                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                    <span class="shop-menu-ttl" id="username" th:text="${accountName}"></span>
                                 </a>
-                            </li>
-                            <li th:if="${accountName != null}">
-                                <button class="btn btn-danger btn-sm" id="logoutButton">
-                                    <i class="fa fa-sign-out"></i> Đăng Xuất
-                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                    <li>
+                                        <a class="dropdown-item" th:href="@{'/updateProfile/' + ${accountID}}">
+                                            <i class="fa fa-cog"></i> Chỉnh Sửa Thông Tin
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger" id="logoutButton"><i class="fa fa-sign-out"></i> Đăng Xuất</button>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>

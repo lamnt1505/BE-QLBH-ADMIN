@@ -17,11 +17,7 @@ $(document).ready(function () {
                 allProducts = data;
                 var table = $("#product-table");
                 table.empty();
-
-
                 var currentPageProducts = allProducts.slice(0, pageSize);
-
-
                 $.each(currentPageProducts, function (index, product) {
                     var row = "<tr>" +
                         "<td>" + product.name + "</td>" +

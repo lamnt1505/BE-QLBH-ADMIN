@@ -79,9 +79,6 @@ function listPageProduct(start, max, donit) {
             '<a class="btn btn-danger favorite-btn addToFavorite" data-productid="' + listProduct[i]['id'] + '">' +
             '<i class="ion-ios-heart"></i> Yêu Thích' +
             '</a>' +
-            '<a class="btn btn-secondary compare-btn addToCompare" data-productid="' + listProduct[i]['id'] + '">' +
-            '<i class="ion-ios-shuffle"></i> So Sánh' +
-            '</a>' +
             '</div>' +
             '</div>' +
             '</div>';

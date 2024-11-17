@@ -384,6 +384,7 @@ body { font-family:Arial, Helvetica, sans-serif; }
     top: 0;
     width: 100%;overflow: hidden;border: 1px solid #ddd;
 }
+
 .product-hover:after {
     background: none repeat scroll 0 0 #000;
     content: "";

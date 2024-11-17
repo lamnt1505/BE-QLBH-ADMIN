@@ -66,6 +66,7 @@ public class StorageRestcontroller {
             
 		}
     }
+
 	@DeleteMapping ("/delete/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable long id) {
 		try {

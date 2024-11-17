@@ -1,6 +1,7 @@
 package com.vnpt.mini_project_java.service.statistical;
 
 import com.vnpt.mini_project_java.projections.StatisticalForMonthProjections;
+import com.vnpt.mini_project_java.projections.StatisticalForQuarterProjections;
 import com.vnpt.mini_project_java.projections.StatisticalForYearProjections;
 import com.vnpt.mini_project_java.projections.StatisticalProductProjections;
 import com.vnpt.mini_project_java.respository.OrderRepository;
@@ -29,5 +30,10 @@ public class StatisticalServiceImpl implements StatisticalService {
     @Override
     public List<StatisticalForMonthProjections> statisticalForMonth() {
         return orderRepository.statisticalForMonth();
+    }
+
+    @Override
+    public List<StatisticalForQuarterProjections> statisticalForQuarter() {
+        return orderRepository.statisticalForQuarter();
     }
 }

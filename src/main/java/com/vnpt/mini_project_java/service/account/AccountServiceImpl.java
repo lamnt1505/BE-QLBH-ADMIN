@@ -52,23 +52,28 @@ public class AccountServiceImpl implements AccountService {
 	public Optional<Account> findByphone(String phone) {
 		return accountRepository.findByphone(phone);
 	}
+
 	@Override
 	public Account findByAccountName(String accountName) {
 		return accountRepository.findByAccountName(accountName);
 	}
+
 	@Override
 	public Optional<Account> findByname(String accountName) {
 		return accountRepository.findByname(accountName);
 	}
+
 	@Override
 	public List<AccountDTO> getAllAccountDTO() {
 		List<Account> accounts = accountRepository.findAll();
 		return accounts.stream().map(AccountDTO::new).collect(Collectors.toList());
 	}
+
 	@Override
 	public Optional<Account> findById(Long accountID) {
 		return accountRepository.findById(accountID);
 	}
+
 	@Override
 	public Account getAccountById(long accountID) {
 		Optional<Account> result = accountRepository.findById(accountID);
@@ -78,6 +83,7 @@ public class AccountServiceImpl implements AccountService {
 			throw new RuntimeException("Product not found with ID: " + accountID);
 		}
 	}
+
 	@Override
 	public String addAccount(AccountDTO accountDTO, MultipartFile image) {
 
@@ -121,6 +127,7 @@ public class AccountServiceImpl implements AccountService {
 		accountRepository.save(account);
 		return account.getAccountName();
 	}
+
 	@Override
 	public void updateAccount(long accountID,AccountDTO accountDTO, MultipartFile image) {
 		Account account = accountRepository.findById(accountDTO.getAccountID())
@@ -151,6 +158,7 @@ public class AccountServiceImpl implements AccountService {
 		}
 		accountRepository.save(account);
 	}
+
 	@Override
 	public LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session) {
 		String msg = "";

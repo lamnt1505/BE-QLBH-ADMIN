@@ -88,10 +88,8 @@ public class ProductRestController {
         try {
             Product product = productService.updateProduct(id,productDTO,image);
             ProductDTO updateDTO = new ProductDTO(product);
-            //System.out.println(updateDTO);
             return ResponseEntity.ok(updateDTO);
         } catch (EntityNotFoundException ex) {
-            //System.out.println("Error" + ex.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

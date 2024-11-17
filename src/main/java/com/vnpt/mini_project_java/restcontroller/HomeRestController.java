@@ -1,9 +1,11 @@
 package com.vnpt.mini_project_java.restcontroller;
 
+import com.vnpt.mini_project_java.dto.FavoriteDTO;
 import com.vnpt.mini_project_java.dto.ProductSearchCriteriaDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.entity.*;
 import com.vnpt.mini_project_java.service.account.AccountService;
+import com.vnpt.mini_project_java.service.favorite.FavoriteService;
 import com.vnpt.mini_project_java.service.order.OrderService;
 import com.vnpt.mini_project_java.service.orderDetail.OrderDetailService;
 import com.vnpt.mini_project_java.service.product.ProductService;
@@ -49,9 +51,11 @@ public class HomeRestController {
     @Autowired
     private StorageService storageService;
 
+    @Autowired
+    private FavoriteService favoriteService;
+
     private void logToConsoleAndFile(String message) {
         Logger logger = LoggerFactory.getLogger(this.getClass());
-        System.out.println(message);
         logger.info(message);
     }
 
@@ -64,9 +68,7 @@ public class HomeRestController {
     @ResponseBody
     public List<ProductDTO> showListProductByIdCategory(@PathVariable("categoryID") long id) {
         List<Product> productList = this.productService.showListProductByIdCategoryFilter(id);
-
         List<ProductDTO> productDTOList = new ArrayList<>();
-
         for (Product product : productList) {
             ProductDTO productDTO = new ProductDTO();
             productDTO.setId(product.getProductID());
@@ -77,40 +79,31 @@ public class HomeRestController {
             productDTO.setCategoryID(product.getCategory().getCategoryID());
             productDTOList.add(productDTO);
         }
-
         return productDTOList;
-
     }
 
     @GetMapping("/dossier-statistic/list--Product--PriceDesc")
     public ResponseEntity<List<ProductDTO>> showListProductPriceDesc() {
         List<Product> productList = this.productService.listProductPriceDesc();
         List<ProductDTO> productDTOList = convertToDTOList(productList);
-
         return ResponseEntity.ok(productDTOList);
     }
 
     @GetMapping("/dossier-statistic/list--Product--PriceAsc")
     public ResponseEntity<List<ProductDTO>> showListProductPriceAsc() {
-
         List<Product> productList = this.productService.listProductPriceAsc();
-
         List<ProductDTO> productDTOList = convertToDTOList(productList);
-
         return ResponseEntity.ok(productDTOList);
     }
 
     private List<ProductDTO> convertToDTOList(List<Product> productList) {
-
         List<ProductDTO> productDTOList = new ArrayList<>();
-
         for (Product product : productList) {
             ProductDTO productDTO = new ProductDTO();
             productDTO.setId(product.getProductID());
             productDTO.setName(product.getProductName());
             productDTO.setImageBase64(product.getImageBase64());
             productDTO.setPrice(product.getPrice());
-
             productDTOList.add(productDTO);
         }
         return productDTOList;
@@ -265,8 +258,7 @@ public class HomeRestController {
                     setDetail.add(s);
                     orderDetailService.save(s);
                 }
-                logger.info("Tài Khoản '{}' đã đặt hàng với tổng giá {} và Mã đơn hàng {}.", account.getAccountName(),
-                        orderTotal, order.getOrderID());
+                logger.info("Tài Khoản '{}' đã đặt hàng với tổng giá {} và Mã đơn hàng {}.", account.getAccountName(), orderTotal, order.getOrderID());
                 session.setAttribute("cart", new ArrayList<>());
             } else {
                 return "-1";
@@ -287,6 +279,7 @@ public class HomeRestController {
             }
             order.setStatus("Đã Hủy");
             orderService.save(order);
+
             return ResponseEntity.ok("Đơn hàng đã được hủy thành công");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi");
@@ -304,7 +297,6 @@ public class HomeRestController {
 
             return ResponseEntity.ok(productDTOs);
         } catch (Exception e) {
-            System.out.println("Lỗi" + e);
             return ResponseEntity.internalServerError().body("Đã xảy ra lỗi khi xử lý yêu cầu của bạn\n");
         }
     }
@@ -323,10 +315,6 @@ public class HomeRestController {
     @ResponseBody
     public String updateOrderStatus(@RequestParam(name = "orderid") Long orderID,
                                     @RequestParam(name = "status") String status) {
-
-        System.out.println("Received orderID: " + orderID);
-        System.out.println("Received status: " + status);
-
         Order order = orderService.findById(orderID);
         if (order == null) {
             return "0";
@@ -335,11 +323,11 @@ public class HomeRestController {
         for (OrderDetail detail : order.getOrderDetails()) {
             Storage storageProduct = storageService.findQuatityProduct(detail.getProduct().getProductID());
             if (storageProduct == null) {
-                System.out.println("Không tồn tại sản phẩm trong kho");
+                //System.out.println("Không tồn tại sản phẩm trong kho");
                 return "-2";
             }
             if (storageProduct.getQuantity() < detail.getAmount()) {
-                System.out.println("Số lượng không đủ trong kho");
+                //System.out.println("Số lượng không đủ trong kho");
                 return "-1";
             }
         }
@@ -351,12 +339,29 @@ public class HomeRestController {
                     storageProduct.setQuantity(storageProduct.getQuantity() - detail.getAmount());
                     storageService.save(storageProduct);
                 } else {
-                    System.out.println("Không tìm thấy chi tiết đơn hàng");
+                    //System.out.println("Không tìm thấy chi tiết đơn hàng");
                     return "-3";
                 }
             }
         }
         orderService.save(order);
         return "1";
+    }
+
+    @PostMapping("/dossier-statistic/add--favorite")
+    public ResponseEntity<String> addToFavorite(@RequestParam(required = false) Long accountID,
+                                                @RequestParam(required = false) Long productID) {
+        String result = favoriteService.addProductToFavorite(accountID, productID);
+        HttpStatus status = result.contains("Đã thêm") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(result, status);
+    }
+
+    @GetMapping("/dossier-statistic/list--favorite")
+    public ResponseEntity<List<FavoriteDTO>> getFavoriteList(@RequestParam Long accountID) {
+        List<FavoriteDTO> favoriteProducts = favoriteService.getFavoritesByAccountId(accountID);
+        if (favoriteProducts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(favoriteProducts, HttpStatus.OK);
     }
 }

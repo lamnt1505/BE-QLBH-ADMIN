@@ -67,8 +67,8 @@ public class AccountRestController {
 
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
-        g.setFont(new Font("Arial", Font.BOLD, 40));
-        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 30));
+        g.setColor(Color.BLUE);
 
         g.drawString(captchaText, 20, 35);
         g.dispose();
@@ -178,8 +178,6 @@ public class AccountRestController {
         if (session != null) {
             session.invalidate();
         }
-
-        logger.info("Người dùng đã đăng xuất thành công tại " + java.time.LocalDateTime.now());
 
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "Đăng xuất thành công");
