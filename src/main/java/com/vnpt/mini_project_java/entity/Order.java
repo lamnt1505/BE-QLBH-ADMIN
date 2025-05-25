@@ -62,7 +62,8 @@ public class Order {
     public enum UpdateStatus{
         SUCCESS,
         ORDERID_NOT_FOUND,
-        INVALID_ORDERID
+        INSUFFICIENT_QUANTITY,
+        STORAGE_NOT_FOUND
     }
 
 }

@@ -24,9 +24,12 @@ $('.price-sale').on('price-sale', function (e) {
     if (!$.isNumeric(cb.getData('text'))) e.preventDefault();
 })
 function formatCurrency(number) {
-    var n = number.split('').reverse().join("");
-    var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
-    return n2.split('').reverse().join('') + 'VNĐ';
+    number = number.toString().replace(/[^0-9]/g, '');
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        minimumFractionDigits: 0
+    }).format(number);
 }
 function detailHtml(pageTotal, max) {
     if (listProduct == null) {
@@ -57,19 +60,25 @@ function listPageProduct(start, max, donit) {
     var j = 0;
     for (var i = start; i < max; i++) {
         if (j == pageProduct) break;
+        const formattedPrice = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            minimumFractionDigits: 0
+        }).format(listProduct[i]['price']);
+
         var html = '<div class="col-md-6 col-lg-3 ftco-animate">' +
-            '<div class="card">' +
+            '<div class="card shadow-sm border-0 h-100 d-flex flex-column">' +
             '<a href="' + origin + '/' + pathname + '/showProductSingle/' + listProduct[i]['id'] + '" class="img-profile">' +
             '<div class="img-container">' +
             '<img class="card-img-top" src="data:image/png;base64,' + listProduct[i]['imageBase64'] + '" alt="Card image cap">' +
             '</div> ' +
             '</a>' +
-            '<div class="card-body">' +
+            '<div class="card-body d-flex flex-column text-center">' +
             '<h5 class="card-title">' +
             '<a href="#">' + listProduct[i]['name'] + '</a>' +
             '</h5>' +
             '<div class="card-text price">' +
-            '<span class="formatPrice">' + listProduct[i]['price'] + '</span> <span class="price-unit">VNĐ</span>' +
+            '<span class="formatPrice">' + formattedPrice + '</span>' +
             '</div>' +
             '</div>' +
             '<div class="card-footer">' +
@@ -78,6 +87,9 @@ function listPageProduct(start, max, donit) {
             '</a>' +
             '<a class="btn btn-danger favorite-btn addToFavorite" data-productid="' + listProduct[i]['id'] + '">' +
             '<i class="ion-ios-heart"></i> Yêu Thích' +
+            '</a>' +
+            '<a class="btn btn-info vote-btn" data-toggle="modal" data-target="#voteModal" data-productid="' + listProduct[i]['id'] + '">' +
+            '<i class="ion-ios-heart"></i> Đánh Giá Sản Phẩm' +
             '</a>' +
             '</div>' +
             '</div>' +

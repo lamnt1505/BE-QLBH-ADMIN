@@ -11,10 +11,7 @@ import com.vnpt.mini_project_java.service.productVersion.ProductVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -44,47 +41,28 @@ public class HomeController {
     @Autowired
     ProductDetailService productDetailService;
 
-    void getName(HttpServletRequest request, ModelMap modelMap) {
-        Cookie[] cookies = request.getCookies();
-        for (int i = 0; i < cookies.length; ++i) {
-            if (cookies[i].getName().equals("accountName")) {
-                Optional<Account> accountOptional = this.accountService.findByname(cookies[i].getValue());
-                Account acc = accountOptional.orElse(null);
-                if (acc != null) {
-                    modelMap.addAttribute("accountName", acc.getUsername());
-                    modelMap.addAttribute("accountID", acc.getAccountID());
-                }
-                break;
-            }
-        }
-    }
-
     @GetMapping()
-    public String homeuser(ModelMap modelMap, HttpServletRequest request,
-                           @CookieValue(value = "accountName", required = false) String accountName,
-                           HttpServletResponse response, HttpSession session) {
+    public String homeuser(ModelMap modelMap, HttpServletRequest request, HttpSession session,
+                           @CookieValue(value = "accountName", required = false) String accountName) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            for (int i = 0; i < cookies.length; ++i) {
-                if (cookies[i].getName().equals("accountName")) {
-                    System.out.println("Cookie accountName: " + cookies[i].getValue());
-                    Optional<Account> optionalAccount = this.accountService.findByname(cookies[i].getValue());
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accountName")) {
+                    System.out.println("Cookie accountName: " + cookie.getValue());
+                    Optional<Account> optionalAccount = this.accountService.findByname(cookie.getValue());
                     if (optionalAccount.isPresent()) {
                         Account acc = optionalAccount.get();
-
                         if (session.getAttribute("cart") == null) {
                             session.setAttribute("cart", new ArrayList<>());
                         }
-
                         modelMap.addAttribute("accountName", acc.getUsername());
                         modelMap.addAttribute("accountID", acc.getAccountID());
                     }
                 }
             }
-        } else {
-            if (session.getAttribute("cart") == null) {
-                session.setAttribute("cart", new ArrayList<>());
-            }
+        }
+        if (session.getAttribute("cart") == null) {
+            session.setAttribute("cart", new ArrayList<>());
         }
         modelMap.addAttribute("product", this.productService.findAll());
         modelMap.addAttribute("category", this.categoryService.findAll());
@@ -93,10 +71,10 @@ public class HomeController {
     }
 
     @GetMapping(value = "/showProductSingle/{productID}")
-    public String ShowProductByIdProductDetail(ModelMap model, @PathVariable("productID") long productID
-            , HttpServletRequest request, HttpServletResponse response) {
+    public String ShowProductByIdProductDetail(ModelMap model, @PathVariable("productID") long productID) {
 
         List<ProductVersion> productVersions = this.productVersionService.findAllByProductId(productID);
+
         model.addAttribute("productversions", productVersions);
 
         model.addAttribute("productdetail", this.productDetailService.findByIdProduct(productID));
@@ -105,6 +83,10 @@ public class HomeController {
         if (productOptional.isPresent()) {
             Product showProductSingle = productOptional.get();
             model.addAttribute("showProductSingle", showProductSingle);
+
+            model.addAttribute("categoryName", showProductSingle.getCategory().getCategoryName());
+            model.addAttribute("categoryID", showProductSingle.getCategory().getCategoryID());
+
         } else {
             model.addAttribute("errorMessage", "Không tìm thấy sản phẩm");
             return "home/index";
@@ -130,36 +112,50 @@ public class HomeController {
     }
 
     @GetMapping("/product")
-    public String getProduct(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+    public String getProduct(HttpServletRequest request, ModelMap model) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("accountName")) {
-                    System.out.println("Cookie accountName: " + cookie.getValue());
-
                     Optional<Account> optionalAccount = this.accountService.findByname(cookie.getValue());
-
                     if (optionalAccount.isPresent()) {
                         Account acc = optionalAccount.get();
-                        modelMap.addAttribute("accountName", acc.getUsername());
-                        modelMap.addAttribute("accountID", acc.getAccountID());
+                        model.addAttribute("accountName", acc.getUsername());
+                        model.addAttribute("accountID", acc.getAccountID());
                         return "shop/product";
                     }
                 }
             }
         }
-        modelMap.addAttribute("product", this.productService.findAll());
-        modelMap.addAttribute("category", this.categoryService.findAll());
+        model.addAttribute("product", this.productService.findAll());
+        model.addAttribute("category", this.categoryService.findAll());
         return "shop/product";
     }
 
     @GetMapping("/introduce")
-    public String getIntroduce(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+    public String getIntroduce(ModelMap model) {
+        model.addAttribute("product", this.productService.findAll());
+        model.addAttribute("category", this.categoryService.findAll());
         return "shop/introduce";
+    }
+
+    @GetMapping("/searchProduct")
+    public String searchProductByIdCategory(ModelMap model, @RequestParam("key") String key) {
+        List<Product> products = this.productService.searchListProductByIdCategory(key);
+
+        if (products == null || products.isEmpty()) {
+            model.addAttribute("errorMessage", "Không tìm thấy sản phẩm phù hợp với từ khóa: " + key);
+            return "shop/searchProduct";
+        }
+
+        model.addAttribute("searchProduct", products);
+        return "shop/searchProduct";
     }
 
     @GetMapping("/contact")
     public String getContact(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        model.addAttribute("product", this.productService.findAll());
+        model.addAttribute("category", this.categoryService.findAll());
         return "shop/contact";
     }
 
@@ -169,10 +165,7 @@ public class HomeController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("accountName")) {
-                    System.out.println("Cookie accountName: " + cookie.getValue());
-
                     Optional<Account> optionalAccount = this.accountService.findByname(cookie.getValue());
-
                     if (optionalAccount.isPresent()) {
                         Account acc = optionalAccount.get();
                         modelMap.addAttribute("accountName", acc.getUsername());

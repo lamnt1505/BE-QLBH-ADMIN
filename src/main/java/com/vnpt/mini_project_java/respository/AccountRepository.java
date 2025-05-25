@@ -20,10 +20,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "SELECT * FROM account  WHERE account_phone = ?", nativeQuery = true)
     Optional<Account> findByphone(String phone);
 
-
     Optional<Account> findOneByAccountNameAndAccountPass(String accountName, String accountPass);
-    
-    Optional<Account> findByPhoneNumberAndAccountPass(String phoneNumber, String accountPass);
     
     Account findByAccountName(String accountName);
 }

@@ -12,6 +12,7 @@ async function showUpdateProductForm(id) {
     bindingProductToForm(product);
     $('#update-product-dialog').modal('show');
 }
+
 function renderCategory(categories, categoryID) {
     const select = $('#category-select');
     select.empty();
@@ -24,6 +25,7 @@ function renderCategory(categories, categoryID) {
         select.append(option);
     });
 }
+
 function renderTradeMark(trademarks, tradeID) {
     const select = $('#trademark-select');
     select.empty();
@@ -36,6 +38,7 @@ function renderTradeMark(trademarks, tradeID) {
         select.append(option);
     });
 }
+
 function bindingProductToForm(product) {
     if (product) {
         $('#id').val(product.id);
@@ -46,6 +49,7 @@ function bindingProductToForm(product) {
         $('#date_product').val(product.date_product);
     }
 }
+
 function saveProduct() {
     const id = $('#id').val();
     const name = $('#name').val();
@@ -95,6 +99,7 @@ function saveProduct() {
             }).showToast();
         });
 }
+
 function renderTable() {
     $.ajax({
         url: "/api/v1/product/Listgetall",
@@ -135,12 +140,13 @@ function renderTable() {
         }
     });
 }
+
 function showProductDetails(productId) {
     $.ajax({
         url: "/api/v1/product/" + productId + "/get",
         type: "GET",
         dataType: "json",
-        success: function(product) {
+        success: function (product) {
             $("#product-details-image").attr("src", "data:image/png;base64," + product.imageBase64);
             $("#product-details-name").text(product.name);
             $("#product-details-description").text(product.description);
@@ -151,11 +157,12 @@ function showProductDetails(productId) {
 
             $("#product-details-modal").modal("show");
         },
-        error: function() {
+        error: function () {
             alert("Lỗi khi lấy thông tin chi tiết sản phẩm.");
         }
     });
 }
+
 function deleteProduct(id) {
     Swal.fire({
         icon: 'warning',
@@ -180,8 +187,8 @@ function deleteProduct(id) {
                         }).showToast();
 
                         setTimeout(() => {
-                            renderTable();
-                        }, 1500);
+                            location.reload();
+                        }, 1000);
                     } else {
                         Toastify({
                             text: response.message,
@@ -206,6 +213,7 @@ function deleteProduct(id) {
         }
     });
 }
+
 async function doGetAjax(url, params = {}) {
     return $.ajax({
         url: url,
@@ -214,6 +222,7 @@ async function doGetAjax(url, params = {}) {
         data: params
     });
 }
+
 async function doPutAjax(url, formData) {
     return $.ajax({
         url: url,
@@ -224,6 +233,7 @@ async function doPutAjax(url, formData) {
         data: formData
     });
 }
+
 async function doDeleteAjax(url) {
     return $.ajax({
         url: url,

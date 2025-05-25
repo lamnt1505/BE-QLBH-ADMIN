@@ -58,7 +58,6 @@ public class CartController {
                     model.addAttribute("accountName", account.getUsername());
                     id = account.getAccountID();
                 }
-
                 break;
             }
         }
@@ -97,5 +96,4 @@ public class CartController {
         model.addAttribute("oldorders",productorder);
         return "shop/orderdetail";
     }
-
 }

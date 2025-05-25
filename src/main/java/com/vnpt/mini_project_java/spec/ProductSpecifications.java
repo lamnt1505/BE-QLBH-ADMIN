@@ -13,14 +13,14 @@ import java.util.List;
 
 @UtilityClass
 public class ProductSpecifications {
-    public static Specification<Product> searchByCriteria(ProductSearchCriteriaDTO criteria){
+    public static Specification<Product> searchByCriteria(ProductSearchCriteriaDTO criteria) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             Predicate predicate;
-            
+
             if (criteria.getProductID() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("category").get("id"), criteria.getProductID()));
+                predicates.add(criteriaBuilder.equal(root.get("product").get("productID"), criteria.getProductID()));
             }
 
             if (criteria.getCategoryID() != null && !criteria.getCategoryID().isEmpty()) {
@@ -44,10 +44,10 @@ public class ProductSpecifications {
             if (criteria.getProductName() != null && !criteria.getProductName().isEmpty()) {
                 try {
                     Predicate productNamePredicate = criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("productName")),
-                        "%" + criteria.getProductName().toLowerCase() + "%"
+                            criteriaBuilder.lower(root.get("productName")),
+                            "%" + criteria.getProductName().toLowerCase() + "%"
                     );
-                    predicates.add(productNamePredicate); 
+                    predicates.add(productNamePredicate);
                 } catch (Exception e) {
                     System.out.println();
                 }
@@ -59,39 +59,39 @@ public class ProductSpecifications {
                 predicates.add(predicate);
             }
 
-            if (criteria.getMemory() != null && !criteria.getMemory().isEmpty()){
+            if (criteria.getMemory() != null && !criteria.getMemory().isEmpty()) {
                 Join<Product, ProductVersion> productVersions = root.join("productVersions", JoinType.LEFT);
                 predicate = criteriaBuilder.equal(productVersions.get("memory"), criteria.getMemory());
                 predicates.add(predicate);
             }
 
-            if (criteria.getColor() != null && !criteria.getColor().isEmpty()){
+            if (criteria.getColor() != null && !criteria.getColor().isEmpty()) {
                 Join<Product, ProductVersion> productVersions = root.join("productVersions", JoinType.LEFT);
                 predicate = criteriaBuilder.equal(productVersions.get("color"), criteria.getColor());
                 predicates.add(predicate);
             }
 
-            if (criteria.getPrice() != null && !criteria.getPrice().isEmpty()){
-                Join<Product,ProductVersion> productVersions = root.join("productVersions");
-                predicate = criteriaBuilder.equal(productVersions.get("price"),criteria.getPrice());
+            if (criteria.getPrice() != null && !criteria.getPrice().isEmpty()) {
+                Join<Product, ProductVersion> productVersions = root.join("productVersions");
+                predicate = criteriaBuilder.equal(productVersions.get("price"), criteria.getPrice());
                 predicates.add(predicate);
             }
 
-            if (criteria.getProductCamera() != null && !criteria.getProductCamera().isEmpty()){
-                Join<Product,ProductDetail> productDetails = root.join("productDetails");
-                predicate = criteriaBuilder.equal(productDetails.get("productCamera"),criteria.getProductCamera());
+            if (criteria.getProductCamera() != null && !criteria.getProductCamera().isEmpty()) {
+                Join<Product, ProductDetail> productDetails = root.join("productDetails");
+                predicate = criteriaBuilder.equal(productDetails.get("productCamera"), criteria.getProductCamera());
                 predicates.add(predicate);
             }
 
-            if (criteria.getProductBluetooth() != null && !criteria.getProductBluetooth().isEmpty()){
-                Join<Product,ProductDetail> productDetails = root.join("productDetails");
-                predicate = criteriaBuilder.equal(productDetails.get("productBluetooth"),criteria.getProductBluetooth());
+            if (criteria.getProductBluetooth() != null && !criteria.getProductBluetooth().isEmpty()) {
+                Join<Product, ProductDetail> productDetails = root.join("productDetails");
+                predicate = criteriaBuilder.equal(productDetails.get("productBluetooth"), criteria.getProductBluetooth());
                 predicates.add(predicate);
             }
 
-            if (criteria.getProductScreen() != null && !criteria.getProductScreen().isEmpty()){
-                Join<Product,ProductDetail> productDetails = root.join("productDetails");
-                predicate = criteriaBuilder.equal(productDetails.get("productScreen"),criteria.getProductScreen());
+            if (criteria.getProductScreen() != null && !criteria.getProductScreen().isEmpty()) {
+                Join<Product, ProductDetail> productDetails = root.join("productDetails");
+                predicate = criteriaBuilder.equal(productDetails.get("productScreen"), criteria.getProductScreen());
                 predicates.add(predicate);
             }
 

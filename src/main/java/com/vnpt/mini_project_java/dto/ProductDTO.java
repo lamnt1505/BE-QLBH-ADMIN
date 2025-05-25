@@ -97,16 +97,24 @@ public class ProductDTO {
             byte[] imageBytes = Files.readAllBytes(path);
             this.imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Không thể đọc ảnh từ đường dẫn: " + imagePath);
+            this.imageBase64 = "";
         }
 
-        this.productVersions = product.getProductVersions().stream()
-                .map(ProductVersionDTO::new)
-                .collect(Collectors.toSet());
+        if (product.getProductVersions() != null) {
+            this.productVersions = product.getProductVersions().stream()
+                    .map(ProductVersionDTO::new)
+                    .collect(Collectors.toSet());
+        } else {
+            this.productVersions = Collections.emptySet();
+        }
 
-        this.productDetails = product.getProductDetails().stream()
-                .map(ProductDetailDTO::new)
-                .collect(Collectors.toSet());
-        //System.out.println("Product Versions Retrieved: " + this.productDetails);
+        if (product.getProductDetails() != null) {
+            this.productDetails = product.getProductDetails().stream()
+                    .map(ProductDetailDTO::new)
+                    .collect(Collectors.toSet());
+        } else {
+            this.productDetails = Collections.emptySet();
+        }
     }
 }

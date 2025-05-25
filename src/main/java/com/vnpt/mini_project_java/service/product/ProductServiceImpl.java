@@ -10,7 +10,6 @@ import com.vnpt.mini_project_java.entity.Category;
 import com.vnpt.mini_project_java.entity.Product;
 import com.vnpt.mini_project_java.entity.Trademark;
 import com.vnpt.mini_project_java.respository.CategoryRepository;
-import com.vnpt.mini_project_java.respository.ProductDetailRepository;
 import com.vnpt.mini_project_java.respository.ProductRepository;
 import com.vnpt.mini_project_java.respository.TrademarkReopsitory;
 import com.vnpt.mini_project_java.spec.ProductSpecifications;
@@ -170,6 +169,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         productRepository.deleteById(id);
     }
+
     @Override
     public Page<ProductDTO> getPaginatedProducts(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
@@ -278,5 +278,10 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> searchProducts(ProductSearchCriteriaDTO criteria) {
         Specification<Product> spec = ProductSpecifications.searchByCriteria(criteria);
         return productRepository.findAll(spec);
+    }
+
+    @Override
+    public List<Product> searchListProductByIdCategory(String productName) {
+        return productRepository.searchListProductByIdCategory(productName);
     }
 }

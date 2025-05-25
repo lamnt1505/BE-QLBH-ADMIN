@@ -12,7 +12,6 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
-    <!-- Bootstrap JS + Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
@@ -21,6 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -65,7 +65,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2 th:href="@{/index}">Giỏ Hàng</h2>
+                    <h2 th:href="@{/index}">GIỎ HÀNG</h2>
                 </div>
             </div>
         </div>
@@ -78,12 +78,11 @@
             <div class="col-md-4">
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Tìm Kiếm Sản Phẩm</h2>
-                    <form action="#">
-                        <input type="text" placeholder="Search products...">
-                        <input type="submit" value="Search">
+                    <form th:action="@{/index/searchProduct}" method="get">
+                        <input type="search" name="key" placeholder="Search products...">
+                        <button type="submit" class="search-btn">Tìm</button>
                     </form>
                 </div>
-
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Sản Phẩm</h2>
                     <div class="thubmnail-recent">
@@ -119,7 +118,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Bài Viết Gần Đây</h2>
                     <ul>
@@ -137,14 +135,14 @@
                         <form action="#">
                             <table cellspacing="0" class="shop_table cart" th:if="${#lists.size(session.cart) > 0}">
                                 <thead>
-                                    <tr>
-                                        <th class="product-remove">&nbsp;</th>
-                                        <th class="product-thumbnail">&nbsp;</th>
-                                        <th class="product-name">Sản Phẩm</th>
-                                        <th class="product-price">Giá Tiền</th>
-                                        <th class="product-quantity">Số Lượng</th>
-                                        <th class="product-subtotal">Tổng</th>
-                                    </tr>
+                                <tr>
+                                    <th class="product-remove">&nbsp;</th>
+                                    <th class="product-thumbnail">&nbsp;</th>
+                                    <th class="product-name">Sản Phẩm</th>
+                                    <th class="product-price">Giá Tiền</th>
+                                    <th class="product-quantity">Số Lượng</th>
+                                    <th class="product-subtotal">Tổng</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="cart_item" th:each="product : ${session.cart}">
@@ -163,7 +161,7 @@
                                     <td class="product-name">
                                         <a th:text="${product.productName}"></a>
                                     </td>
-                                    <td class="product-price">
+                                    <td >
                                         <span class="price" th:text="${product.price}"></span>
                                     </td>
                                     <td class="product-quantity">
@@ -184,12 +182,9 @@
                                 </tr>
                                 <tr>
                                     <td class="actions" colspan="6">
-                                        <div class="coupon">
-                                            <label>Phiếu giảm giá:</label>
-                                            <input type="text" placeholder="Mã phiếu giảm giá" value="" class="input-text">
-                                            <input type="submit" value="Apply Coupon" name="apply_coupon"
-                                                   class="button">
-                                        </div>
+                                        <label>Phiếu giảm giá:</label>
+                                        <input type="text" placeholder="Mã phiếu giảm giá" value="" class="input-text">
+                                        <button type="button" name="apply" class="button">Apply Coupon</button>
                                         <button type="button" class="btn btn-primary" id="submitorders">Đặt Hàng
                                         </button>
                                     </td>
@@ -199,11 +194,12 @@
                         </form>
                         <div class="row" th:unless="${#lists.size(session.cart) > 0}">
                             <div class="text-center">
-                                <h2>Chưa Chọn Sản Phẩm Nào!</h2>  <div class="icon">📝</div>
+                                <h2>CHƯA CHỌN SẢN PHẨM NÀO!</h2>
+                                <div class="icon">📝</div>
                             </div>
                         </div>
                         <div class="cart-collaterals" th:if="${#lists.size(orders) > 0}">
-                            <div style="text-align: center;" >
+                            <div style="text-align: center;">
                                 <h2>Orders</h2>
                             </div>
                             <form action="#">
@@ -218,26 +214,26 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-center" th:each="oneinvoice : ${orders}">
-                                        <td class="cart-ttl">
-                                            <a th:href="@{'/orderdetails/'+${oneinvoice.orderID}}"
-                                               th:text="${oneinvoice.orderID}"
-                                               th:attr="data-orderid=${oneinvoice.orderID}"></a>
-                                        </td>
-                                        <td>
-                                            <span th:text="${oneinvoice.orderDateImport}"></span>
-                                        </td>
-                                        <td>
-                                            <span th:text="${oneinvoice.status}"></span>
-                                        </td>
-                                        <td>
-                                            <span th:text="${oneinvoice.orderTotal}"></span>
-                                        </td>
-                                        <td>
-                                            <button class="cancel-order-button"
-                                                    th:if="${oneinvoice.status != 'Hoàn thành'}"
-                                                    th:attr="data-orderid=${oneinvoice.orderID}">Hủy Đơn Hàng
-                                            </button>
-                                        </td>
+                                    <td class="cart-ttl">
+                                        <a th:href="@{'/orderdetails/'+${oneinvoice.orderID}}"
+                                           th:text="${oneinvoice.orderID}"
+                                           th:attr="data-orderid=${oneinvoice.orderID}"></a>
+                                    </td>
+                                    <td>
+                                        <span th:text="${oneinvoice.orderDateImport}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${oneinvoice.status}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${oneinvoice.orderTotal}" class="product-price"></span>
+                                    </td>
+                                    <td>
+                                        <button class="cancel-order-button"
+                                                th:if="${oneinvoice.status != 'Hoàn thành' && oneinvoice.status != 'Đã Hủy'}"
+                                                th:attr="data-orderid=${oneinvoice.orderID}">Hủy Đơn Hàng
+                                        </button>
+                                    </td>
                                     </tbody>
                                 </table>
                             </form>
@@ -261,5 +257,66 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/canceloder.js}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        };
+
+        document.querySelectorAll('.product-price').forEach(el => {
+            const price = parseFloat(el.innerText);
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('button[name="apply"]').on('click', function () {
+            var discountCode = $('input[placeholder="Mã phiếu giảm giá"]').val().trim();
+
+            if (discountCode === '') {
+                alert('Vui lòng nhập mã giảm giá');
+                return;
+            }
+
+            var products = [];
+            $('.cart_item').each(function () {
+                var productID = $(this).find('.productID').val();
+                var price = parseFloat($(this).find('.price').text().trim());
+                var quantity = parseInt($(this).find('.quantityinput').val().trim());
+
+                products.push({productID: productID, price: price, quantity: quantity});
+            });
+
+            $.ajax({
+                url: '/dossier-statistic/apply',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    discountCode: discountCode,
+                    products: products,
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        response.discountedProducts.forEach(function (item) {
+                            var row = $('.cart_item').find(`.productID[value="${item.productID}"]`).closest('.cart_item');
+                            row.find('.price').text(item.discountedPrice.toFixed(2));
+                            row.find('.total').text((item.discountedPrice * item.quantity).toFixed(2));
+                        });
+
+                        alert('Áp dụng mã giảm giá thành công!');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                },
+            });
+        });
+    });
+</script>
 </body>
 </html>

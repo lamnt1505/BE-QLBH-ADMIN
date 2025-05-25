@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hệ Thống Mua Sắm Điện Tử</title>
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
@@ -22,14 +23,65 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/product.css}">
     <style type="text/css">
-        .dropdown-item {
-            padding: 10px 15px;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s ease;
+        .discount-banner {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: slide-left 15s linear infinite;
         }
-        .dropdown-item:hover {
-            background-color: #f1f1f1;
+
+        @keyframes slide-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
+        .img-container {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .img-container img {
+            max-height: 100%;
+            object-fit: contain;
+            width: auto;
+        }
+
+        .card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-body {
+            flex-grow: 1;
+        }
+
+        .card-title {
+            min-height: 3em;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-text.price {
+            text-align: center;
+            margin: 1em 0;
+        }
+
+        .card-footer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5em;
+        }
+
     </style>
 </head>
 <body>
@@ -54,22 +106,18 @@
         </div>
     </div>
 </div>
+<div class="discount-banner">
+    🔥 Siêu khuyến mãi: Giảm ngay 30% cho đơn hàng đầu tiên - Áp dụng từ 14/12 đến 31/1 🔥 Mã Giảm Giá:
+    <span id="generatedDiscountCode" class="font-weight-bold"></span>
+</div>
 <div class="mainmenu-area">
     <div class="container">
         <div class="row">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Chuyển Đổi Điều Hướng</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/index}">Trang Chủ</a></li>
                     <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
-                    <li><a th:href="@{/cart}">Giỏ Hàng</a></li>
+                    <li class=""><a th:href="@{/cart}">Giỏ Hàng</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">Loại Sản Phẩm<b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -88,62 +136,62 @@
     </div>
 </div>
 <section class="container">
-	<div class="filter-bar">
-    <div class="dropdown">
-        <button class="btn btn-primary" style="margin-right: 10px;" data-toggle="modal" data-target="#modalFilter">
-            Lọc theo danh mục
-        </button>
-        <a style="margin-right: 10px;" href="#">Sắp Xếp Theo:</a>
-        <button class="btn btn-primary" type="button" onclick="listProductNewBest()">Mới Nhất</button>
-        <div class="dropdown-divider"></div>
-        </br>
-        <div class="filter-bar">
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-primary dropdown" type="button" data-toggle="dropdown">
-                    Giá <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li> <a class="dropdown-item" onclick="listProductPriceDesc()">Giá cao đến thấp</a> </li>
-                    <li> <a class="dropdown-item" onclick="listProductPriceAsc()">Giá thấp đến cao</a> </li>
-                </ul>
+    <div class="filter-bar">
+        <div class="dropdown">
+            <button class="btn btn-primary" style="margin-right: 10px;" data-toggle="modal" data-target="#modalFilter">
+                LỌC THEO DANH MỤC
+            </button>
+            <a style="margin-right: 10px;" href="#">SẮP XẾP THEO:</a>
+            <button class="btn btn-primary" type="button" onclick="listProductNewBest()">MỚI NHẤT</button>
+            <div class="dropdown-divider"></div>
+            </br>
+            <div class="filter-bar">
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown" type="button" data-toggle="dropdown">
+                        GIÁ <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" onclick="listProductPriceDesc()">GIÁ CAO ĐẾN THẤP</a></li>
+                        <li><a class="dropdown-item" onclick="listProductPriceAsc()">GIÁ THẤP ĐẾN CAO</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        THƯƠNG HIỆU <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="trademark-Dropdown">
+                    </ul>
+                </div>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        LOẠI <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="category-Dropdown">
+                    </ul>
+                </div>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        PHIÊN BẢN SẢN PHẨM <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="productVersion-Dropdown">
+                    </ul>
+                </div>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        CHI TIẾT <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="details-Dropdown">
+                    </ul>
+                </div>
+                <button type="submit" class="btn btn-default" id="searchButton">TÌM KIẾM</button>
             </div>
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Thương hiệu <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" id="trademark-Dropdown">
-                </ul>
-            </div>
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Loại <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" id="category-Dropdown">
-                </ul>
-            </div>
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Chọn Phiên Bản Sản Phẩm <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" id="productVersion-Dropdown">
-                </ul>
-            </div>
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Chọn chi Tiết <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" id="details-Dropdown">
-                </ul>
-            </div>
-            <button type="submit" class="btn btn-default" id="searchButton">Tìm Kiếm</button>
         </div>
-    </div>
-    <div class="product-container">
-        <div class="row" id="dataProduct"></div>
-    </div>
-    <div class="container">
-        <div class="row" id="pageproduct"></div>
-    </div>
+        <div class="product-container">
+            <div class="row" id="dataProduct"></div>
+        </div>
+        <div class="container">
+            <div class="row" id="pageproduct"></div>
+        </div>
     </div>
 </section>
 <footer th:replace="fragment/footer::footer"></footer>
@@ -156,8 +204,7 @@
             <div class="modal-body" th:each="cate : ${category}">
                 <ul>
                     <li>
-                        <input type="radio" name="categoryID"
-                               th:value="${cate.categoryID}">
+                        <input type="radio" name="categoryID" th:value="${cate.categoryID}">
                         <span th:text="${cate.categoryName}"></span>
                     </li>
                 </ul>
@@ -174,7 +221,60 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+<div id="voteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đánh Giá Sản Phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="post text-center">
+                    <p class="text-success mb-2">Cảm ơn bạn đã đánh giá!</p>
+                </div>
+
+                <div class="star-rating text-center mt-3">
+                    <input type="radio" name="rate" id="rate-5" value="5">
+                    <label for="rate-5" class="fa fa-star"></label>
+
+                    <input type="radio" name="rate" id="rate-4" value="4">
+                    <label for="rate-4" class="fa fa-star"></label>
+
+                    <input type="radio" name="rate" id="rate-3" value="3">
+                    <label for="rate-3" class="fa fa-star"></label>
+
+                    <input type="radio" name="rate" id="rate-2" value="2">
+                    <label for="rate-2" class="fa fa-star"></label>
+
+                    <input type="radio" name="rate" id="rate-1" value="1">
+                    <label for="rate-1" class="fa fa-star"></label>
+                </div>
+
+                <form id="voteForm" class="mt-3">
+                    <div class="form-group">
+                        <textarea
+                                id="comment"
+                                class="form-control"
+                                rows="3"
+                                maxlength="200"
+                                placeholder="Nhập tối đa 200 ký tự miêu tả nhận xét của bạn về sản phẩm"></textarea>
+                        <small class="form-text text-muted text-right">0/200</small>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Gửi Đánh Giá
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -186,20 +286,53 @@
             <div class="modal-body">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>Tên Sản Phẩm</th>
-                            <th>Hình Ảnh</th>
-                            <th>Thương Hiệu</th>
-                            <th>Loại</th>
-                            <th>Giá</th>
-                        </tr>
+                    <tr>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Hình Ảnh</th>
+                        <th>Thương Hiệu</th>
+                        <th>Loại</th>
+                        <th>Giá</th>
+                    </tr>
                     </thead>
                     <tbody id="productModalBody">
                     </tbody>
                 </table>
+                <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                     aria-labelledby="productModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Kết quả Tìm kiếm</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên Sản Phẩm</th>
+                                            <th>Hình Ảnh</th>
+                                            <th>Thương Hiệu</th>
+                                            <th>Loại</th>
+                                            <th>Giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productModalBody">
+                                    </tbody>
+                                </table>
+                                <nav>
+                                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
@@ -213,20 +346,29 @@
 <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/search.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/querySelectorAll.js}" defer></script>
 <script type="text/javascript" th:src="@{/resources/js/product.js}"></script>
 <script type="text/javascript" th:inline="javascript">
-    $(document).on('click', '.addToFavorite', function() {
+    $(document).on('click', '.addToFavorite', function () {
         var productID = $(this).data('productid');
         var accountID = /*[[${accountID}]]*/ '0';
 
-        if (!accountID || accountID === 0) {
-            alert("Account ID is missing. Please log in.");
+        if (!accountID || accountID === '0') {
+            Toastify({
+                text: "Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                onClick: function () {
+                    window.location.href = '/login';
+                }
+            }).showToast();
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 3000);
             return;
         }
-
-        console.log("Account ID:", accountID);
-        console.log("Product ID:", productID);
-
         $.ajax({
             url: "/dossier-statistic/add--favorite",
             method: "POST",
@@ -234,18 +376,130 @@
                 accountID: accountID,
                 productID: productID
             },
-            success: function(response) {
-                //console.log("Server response:", response);
-                alert(response);
+            success: function (response) {
+                Toastify({
+                    text: response,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #56ab2f, #a8e063)",
+                }).showToast();
             },
-            error: function(xhr) {
-                if (xhr.status === 200) {
-                    console.log("AJAX treated as success due to 200 status in error callback:", xhr.responseText);
-                    alert(xhr.responseText);
-                } else {
-                    //console.log("AJAX Error:", xhr.status, xhr.responseText);
-                    alert("Có lỗi xảy ra khi thêm vào danh sách yêu thích.");
+            error: function (xhr) {
+                var errorMessage = xhr.status === 200 ? xhr.responseText : "Có lỗi xảy ra khi thêm vào danh sách yêu thích.";
+                Toastify({
+                    text: errorMessage,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                }).showToast();
+            }
+        });
+    });
+</script>
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        let productID = null;
+        var accountID = /*[[${accountID}]]*/ '0';
+        accountID = accountID === '0' ? null : parseInt(accountID);
+
+        $(document).on('click', '.vote-btn', function () {
+            productID = $(this).data('productid');
+
+            $('input[name="rate"]').prop('checked', false);
+            $('#comment').val('');
+        });
+
+        $('#voteForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const rate = $('input[name="rate"]:checked').val();
+            const comment = $('#comment').val();
+
+            if (!rate) {
+                Toastify({
+                    text: "Vui lòng chọn số sao để đánh giá!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#ff6b6b",
+                }).showToast();
+                return;
+            }
+
+            if (!productID) {
+                Toastify({
+                    text: "Không xác định được sản phẩm để đánh giá!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#ff6b6b",
+                }).showToast();
+                return;
+            }
+
+            const voteData = {
+                rating: parseInt(rate),
+                comment: comment,
+                accountID: accountID,
+                productID: parseInt(productID)
+            };
+
+            $.ajax({
+                url: '/dossier-statistic/add--vote',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(voteData),
+                success: function (response) {
+                    Toastify({
+                        text: "Cảm Ơn Bạn Đã Đánh Giá Sản Phẩm Này!",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#4caf50",
+                    }).showToast();
+
+                    $('#voteModal').modal('hide');
+                },
+                error: function (xhr) {
+                    if (xhr.status === 400) {
+                        Toastify({
+                            text: "Lỗi: " + xhr.responseText,
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#ff6b6b",
+                        }).showToast();
+                    } else {
+                        Toastify({
+                            text: "Có lỗi xảy ra khi lưu đánh giá. Vui lòng thử lại sau.",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#ff6b6b",
+                        }).showToast();
+                    }
+                    console.error(xhr.responseText);
                 }
+            });
+        });
+    });
+</script>
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: "/api/v1/discounts/getDiscountCode",
+            type: "GET",
+            success: function (response) {
+                if (response.success) {
+                    $("#generatedDiscountCode").text(response.discountCode);
+                } else {
+                    console.log("Không có mã giảm giá trong session.");
+                }
+            },
+            error: function (xhr) {
+                console.error("Đã xảy ra lỗi khi lấy mã giảm giá:", xhr);
             }
         });
     });

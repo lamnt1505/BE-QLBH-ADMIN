@@ -65,9 +65,9 @@ public class Account {
 
     public static final String ADMIN = "ADMIN";
 
-    public static final String USER = "USER";
+    public static final String EMPLOYEE = "EMPLOYEE";
 
-    public static final String USER_VIP = "USER_VIP";
+    public static final String USER = "USER";
 
     public Account() {
     }
@@ -139,9 +139,5 @@ public class Account {
 
     public boolean isUser() {
         return USER.equals(typeAccount);
-    }
-
-    public boolean isUserVip() {
-        return USER_VIP.equals(typeAccount);
     }
 }

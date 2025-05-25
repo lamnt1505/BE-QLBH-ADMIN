@@ -69,5 +69,4 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @Query(value = "select * from order_info where account_id = ?", nativeQuery = true)
     List<Order> findOrderByAccount(long orderID);
-
 }

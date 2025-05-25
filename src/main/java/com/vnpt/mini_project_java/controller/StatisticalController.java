@@ -17,12 +17,8 @@ import java.util.Optional;
 
 @Controller
 public class StatisticalController {
-
 	@Autowired
 	AccountService accountService;
-	
-    @Autowired
-    OrderService orderService;
 
     @Autowired
     StatisticalService statisticalService;
@@ -39,8 +35,7 @@ public class StatisticalController {
     }
 
     @GetMapping("/manager/statistical")
-    public String manager(ModelMap model, 
-                          HttpServletRequest request,
+    public String manager(ModelMap model,
                           @CookieValue(value = "accountName", required = false) String accountName,
                           RedirectAttributes redirect) {
         if (accountName != null) {

@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -63,11 +65,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             color: #007bff;
         }
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
         .pagination {
             margin-bottom: 0;
         }
@@ -105,19 +102,19 @@
                     <span th:text="${fail}"></span>
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Danh Sách Loại Sản Phẩm</h1>
+                    <h1 class="h3 mb-0 text-gray-800">DANH SÁCH LOẠI SẢN PHẨM</h1>
                 </div>
                 <div class="row">
-                    <p class="card-description">
+                    <p class="card-description pl-5">
                         <a class="btn btn-primary"
                            th:href="@{/manager/addCategory}">
-                            <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Loại Sản Phẩm
+                            <i class="fas fa-chevron-right fa-sm text-white-50"></i> THÊM LOẠI SẢN PHẨM
                         </a>
-                        <a class="btn btn-inverse-outline-danger" href="/api/v1/category/download" download="API-PRODUCT.xlsx">
-                            <i class="fas fa-download fa-sm text-white-50"></i> File Mẫu Excel Để Thêm Loại Sản Phẩm
+                        <a class="btn btn-primary" href="/api/v1/category/download" download="API-PRODUCT.xlsx">
+                            <i class="fas fa-download fa-sm text-white-50"></i> Tải File Mẫu
                         </a>
-                        <button type="button" id="btnOpenUploadExcelDialog" class="btn btn-secondary">
-                            <i class="fas fa-file-excel fa-sm text-white-50"></i> Upload Excel
+                        <button type="button" id="btnOpenUploadExcelDialog" class="btn btn-info">
+                            <i class="fas fa-cloud-upload fa-sm text-white-50"></i> Tải Lên File Excel
                         </button>
                     </p>
                     <table  class="table table-striped">
@@ -249,7 +246,7 @@
 <script type="text/javascript" th:src="@{/resources/js/upload--excel_cate.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/crud_cate.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/paginated--cate.js}"></script>
+
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/dataTables.bootstrap4.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
 </body>

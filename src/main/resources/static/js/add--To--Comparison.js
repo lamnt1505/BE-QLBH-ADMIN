@@ -8,7 +8,6 @@ function addToComparison(id) {
     }
     var categoryID = product.categoryID;
     if (!compareProductTypes(categoryID)) {
-        console.log('Sản phẩm có id ' + id + ' không thuộc loại cần so sánh.');
         return;
     }
     if (comparedProducts.includes(id)) {
@@ -29,25 +28,45 @@ function displayComparedProducts() {
     var container = $('#compareModal .modal-content');
     container.empty();
 
+    var closeBtn = `
+        <div style="text-align: right;">
+            <button id="closeCompareBtn" style="background: transparent; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+        </div>
+    `;
+    container.append(closeBtn);
+    // khung so sánh
+    var wrapper = '<div class="products-row" style="display: flex; justify-content: space-between; gap: 16px;"></div>';
+    container.append(wrapper);
+
+    var productsRow = container.find('.products-row');
+
     for (var i = 0; i < comparedProducts.length; i++) {
         var id = comparedProducts[i];
         var product = listProduct.find(item => item.id === id);
+
         if (product) {
-            var html = '<div class="product" style="width: 100%; position: relative; border: 1px solid #ddd; padding: 16px; margin-bottom: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+            var html = '<div class="product" style="width: 48%; border: 1px solid #ddd; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
                 '<h2 class="product-name" style="text-align: center; font-size: 16px; margin-bottom: 8px;">' + product.name + '</h2>' +
                 '<div style="display: flex; justify-content: center;">' +
                 '<img class="product-image" src="data:image/png;base64,' + product.imageBase64 + '" alt="Product Image" style="max-width: 100%; height: auto; border-radius: 8px; object-fit: cover;">' +
                 '</div>' +
                 '</div>';
-            container.append(html);
+            productsRow.append(html);
         }
     }
+
     if (comparedProducts.length === 2) {
-        var compareDiv = '<div class="compare-section" style="position: fixed; top: 16px; right: 16px;">' +
+        var compareDiv = '<div class="compare-section" style="text-align: center; margin-top: 16px;">' +
             '<button class="btn btn-primary cmprBtn compareTwoProducts">So Sánh</button>' +
             '</div>';
         container.append(compareDiv);
     }
+
+    // Xử lý sự kiện nút đóng
+    $('#closeCompareBtn').on('click', function () {
+        $('#compareModal').modal('hide');
+        comparedProducts = []; // Optionally clear the list
+    });
 }
 function getProductDetailsFromAPI(id) {
     $.ajax({

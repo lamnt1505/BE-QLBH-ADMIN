@@ -76,7 +76,6 @@ public class CategoryRestController {
             categoryService.deleteCategoryById(id);
             return ResponseEntity.ok().body("{\"status\":\"success\"}");
         }catch (EntityNotFoundException ex){
-            System.out.println("Error" + ex.getMessage());
             return ResponseEntity.noContent().build();
         }
     }
@@ -105,7 +104,6 @@ public class CategoryRestController {
                     .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                     .body(resource);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

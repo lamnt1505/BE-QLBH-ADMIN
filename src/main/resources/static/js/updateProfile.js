@@ -1,10 +1,11 @@
 $(document).ready(function() {
-    let accountID = $('#accountID').val();
+    var accountID = $('#accountID').val();
     if (accountID) {
         $.ajax({
             url: `/api/v1/account/${accountID}/get`,
             type: 'GET',
             success: function(accountDTO) {
+                console.log("Username nhận được:", accountDTO.username);
                 $('#accountName').val(accountDTO.accountName);
                 $('#username').val(accountDTO.username);
                 $('#phoneNumber').val(accountDTO.phoneNumber);
@@ -34,7 +35,6 @@ $(document).ready(function() {
 
     $('#updateButton').click(function(e) {
         e.preventDefault();
-        console.log("Update button clicked");
         if (!accountID) {
             console.error("No accountID found");
             Toastify({
@@ -57,15 +57,6 @@ $(document).ready(function() {
         const accountPass = $('#accountPass').val();
         const confirmPassword = $('#confirmAccountPass').val();
 
-        console.log("Form data:", {
-            accountName,
-            username,
-            phoneNumber,
-            email,
-            local,
-            dateOfBirth,
-            hasPassword: !!accountPass
-        });
         if (accountPass && !validatePassword()) {
             Toastify({
                 text: "Mật khẩu không khớp. Vui lòng kiểm tra lại.",
@@ -105,7 +96,6 @@ $(document).ready(function() {
             contentType: false,
             dataType: 'text',
             success: function(response) {
-                console.log("Cập nhật thành công:", response);
                 Toastify({
                     text: response,
                     duration: 3000,

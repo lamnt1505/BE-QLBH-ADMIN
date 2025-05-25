@@ -32,9 +32,6 @@ function uploadExcelFile() {
             });
         },
         error: function (xhr, status, error) {
-            console.error("Error Status: " + status);
-            console.error("Error Details: " + error);
-            console.error("Response Text: " + xhr.responseText);
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi!',
@@ -47,7 +44,6 @@ function uploadExcelFile() {
         }
     });
 }
-
 function showLoadingSpinner() {
     $('#loading-spinner').show();
 }

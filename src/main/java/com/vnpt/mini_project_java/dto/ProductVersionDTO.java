@@ -25,6 +25,5 @@ public class ProductVersionDTO {
         this.image1 = productVersion.getImage1();
         this.color = productVersion.getColor();
         this.productID = productVersion.getProduct().getProductID();
-        //System.out.println("Mapping ProductVersionDTO: versionID=" + versionID + ", memory=" + memory + ", color=" + color);
     }
 }

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hệ Thống Mua Sắm Điện Tử</title>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/index.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/styleCus.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style1.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style type="text/css">
+        .discount-banner {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: slide-left 20s linear infinite;
+        }
+        @keyframes slide-left {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragment/header::header"></div>
+<div class="site-branding-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="logo">
+                    <h1>
+                        <a th:href="@{/index}">
+                            <img src="/resources/img/logo.png" alt="Logo">
+                        </a>
+                    </h1>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="shopping-item">
+                    <a th:href="@{/cart}">
+                        Giỏ Hàng<i class="fa fa-shopping-cart"></i>(<span id="cartQuantity">0</span>)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="discount-banner">
+    🔥 Siêu khuyến mãi: Giảm ngay 30% cho đơn hàng đầu tiên - Áp dụng từ 14/12 đến 31/1 🔥
+    <span id="generatedDiscountCode" class="font-weight-bold"></span>
+</div>
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/index}">Trang Chủ</a></li>
+                    <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
+                    <li class=""><a th:href="@{/cart}">Giỏ Hàng</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Loại Sản Phẩm<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="cate : ${category}">
+                                <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
+                                    <span th:text="${cate.categoryName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a th:href="@{/index/introduce}">Giới Thiệu</a></li>
+                    <li><a th:href="@{/index/contact}">Liên Hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="slider-area">
+    <div class="block-slider block-slider4">
+        <ul id="bxslider-home4" class="slider-list">
+            <li class="slider-item">
+                <img src="/resources/img/h4-slide.png" alt="iPhone 6 Plus">
+                <div class="caption-group">
+                    <h2 class="caption title">
+                        iPhone <span class="primary">6 <strong>Plus</strong></span>
+                    </h2>
+                    <h4 class="caption subtitle">Dual SIM</h4>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
+                </div>
+            </li>
+            <li class="slider-item">
+                <img src="/resources/img/h4-slide2.png" alt="Buy one, get one 50% off">
+                <div class="caption-group">
+                    <h2 class="caption title">
+                        by one, get one <span class="primary">50% <strong>off</strong></span>
+                    </h2>
+                    <h4 class="caption subtitle">school supplies & backpacks.*</h4>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
+                </div>
+            </li>
+            <li class="slider-item">
+                <img src="/resources/img/h4-slide3.png" alt="Apple Store iPod">
+                <div class="caption-group">
+                    <h2 class="caption title">
+                        Apple <span class="primary">Store <strong>iPod</strong></span>
+                    </h2>
+                    <h4 class="caption subtitle">Chọn Mục</h4>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
+                </div>
+            </li>
+            <li class="slider-item">
+                <img src="/resources/img/h4-slide4.png" alt="Apple Store iPod & Phone">
+                <div class="caption-group">
+                    <h2 class="caption title">
+                        Apple <span class="primary">Store <strong>iPod</strong></span>
+                    </h2>
+                    <h4 class="caption subtitle">& Phone</h4>
+                    <a class="caption button-radius" th:href="@{/index/product}"><span class="icon"></span>Mua Sắm Ngay
+                        Bây Giờ</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="promo-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="single-promo promo1">
+                    <i class="fa fa-refresh"></i>
+                    <h4>Hoàn trả trong 30 ngày</h4>
+                    <p>Mua Sắm Với Trang Web Đáng Tin Cậy</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="single-promo promo2">
+                    <i class="fa fa-truck"></i>
+                    <h4>Miễn Phí Vận Chuyển</h4>
+                    <p>Với Tất Cả Các Đơn Hàng Trên $50</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="single-promo promo3">
+                    <i class="fa fa-lock"></i>
+                    <h4>Thanh Toán An Toàn</h4>
+                    <p>Thông Tin Của Bạn Được An Toàn</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="single-promo promo4">
+                    <i class="fa fa-gift"></i>
+                    <h4>Sản Phẩm Mới</h4>
+                    <p>Sản Phẩm Mới Nhất Của Chúng Tôi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="maincontent-area">
+    <section class="ftco-section">
+        <div class="container">
+            <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold; color: #333;">Kết quả tìm kiếm</h2>
+            <div class="row">
+                <!-- Hiển thị thông báo lỗi -->
+                <div class="col-12 text-center" th:if="${errorMessage}">
+                    <p th:text="${errorMessage}" class="text-danger" style="font-size: 1.5rem;"></p>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mb-4 ftco-animate" th:each="product : ${searchProduct}">
+                    <div class="product card shadow" style="padding: 15px; border-radius: 10px;">
+                        <a th:href="@{'/index/showProductSingle/' + ${product.productID}}" class="img-prod">
+                            <img class="card-img-top img-fluid"
+                                 th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}"
+                                 alt="Product Image"
+                                 style="border-radius: 10px; height: 200px; object-fit: cover;">
+                            <span class="status"
+                                  style="position: absolute; top: 10px; left: 10px; background: red; color: white; font-size: 1rem; padding: 5px 10px; border-radius: 5px;">Giảm Giá</span>
+                        </a>
+                        <div class="text pt-3 px-3 text-center">
+                            <h3 style="font-size: 1.8rem; font-weight: bold; color: #333;">
+                                <a th:href="@{'/index/showProductSingle/' + ${product.productID}}"
+                                   th:text="${product.productName}"></a>
+                            </h3>
+                            <div class="pricing" style="margin-top: 10px;">
+                                <p style="font-size: 1.6rem; color: green;">
+                                    <span th:text="'$' + ${product.price}" class="product-price"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="brands-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="brand-wrapper">
+                    <div class="brand-list owl-carousel">
+                        <img src="/resources/img/brand1.png" alt="">
+                        <img src="/resources/img/brand2.png" alt="">
+                        <img src="/resources/img/brand3.png" alt="">
+                        <img src="/resources/img/brand4.png" alt="">
+                        <img src="/resources/img/brand5.png" alt="">
+                        <img src="/resources/img/brand6.png" alt="">
+                        <img src="/resources/img/brand1.png" alt="">
+                        <img src="/resources/img/brand2.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-widget-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="single-product-widget">
+                    <h2 class="product-wid-title">Bán Chạy Nhất</h2>
+                    <a href="" class="wid-view-more">Tất Cả</a>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-1.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-2.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Apple new mac book 2015</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-3.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Apple new i phone 6</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="single-product-widget">
+                    <h2 class="product-wid-title">Đã Xem Gần Đây</h2>
+                    <a href="#" class="wid-view-more">Tất Cả</a>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-4.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Sony playstation microsoft</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-1.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Sony Smart Air Condtion</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-2.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Samsung gallaxy note 4</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="single-product-widget">
+                    <h2 class="product-wid-title">Mới Hàng Đầu</h2>
+                    <a href="#" class="wid-view-more">Tất Cả</a>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-3.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Apple new i phone 6</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-4.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Samsung gallaxy note 4</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                    <div class="single-wid-product">
+                        <a href="single-product.html"><img src="/resources/img/product-thumb-1.jpg" alt=""
+                                                           class="product-thumb"></a>
+                        <h2><a href="single-product.html">Sony playstation microsoft</a></h2>
+                        <div class="product-wid-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-wid-price">
+                            <ins>$400.00</ins>
+                            <del>$425.00</del>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragment/footer::footer"></footer>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/owl.carousel.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/jquery.easing.1.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/bxslider.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/product-carousel.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/brand-list.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        };
+        document.querySelectorAll('.product-price').forEach(el => {
+            const price = parseFloat(el.innerText);
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
+</body>
+</html>

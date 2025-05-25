@@ -6,11 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hệ Thống Mua Sắm Điện Tử</title>
-
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
-    <!-- Bootstrap JS + Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
@@ -25,6 +23,90 @@
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style type="text/css">
+        .product-hover {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px; /* tạo khoảng cách giữa các nút */
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            overflow-y: auto; /* Cho phép cuộn nếu quá chiều cao */
+            padding: 10px 0;
+            z-index: 10;
+        }
+
+        .product-f-image {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        .product-f-image:hover .product-hover {
+            opacity: 1;
+        }
+
+        .product-hover a {
+            background-color: #3498db;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            width: 160px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+
+        .product-hover a:hover {
+            background-color: #2980b9;
+        }
+
+        .product-hover a i {
+            margin-right: 5px;
+        }
+
+        .product-f-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .message-logo img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .message-logo p {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+        .discount-banner {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: slide-left 20s linear infinite;
+        }
+        @keyframes slide-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
 </head>
 <body>
 <div th:replace="fragment/header::header"></div>
@@ -52,17 +134,13 @@
         </div>
     </div>
 </div>
+<div class="discount-banner">
+    🔥 Siêu khuyến mãi: Giảm ngay 30% cho đơn hàng đầu tiên - Áp dụng từ 14/12 đến 31/1 🔥 Mã Giảm Giá:
+    <span id="generatedDiscountCode" class="font-weight-bold"></span>
+</div>
 <div class="mainmenu-area">
     <div class="container">
         <div class="row">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Chuyển Đổi Điều Hướng</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/index}">Trang Chủ</a></li>
@@ -143,73 +221,75 @@
                 <div class="single-promo promo1">
                     <i class="fa fa-refresh"></i>
                     <h4>Hoàn trả trong 30 ngày</h4>
+                    <p>Mua Sắm Với Trang Web Đáng Tin Cậy</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo2">
                     <i class="fa fa-truck"></i>
                     <h4>Miễn Phí Vận Chuyển</h4>
+                    <p>Với Tất Cả Các Đơn Hàng Trên $50</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo3">
                     <i class="fa fa-lock"></i>
                     <h4>Thanh Toán An Toàn</h4>
+                    <p>Thông Tin Của Bạn Được An Toàn</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="single-promo promo4">
                     <i class="fa fa-gift"></i>
                     <h4>Sản Phẩm Mới</h4>
+                    <p>Sản Phẩm Mới Nhất Của Chúng Tôi</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- End promo area -->
 <div class="maincontent-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="latest-product">
-                    <h2 class="section-title">Sản Phẩm Mới Nhất</h2>
-                    <!-- Carousel Container -->
+                    <h2 class="section-title">SẢN PHẨM MỚI NHẤT</h2>
                     <div class="product-carousel owl-carousel">
-                                    <!-- Vòng lặp sản phẩm -->
-                                    <div class="single-product" th:each="product : ${product}">
-                                        <div class="product-f-image">
-                                            <!-- Hiển thị ảnh sản phẩm -->
-                                            <img th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}"
-                                                 alt="">
-                                            <div class="product-hover">
-                                                <a class="add-to-cart-link procart"
-                                                   th:attr="data-productid=${product.productID}"><i
-                                                        class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng</a>
-                                                <a th:href="@{'/index/showProductSingle/'+${product.productID}}"
-                                                   class="view-details-link"><i class="fa fa-link"></i>Chi Tiết Sản Phẩm</a>
-                                            </div>
-                                        </div>
-                                        <h2><a th:text="${product.productName}"></a></h2>
-                                        <div class="product-carousel-price">
-                                            <ins th:text="${product.price}"></ins>
-                                            <del>$100.00</del>
-                                        </div>
-                                    </div>
+                        <div class="single-product" th:each="product : ${product}">
+                            <div class="product-f-image">
+                                <img th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}"
+                                     alt="">
+                                <div class="product-hover">
+                                    <a class="add-to-cart-link procart"
+                                       th:attr="data-productid=${product.productID}"><i
+                                            class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng
+                                    </a>
+
+                                    <a th:href="@{'/index/showProductSingle/'+${product.productID}}"
+                                       class="view-details-link"><i class="fa fa-link"></i>Chi Tiết Sản Phẩm
+                                    </a>
                                 </div>
+                            </div>
+                            <h2><a th:text="${product.productName}"></a></h2>
+                            <div class="product-carousel-price">
+                                <ins th:text="${product.price}" class="product-price"></ins>
+                                <del>$100.00</del>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-<!-- End promo area -->
+        </div>
+    </div>
+</div>
 <div class="brands-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="brand-wrapper">
-                    <div class="brand-list owl-carousel">
+                    <div class="brand-list product-carousel owl-carousel">
                         <img src="/resources/img/brand1.png" alt="">
                         <img src="/resources/img/brand2.png" alt="">
                         <img src="/resources/img/brand3.png" alt="">
@@ -406,5 +486,36 @@
 <script type="text/javascript" th:src="@{/resources/js/product-carousel.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/brand-list.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        };
+        document.querySelectorAll('.product-price').forEach(el => {
+            const price = parseFloat(el.innerText);
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: "/api/v1/discounts/getDiscountCode",
+            type: "GET",
+            success: function (response) {
+                if (response.success) {
+                    $("#generatedDiscountCode").text(response.discountCode);
+                } else {
+                    console.log("Không có mã giảm giá trong session.");
+                }
+            },
+            error: function (xhr) {
+                console.error("Đã xảy ra lỗi khi lấy mã giảm giá:", xhr);
+            }
+        });
+    });
+</script>
 </body>
 </html>

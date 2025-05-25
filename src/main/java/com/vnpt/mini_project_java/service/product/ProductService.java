@@ -61,4 +61,6 @@ public interface ProductService {
     List<Product> searchProducts(ProductSearchCriteriaDTO criteria);
 
 	Page<Product> findAll(Specification<Product> spec, Pageable pageable);
+
+    List<Product> searchListProductByIdCategory(String productName);
 }

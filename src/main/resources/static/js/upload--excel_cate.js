@@ -5,19 +5,20 @@ $(document).ready(function () {
 });
 
 function uploadExcelFile() {
-
     var excelFile = $('#excelFile')[0].files[0];
-
     if (!excelFile) {
-        alert('Please select an Excel file.');
+        Toastify({
+            text: "Vui lòng chọn tệp Excel!",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        }).showToast();
         return;
     }
-
     showLoadingSpinner();
-
     var formData = new FormData();
     formData.append('file', excelFile);
-
     $.ajax({
         url: '/api/v1/category/import',
         type: 'POST',
@@ -25,24 +26,41 @@ function uploadExcelFile() {
         contentType: false,
         processData: false,
         success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'Import successful!',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#upload-excel-dialog').modal('hide');
-                    location.reload();
-                }
-            });
+            Toastify({
+                text: "Nhập dữ liệu thành công ✔️!",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #56ab2f, #a8e063)",
+            }).showToast();
+            setTimeout(() => {
+                $('#upload-excel-dialog').modal('hide');
+                location.reload();
+            }, 1500);
         },
         error: function (error) {
-            console.error(error);
-
-            var errorMessage = error.responseText;
-
-            alert('Error during import: ' + errorMessage);
+            if (error.status === 200) {
+                Toastify({
+                    text: "Nhập dữ liệu thành công ✔️!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #56ab2f, #a8e063)",
+                }).showToast();
+                setTimeout(() => {
+                    $('#upload-excel-dialog').modal('hide');
+                    location.reload();
+                }, 1500);
+            } else {
+                var errorMessage = error.responseText || "Đã xảy ra lỗi không xác định.";
+                Toastify({
+                    text: "Lỗi khi nhập dữ liệu: " + errorMessage,
+                    duration: 5000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                }).showToast();
+            }
         },
         complete: function () {
             hideLoadingSpinner();

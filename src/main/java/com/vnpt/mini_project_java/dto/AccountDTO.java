@@ -58,6 +58,7 @@ public class AccountDTO {
         this.isAdmin = account.isAdmin();
 
         String imagePath = "src/main/resources/static/images/" + account.getImage();
+
         try {
             Path path = Paths.get(imagePath);
             byte[] imageBytes = Files.readAllBytes(path);

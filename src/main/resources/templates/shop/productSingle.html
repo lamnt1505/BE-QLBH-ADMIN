@@ -11,7 +11,6 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
-    <!-- Bootstrap JS + Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
@@ -23,6 +22,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
+    <style type="text/css">
+        .discount-banner {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: slide-left 15s linear infinite;
+        }
+
+        @keyframes slide-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
 </head>
 <body>
 <div th:replace="fragment/header::header"></div>
@@ -45,6 +60,10 @@
             </div>
         </div>
     </div>
+</div>
+    <div class="discount-banner">
+    🔥 Siêu khuyến mãi: Giảm ngay 30% cho đơn hàng đầu tiên - Áp dụng từ 14/12 đến 31/1 🔥 Mã Giảm Giá:
+    <span id="generatedDiscountCode" class="font-weight-bold"></span>
 </div>
     <div class="mainmenu-area">
     <div class="container">
@@ -84,7 +103,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Shop</h2>
+                    <h2>Cửa Hàng</h2>
                 </div>
             </div>
         </div>
@@ -103,7 +122,7 @@
                     </form>
                 </div>
                 <div class="single-sidebar">
-                    <h2 class="sidebar-title">Products</h2>
+                    <h2 class="sidebar-title">Danh Mục Sản Phẩm</h2>
                     <div class="thubmnail-recent">
                         <img src="/resources/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="">Sony Smart TV - 2015</a></h2>
@@ -133,7 +152,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Bài Viết Gần Đây</h2>
                     <ul>
@@ -145,13 +163,11 @@
                     </ul>
                 </div>
             </div>
-            <!---Single Product-->
             <div class="col-md-8">
                 <div class="product-content-right">
                     <div class="product-breadcroumb">
                         <a href="">Trang Chủ</a>
-                        <a href="">Tên Loại Sản Phẩm</a>
-                        <a href="">Sony Smart TV - 2015</a>
+                        <a th:href="@{/category/{id}(id=${categoryID})}" th:text="${categoryName}">Tên Loại Sản Phẩm</a>
                     </div>
                     <div class="row" th:object="${showProductSingle}">
                         <input id="productID" hidden=true th:value="*{productID}">
@@ -172,7 +188,7 @@
                                 <input hidden=true th:value="*{productID}">
                                 <h2 class="product-name" th:text="*{productName}"></h2>
                                 <div class="product-inner-price">
-                                    <ins th:text="*{price}"></ins> <del>$100.00</del>
+                                    <ins th:text="*{price}" class="product-price"></ins> <del>$100.00</del>
                                 </div>
                                 <form action="" class="cart">
                                     <div class="quantity">
@@ -186,10 +202,10 @@
                                 <div role="tabpanel">
                                     <ul class="product-tab" role="tablist">
                                         <li role="presentation" class="active">
-                                            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">DETAIL</a>
+                                            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">CHI TIẾT</a>
                                         </li>
                                         <li role="presentation">
-                                            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">VERSION</a>
+                                            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">PHIÊN BẢN</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content" th:each="productversion : ${productversions}">
@@ -235,7 +251,7 @@
                                     <a th:text="${p.productName}"></a>
                                 </h2>
                                 <div class="product-carousel-price">
-                                    <ins th:text="${p.price}"></ins> <del>$100.00</del>
+                                    <ins th:text="${p.price}" class="product-price"></ins> <del>$100.00</del>
                                 </div>
                             </div>
                         </div>
@@ -255,5 +271,37 @@
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        };
+
+        document.querySelectorAll('.product-price').forEach(el => {
+            const price = parseFloat(el.innerText);
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: "/api/v1/discounts/getDiscountCode",
+            type: "GET",
+            success: function (response) {
+                if (response.success) {
+                    $("#generatedDiscountCode").text(response.discountCode);
+                } else {
+                    console.log("Không có mã giảm giá trong session.");
+                }
+            },
+            error: function (xhr) {
+                console.error("Đã xảy ra lỗi khi lấy mã giảm giá:", xhr);
+            }
+        });
+    });
+</script>
 </body>
 </html>

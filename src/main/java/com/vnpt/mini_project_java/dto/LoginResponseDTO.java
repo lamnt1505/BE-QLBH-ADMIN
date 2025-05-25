@@ -21,7 +21,7 @@ public class LoginResponseDTO {
 	
 	private String redirectPage;
 
-	// Constructors
+
 	public LoginResponseDTO() {
 	}
 

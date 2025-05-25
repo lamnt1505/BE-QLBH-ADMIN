@@ -37,10 +37,10 @@ function renderTable(products) {
             <td>${product.categoryname}</td>
             <td>${product.tradeName}</td>
             <td>
-                <button class='btn btn-info' onclick="showProductDetails(${product.id})"><i class='fas fa-check'></i> Chi tiết</button>
+                <button class='btn btn-info' onclick="showProductDetails(${product.id})"><i class='fas fa-info-circle'></i> Chi tiết</button>
             </td>
             <td>
-                <button class='btn btn-primary' onclick="showUpdateProductForm(${product.id})"><i class='fas fa-info-circle'></i> Cập nhật</button>
+                <button class='btn btn-primary' onclick="showUpdateProductForm(${product.id})"><i class='fas fa-pen-square'></i> Cập nhật</button>
             </td>
             <td>
                 <button class='btn btn-danger' onclick="deleteProduct(${product.id})"><i class='fas fa-trash'></i> Xóa</button>

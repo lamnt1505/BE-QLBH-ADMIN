@@ -1,14 +1,19 @@
-$(document).ready(function() {
+$(document).ready(function () {
     var orderid = 0;
-    $(".editmodal").click(function(e) {
+
+    // Xử lý sự kiện click vào nút sửa
+    $(".editmodal").click(function (e) {
         e.preventDefault();
         var status = $(this).parents('tr').find('.status').text();
         orderid = $(this).data('orderid');
         $(".optionorder").val(status).change();
     });
-    $(".submitstatus").click(function(e) {
+
+    // Xử lý sự kiện click vào nút cập nhật
+    $(".submitstatus").click(function (e) {
         e.preventDefault();
         var newstatus = $(".optionorder").val();
+
         $.ajax({
             url: "/dossier-statistic/--update-status",
             type: "POST",
@@ -16,57 +21,69 @@ $(document).ready(function() {
                 orderid: orderid,
                 status: newstatus
             },
-            success: function(response) {
-                var responseCode = parseInt(response);
-                switch(responseCode) {
-                    case 1:
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Cập nhật trạng thái thành công!'
-                        });
+            success: function (response) {
+                let toastOptions = {
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                };
+
+                switch (response) {
+                    case "SUCCESS":
+                        Toastify({
+                            ...toastOptions,
+                            text: "Cập nhật trạng thái thành công!",
+                            backgroundColor: "linear-gradient(to right, #56ab2f, #a8e063)",
+                        }).showToast();
                         break;
-                    case 0:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Không tìm thấy đơn hàng! Vui lòng thử lại...'
-                        });
+
+                    case "ORDERID_NOT_FOUND":
+                        Toastify({
+                            ...toastOptions,
+                            text: "Không tìm thấy đơn hàng! Vui lòng thử lại...",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
                         break;
-                    case -1:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Số lượng trong kho không đủ!'
-                        });
+
+                    case "INSUFFICIENT_QUANTITY":
+                        Toastify({
+                            ...toastOptions,
+                            text: "Số lượng trong kho không đủ!",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
                         break;
-                    case -2:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Sản phẩm chưa được cập nhật trong kho!'
-                        });
+
+                    case "STORAGE_NOT_FOUND":
+                        Toastify({
+                            ...toastOptions,
+                            text: "Sản phẩm chưa được cập nhật trong kho!",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
                         break;
-                    case -3:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Không tìm thấy chi tiết đơn hàng!'
-                        });
-                        break;
+
                     default:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Có lỗi xảy ra! Vui lòng thử lại.'
-                        });
+                        Toastify({
+                            ...toastOptions,
+                            text: "Có lỗi xảy ra! Vui lòng thử lại.",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
                 }
 
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.reload();
                 }, 2000);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("Error:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi kết nối',
-                    text: 'Không thể kết nối đến server. Vui lòng thử lại sau!'
-                });
+                Toastify({
+                    text: "Không thể kết nối đến server. Vui lòng thử lại sau!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    stopOnFocus: true,
+                }).showToast();
             }
         });
     });

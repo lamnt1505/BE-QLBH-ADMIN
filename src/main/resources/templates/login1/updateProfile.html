@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
-    <!-- Bootstrap JS + Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
@@ -79,57 +78,68 @@
     <section>
         <div class="auth-wrap">
             <div class="auth-col">
-                <h2>CẬP NHẬT TÀI KHOẢN</h2>
+                <h2 class="text-center mb-4">CẬP NHẬT TÀI KHOẢN</h2>
                 <form id="accountForm">
                     <input type="hidden" id="accountID" th:value="${account.accountID}">
 
-                    <div class="form-group">
-                        <label for="accountName">Tên tài khoản</label>
-                        <input type="text" id="accountName" class="form-control" placeholder="Nhập tên tài khoản" readonly>
+                    <div class="row">
+                        <!-- Cột trái -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="accountName">Tên tài khoản</label>
+                                <input type="text" id="accountName" class="form-control" placeholder="Nhập tên tài khoản" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneNumber">Số điện thoại</label>
+                                <input type="tel" id="phoneNumber" class="form-control" placeholder="Nhập số điện thoại">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="username">Họ và Tên</label>
+                                <input type="text" id="username" class="form-control" placeholder="Nhập họ và tên">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" class="form-control" placeholder="Nhập email">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="local">Địa chỉ</label>
+                                <input type="text" id="local" class="form-control" placeholder="Nhập địa chỉ">
+                            </div>
+                        </div>
+
+                        <!-- Cột phải -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dateOfBirth">Ngày sinh</label>
+                                <input type="date" id="dateOfBirth" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="accountPass">Mật khẩu mới (để trống nếu không thay đổi)</label>
+                                <input type="password" id="accountPass" class="form-control" placeholder="Nhập mật khẩu mới">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmAccountPass">Xác nhận mật khẩu mới</label>
+                                <input type="password" id="confirmAccountPass" class="form-control" placeholder="Xác nhận mật khẩu mới">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="image">Ảnh đại diện</label>
+                                <input type="file" id="image" class="form-control" accept="image/*">
+                                <img id="imagePreview" src="#" alt="Profile Image" style="display: none; margin-top: 10px; max-width: 100%;">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="phoneNumber">Số điện thoại</label>
-                        <input type="tel" id="phoneNumber" class="form-control" placeholder="Nhập số điện thoại">
+                    <!-- Nút cập nhật căn giữa -->
+                    <div class="text-center mt-4">
+                        <button type="button" id="updateButton" class="btn btn-primary">Cập nhật</button>
                     </div>
-
-                    <div class="form-group">
-                        <label for="username">Họ và Tên</label>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Nhập họ và tên">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" placeholder="Nhập email">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="local">Địa chỉ</label>
-                        <input type="text" id="local" class="form-control" placeholder="Nhập địa chỉ">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="dateOfBirth">Ngày sinh</label>
-                        <input type="date" id="dateOfBirth" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="accountPass">Mật khẩu mới (để trống nếu không thay đổi)</label>
-                        <input type="password" id="accountPass" class="form-control" placeholder="Nhập mật khẩu mới">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmAccountPass">Xác nhận mật khẩu mới</label>
-                        <input type="password" id="confirmAccountPass" class="form-control" placeholder="Xác nhận mật khẩu mới">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="image">Ảnh đại diện</label>
-                        <input type="file" id="image" class="form-control" accept="image/*">
-                        <img id="imagePreview" src="#" alt="Profile Image" style="display: none;">
-                    </div>
-
-                    <button type="button" id="updateButton" class="btn btn-primary">Cập nhật</button>
                 </form>
             </div>
         </div>

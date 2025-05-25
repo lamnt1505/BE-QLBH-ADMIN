@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
+    Account save(Account account);
+
     List<Account> findAll();
 
     @Query(value = "SELECT * FROM account  WHERE account_phone = ?", nativeQuery = true)
@@ -33,5 +35,4 @@ public interface AccountService {
     void updateAccount(long accountID, AccountDTO accountDTO, MultipartFile image);
 
     LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session);
-
 }

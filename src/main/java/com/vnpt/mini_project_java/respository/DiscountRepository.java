@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount,Long> {
-    Optional<Discount> findByDiscountName(String discountName);
+    Optional<Discount> findByDiscountCode(String discountCode);
 }

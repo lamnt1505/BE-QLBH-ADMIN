@@ -15,18 +15,21 @@
                     <div class="header-links pull-right">
                         <ul class="nav">
                             <li class="nav-item dropdown" th:if="${accountName != null}">
-                                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fa fa-user"></i>
-                                    <span class="shop-menu-ttl" id="username" th:text="${accountName}"></span>
+                                    <span class="shop-menu-ttl" id="account_Name" th:text="${accountName}"></span>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                                     <li>
                                         <a class="dropdown-item" th:href="@{'/updateProfile/' + ${accountID}}">
-                                            <i class="fa fa-cog"></i> Chỉnh Sửa Thông Tin
+                                            <i class="fa fa-cog"></i> CẬP NHẬT THÔNG TIN
                                         </a>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-danger" id="logoutButton"><i class="fa fa-sign-out"></i> Đăng Xuất</button>
+                                        <a class="dropdown-item text-danger" id="logoutButton">
+                                            <i class="fa fa-sign-out"></i> Đăng Xuất
+                                        </a>
                                     </li>
                                 </ul>
                             </li>

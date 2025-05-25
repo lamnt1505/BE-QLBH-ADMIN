@@ -1,6 +1,6 @@
 package com.vnpt.mini_project_java.respository;
 
-import com.vnpt.mini_project_java.entity.Order;
+
 import com.vnpt.mini_project_java.entity.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

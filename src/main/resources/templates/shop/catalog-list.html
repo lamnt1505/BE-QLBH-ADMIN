@@ -12,8 +12,7 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- Bootstrap JS + Popper.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/owl.carousel.min.css}">
@@ -25,16 +24,42 @@
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style type="text/css">
+        .product h3 {
+            margin-top: 0;
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+        .card-title {
+            min-height: 3em; /* giữ chiều cao tên sản phẩm */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .product-upper img {
+            max-height: 180px;
+            object-fit: contain;
+            width: 100%;
+        }
+
+        .product-carousel-price {
+            min-height: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5em;
+        }
+
+        .product-option-shop {
+            margin-top: auto;
+        }
+
+    </style>
 </head>
-<style type="text/css">
-    .product h3 {
-        margin-top: 0;
-    }
-    .product img {
-        max-width: 100%;
-        height: auto;
-    }
-</style>
 <body>
 <div th:replace="fragment/header::header"></div>
 <div class="site-branding-area">
@@ -100,7 +125,7 @@
 </div>
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
-    <div class="container mt-4">
+    <!--<div class="container mt-4">
         <div class="row">
             <div class="col-md-3 col-sm-6 mb-4" th:each="product : ${showProductByIdCategory}">
                 <div class="card shadow-sm border-0 h-100">
@@ -115,7 +140,7 @@
                                th:text="${product.productName}" class="text-dark"></a>
                         </h5>
                         <p class="product-carousel-price">
-                            <ins th:text="${product.price}" class="text-primary font-weight-bold"></ins>
+                            <ins th:text="${product.price}" class="text-primary font-weight-bold product-price"></ins>
                             <del class="text-muted ml-2">$999.00</del>
                         </p>
                         <div class="product-option-shop d-flex justify-content-center mt-3">
@@ -128,7 +153,37 @@
                 </div>
             </div>
         </div>
+    </div>-->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-4" th:each="product : ${showProductByIdCategory}">
+                <div class="card shadow-sm border-0 h-100 d-flex flex-column">
+                    <div class="product-upper">
+                        <img class="card-img-top img-fluid"
+                             th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}" alt="Product Image"
+                             style="border-radius: 8px;">
+                    </div>
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title">
+                            <a th:href="@{'/index/showProductSingle/'+${product.productID}}"
+                               th:text="${product.productName}" class="text-dark"></a>
+                        </h5>
+                        <p class="product-carousel-price">
+                            <ins th:text="${product.price}" class="text-primary font-weight-bold product-price"></ins>
+                            <del class="text-muted ml-2">$999.00</del>
+                        </p>
+                        <div class="product-option-shop d-flex justify-content-center mt-auto gap-2">
+                            <a class="btn btn-primary add_to_cart_button procart"
+                               th:attr="data-productid=${product.productID}">Thêm Vào Giỏ Hàng</a>
+                            <a class="btn btn-outline-secondary compare-btn addToCompare"
+                               th:attr="data-productid=${product.productID}"> + </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="product-pagination text-center">
@@ -192,5 +247,19 @@
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/add--To--Comparison.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/compare--Products.js}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        };
+
+        document.querySelectorAll('.product-price').forEach(el => {
+            const price = parseFloat(el.innerText);
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
 </body>
 </html>

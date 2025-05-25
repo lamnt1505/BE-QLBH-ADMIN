@@ -17,14 +17,20 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "discount_id")
     private Long discountID;
+
     @Column(name = "discount_name")
     private String discountName;
+
     @Column(name = "discount_percent")
     private Double discountPercent;
+
     @Column(name = "date_start")
     private LocalDate dateStart;
+
     @Column(name = "date_finish")
     private LocalDate dateFinish;
+
+    private String discountCode;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

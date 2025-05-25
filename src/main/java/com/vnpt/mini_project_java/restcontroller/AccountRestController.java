@@ -47,13 +47,51 @@ public class AccountRestController {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder captchaText = new StringBuilder();
         Random random = new Random();
-
         for (int i = 0; i < length; i++) {
             int index = random.nextInt(characters.length());
             captchaText.append(characters.charAt(index));
         }
-
         return captchaText.toString();
+    }
+
+    @GetMapping("/Listgetall")
+    public ResponseEntity<List<AccountDTO>> getList() {
+        List<AccountDTO> accountDTOS = accountService.getAllAccountDTO();
+        return ResponseEntity.ok(accountDTOS);
+    }
+
+    @PostMapping(path = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, String>> addAccount(@ModelAttribute AccountDTO accountDTO, @RequestParam("image") MultipartFile image) {
+        try {
+            String accountName = accountService.addAccount(accountDTO, image);
+            if (accountName == null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
+            }
+            return ResponseEntity.ok(Collections.singletonMap("message", "Tài khoản đã đăng ký thành công với ID: " + accountName));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "Có lỗi xảy ra: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateAccount( @PathVariable("id") Long accountID, @ModelAttribute AccountDTO accountDTO,
+                                                 @RequestParam(value = "image", required = false) MultipartFile image) {
+        try {
+            accountDTO.setAccountID(accountID);
+            accountService.updateAccount(accountID, accountDTO, image);
+            return ResponseEntity.ok("Cập nhật tài khoản thành công");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi cập nhật tài khoản");
+        }
+    }
+
+    @GetMapping("/{id}/get")
+    public ResponseEntity<AccountDTO> getProductById(@PathVariable(name = "id") Long accountID) {
+        Account account = accountService.getAccountById(accountID);
+        AccountDTO accountResponse = new AccountDTO(account);
+        return ResponseEntity.ok().body(accountResponse);
     }
 
     @GetMapping("/captcha")
@@ -77,66 +115,47 @@ public class AccountRestController {
         ImageIO.write(image, "png", response.getOutputStream());
     }
 
-    @GetMapping("/Listgetall")
-    public ResponseEntity<List<AccountDTO>> getList() {
-        List<AccountDTO> accountDTOS = accountService.getAllAccountDTO();
-        return ResponseEntity.ok(accountDTOS);
-    }
+    @PutMapping("/grant-role/{accountID}")
+    public ResponseEntity<?> grantRole(@PathVariable("accountID") Long accountID,
+                                       @RequestParam("role") String role,
+                                       HttpSession session) {
 
-    @PostMapping(path = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Map<String, String>> addAccount(@ModelAttribute AccountDTO accountDTO, @RequestParam("image") MultipartFile image) {
-        try {
-            String accountName = accountService.addAccount(accountDTO, image);
-            if (accountName == null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
-            }
-            return ResponseEntity.ok(Collections.singletonMap("message", "Tài khoản đã đăng ký thành công với ID: " + accountName));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "Có lỗi xảy ra: " + e.getMessage()));
+        Account currentAccount = (Account) session.getAttribute("account");
+
+        if (currentAccount == null || !currentAccount.isAdmin()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền thực hiện thao tác này");
         }
-    }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateAccount(
-            @PathVariable("id") Long accountID,
-            @ModelAttribute AccountDTO accountDTO,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
-        try {
-            accountDTO.setAccountID(accountID);
-            accountService.updateAccount(accountID, accountDTO, image);
-            return ResponseEntity.ok("Cập nhật tài khoản thành công");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi cập nhật tài khoản");
+        Optional<Account> optionalAccount = accountService.findById(accountID);
+
+        if (!optionalAccount.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy người dùng");
         }
+
+        Account user = optionalAccount.get();
+        user.setTypeAccount(role.toUpperCase());
+
+        accountService.save(user);
+
+        return ResponseEntity.ok("Phân quyền thành công! Người dùng giờ là: " + role.toUpperCase());
     }
 
-    @GetMapping("/{id}/get")
-    public ResponseEntity<AccountDTO> getProductById(@PathVariable(name = "id") Long accountID) {
-        Account account = accountService.getAccountById(accountID);
-        AccountDTO accountResponse = new AccountDTO(account);
-        return ResponseEntity.ok().body(accountResponse);
-    }
-
-    @PostMapping(path = "/login")
+    @PostMapping("/login")
     public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) {
 
         LoginMesage loginResponse = accountService.loginAccount(loginDTO, session);
         HttpHeaders headers = new HttpHeaders();
+
         String generatedCaptcha = (String) session.getAttribute("captcha");
 
         if (generatedCaptcha == null || !generatedCaptcha.equalsIgnoreCase(loginDTO.getCaptcha())) {
-            loginResponse.setCaptchaValid(false);
-            loginResponse.setMessage("Captcha không hợp lệ. Vui lòng thử lại.");
-            return new ResponseEntity<>(loginResponse, HttpStatus.BAD_REQUEST);
+            LoginMesage captchaError = new LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.", false, false, false, false, false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(captchaError);
         }
 
         loginResponse.setCaptchaValid(true);
 
         if (loginResponse.isSuccess()) {
-
             Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
             cookie.setPath("/");
             cookie.setHttpOnly(true);
@@ -146,8 +165,8 @@ public class AccountRestController {
                 headers.setLocation(URI.create("/admin"));
             } else if (loginResponse.isUser()) {
                 headers.setLocation(URI.create("/user"));
-            } else if (loginResponse.isUserVip()) {
-                headers.setLocation(URI.create("/user-vip"));
+            } else if (loginResponse.isEmployee()) {
+                headers.setLocation(URI.create("/admin"));
             } else {
                 headers.setLocation(URI.create("/"));
             }
@@ -158,7 +177,6 @@ public class AccountRestController {
         ResponseEntity<LoginMesage> entity = new ResponseEntity<>(loginResponse, headers, HttpStatus.OK);
         return entity;
     }
-
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -174,14 +192,11 @@ public class AccountRestController {
             }
         }
         HttpSession session = request.getSession(false);
-
         if (session != null) {
             session.invalidate();
         }
-
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "Đăng xuất thành công");
-
         return ResponseEntity.ok(responseBody);
     }
 }

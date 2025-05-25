@@ -39,10 +39,6 @@
             50% { transform: scale(1.2); color: #4CAF50; }
             100% { transform: scale(1); }
         }
-
-        .highlight {
-            animation: highlightAnimation 1s ease-in-out;
-        }
         .shopping-item {
             position: relative;
             padding: 10px;
@@ -96,7 +92,7 @@
                     <li><a th:href="@{/index/product}">Sản Phẩm</a></li>
                     <li class=""><a th:href="@{/cart}">Giỏ Hàng</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Loại<b class="caret"></b></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">Loại Sản Phẩm<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li th:each="cate : ${category}">
                                 <a th:href="@{'/catalog-list/' + ${cate.categoryID}}">
@@ -208,27 +204,6 @@
             <div class="col-md-6">
                 <div class="about-image">
                     <img src="/resources/images/e-commerce.jpg" alt="Giới Thiệu Cửa Hàng" class="img-responsive" style="border-radius: 8px;">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="brands-area">
-    <div class="zigzag-bottom"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="brand-wrapper">
-                    <div class="brand-list">
-                        <img src="/resources/img/brand1.png" alt="">
-                        <img src="/resources/img/brand2.png" alt="">
-                        <img src="/resources/img/brand3.png" alt="">
-                        <img src="/resources/img/brand4.png" alt="">
-                        <img src="/resources/img/brand5.png" alt="">
-                        <img src="/resources/img/brand6.png" alt="">
-                        <img src="/resources/img/brand1.png" alt="">
-                        <img src="/resources/img/brand2.png" alt="">
-                    </div>
                 </div>
             </div>
         </div>
@@ -410,6 +385,7 @@
 <script type="text/javascript" th:src="@{/resources/js/main.js}"></script>
 <script type="text/javascript"  th:src="@{/resources/js/bxslider.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/script.slider.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/brand-list.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.5.3/dist/sweetalert2.all.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/insertproduct.js}"></script>

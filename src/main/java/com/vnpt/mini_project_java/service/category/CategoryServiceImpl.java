@@ -40,15 +40,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryDTO> getPaginatedCategorys(Pageable pageable) {
-        // Fetch the paginated products
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
 
-        // Convert the Page<Product> to Page<ProductDTO>
         List<CategoryDTO> categoryDTOS = categoryPage.getContent().stream()
-                .map(CategoryDTO::new) // Use the ProductDTO constructor to map Product to ProductDTO
+                .map(CategoryDTO::new)
                 .collect(Collectors.toList());
 
-        // Return a new Page<ProductDTO>
         return new PageImpl<>(categoryDTOS, pageable, categoryPage.getTotalElements());
     }
 

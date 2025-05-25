@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
 
@@ -29,6 +29,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @Query(value = "SELECT * FROM product ORDER BY price asc", nativeQuery = true)
     List<Product> listProductPriceAsc();
+
+    @Query(value = "select * from product where  product_name like %?% ", nativeQuery = true)
+    List<Product> searchListProductByIdCategory(String productName);
 
     @EntityGraph(attributePaths = {"productVersions"})
     List<Product> findAll(Specification<Product> spec);

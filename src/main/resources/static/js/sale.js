@@ -19,7 +19,6 @@ $(document).ready(function() {
                 progressHtml += '</div>';
             }
 
-
             $('#progressContainer').html(progressHtml);
         },
         error: function() {

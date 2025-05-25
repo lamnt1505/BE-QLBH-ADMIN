@@ -31,8 +31,8 @@ function login() {
                         window.location.href = "/manager";
                     } else if (response.isUser) {
                         window.location.href = "/index";
-                    } else if (response.isUserVip) {
-                        window.location.href = "/index";
+                    } else if (response.isEmployee) {
+                        window.location.href = "/manager";
                     } else {
                         window.location.href = "/";
                     }
@@ -42,7 +42,10 @@ function login() {
             }
         },
         error: function(error) {
-            if (error.status === 401) {
+            if (error.status === 400 && error.responseJSON) {
+                $("#error").text(error.responseJSON.message || "Captcha không hợp lệ. Vui lòng thử lại.");
+                refreshCaptcha();
+            } else if (error.status === 401) {
                 $("#error").text("Session expired. Please log in again.");
                 setTimeout(function() {
                     window.location.href = "/login";

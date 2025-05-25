@@ -4,7 +4,6 @@ $(document).ready(function() {
         searchProducts();
     });
 });
-
 function loadDropdownData() {
     $.ajax({
         url: "/api/v1/category/Listgetall",
@@ -13,7 +12,7 @@ function loadDropdownData() {
     }).done(function(response) {
         response.forEach(function(category) {
             $('#category-Dropdown').append(
-                '<li><label class="dropdown-item">' +
+                '<li class="dropdown-filter-item"><label class="form-check-label d-flex align-items-start gap-2">' +
                 '<input type="checkbox" class="category-checkbox" id="category-' + category.id + '" value="' + category.id + '"> ' +
                 category.name +
                 '</label></li>'
@@ -113,8 +112,6 @@ function searchProducts() {
         productDetailID: selectedDetails
     };
 
-    console.log("Dữ liệu tìm kiếm gửi đến API:", criteria);
-
     $.ajax({
         url: "/dossier-statistic/search",
         method: "POST",
@@ -134,6 +131,11 @@ function renderProductModal(products) {
         $('#productModalBody').append( '<tr><td colspan="5">Không tìm thấy sản phẩm phù hợp</td></tr>');
     }else{
         products.content.forEach(function(product) {
+            const formattedPrice = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0
+            }).format(product.price);
             $('#productModalBody').append(
                 '<tr>' +
                 '<td>' +
@@ -143,7 +145,7 @@ function renderProductModal(products) {
                 '</td>' +
                 '<td>' + product.tradeName + '</td>' +
                 '<td>' + product.categoryname + '</td>' +
-                '<td>' + product.price + '</td>' +
+                '<td>' + formattedPrice + '</td>' +
                 '</tr>'
             );
         });

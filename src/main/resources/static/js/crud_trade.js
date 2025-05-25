@@ -114,7 +114,7 @@ function deleteTrademark(id) {
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            renderTable();
+                            location.reload();
                         });
                     } else {
                         Swal.fire({

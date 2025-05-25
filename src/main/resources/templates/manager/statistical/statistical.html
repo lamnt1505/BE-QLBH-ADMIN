@@ -68,8 +68,8 @@
                                     <td class="py-1" th:text="${month.Month + '/' + month.Year}">
                                     <td th:text="${month.orderCount}"></td>
                                     <td th:text="${month.total}"></td>
-                                    <td th:text="${month.minTotal}"></td>
-                                    <td th:text="${month.maxTotal}"></td>
+                                    <td th:text="${month.minTotal}" class="product-price"></td>
+                                    <td th:text="${month.maxTotal}" class="product-price"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -95,8 +95,8 @@
                                 <td class="py-1" th:text=${year.year}>
                                 <td th:text=${year.orderCount}></td>
                                 <td th:text=${year.total}></td>
-                                <td th:text=${year.minTotal}></td>
-                                <td th:text=${year.maxTotal}></td>
+                                <td th:text=${year.minTotal} class="product-price"></td>
+                                <td th:text=${year.maxTotal} class="product-price"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -124,8 +124,8 @@
                                     <td class="py-1" th:text="${quarter.quarter}"></td>
                                     <td th:text="${quarter.orderCount}"></td>
                                     <td th:text="${quarter.total}"></td>
-                                    <td th:text="${quarter.minTotal}"></td>
-                                    <td th:text="${quarter.maxTotal}"></td>
+                                    <td th:text="${quarter.minTotal}" class="product-price"></td>
+                                    <td th:text="${quarter.maxTotal}" class="product-price"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -152,7 +152,7 @@
                             <tr th:each="product : ${products}">
                                 <td class="py-1" th:text="${product.name}">
                                 <td th:text="${product.quantitysold}"></td>
-                                <td th:text="${product.total}"></td>
+                                <td th:text="${product.total}" class="product-price"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -198,5 +198,19 @@
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        };
+
+        document.querySelectorAll('.product-price').forEach(el => {
+            const price = parseFloat(el.innerText);
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
 </body>
 </html>

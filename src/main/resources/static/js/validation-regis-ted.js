@@ -28,7 +28,7 @@ function validateForm() {
 
     var phoneNumber = $("#phoneNumber").val().trim();
     if (phoneNumber === "" || !/^\d{10}$/.test(phoneNumber)) {
-        $("#phoneError").text("Số điện thoại phải có 10 chữ số.");
+        $("#phoneError").text("Số điện thoại phải có 10 đến 11 chữ số.");
         isValid = false;
     } else {
         $("#phoneError").text("");

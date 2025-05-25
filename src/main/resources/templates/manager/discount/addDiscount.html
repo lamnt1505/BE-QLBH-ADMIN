@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Manager</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/vendor/fontawesome-free/css/all.min.css}">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <nav class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+         th:replace="manager/fragment/listNav_1::nav_1"></nav>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+                 th:replace="manager/fragment/listNav::nav"></nav>
+            <div class="container-fluid">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">THÊM MỚI MÃ GIẢM GIÁ</h1>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="categoryForm" enctype="multipart/form-data">
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <label for="discountCode">Mã Giảm Giá:</label>
+                                        <input type="text" class="form-control" id="discountCode" name="discountCode" readonly/>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label for="discountName">Tên Mã Giảm Giá:</label>
+                                        <input type="text" class="form-control" id="discountName" name="discountName" placeholder="Nhập tên mã giảm giá"/>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label for="discountPercent">Phần Trăm Giảm Giá:</label>
+                                        <input type="number" class="form-control" id="discountPercent" name="discountPercent" placeholder="Nhập % giảm giá" min="0" max="100"/>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label for="dateStart">Ngày Bắt Đầu:</label>
+                                        <input type="date" class="form-control" id="dateStart" name="dateStart"/>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label for="dateFinish">Ngày Kết Thúc:</label>
+                                        <input type="date" class="form-control" id="dateFinish" name="dateFinish"/>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary py-2 px-4">
+                                    <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Mới
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:replace="manager/fragment/footer::footer"></footer>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sẵn sàng rời đi?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc phiên hiện tại của mình.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Đăng Xuất</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#categoryForm").on("submit", function (event) {
+            event.preventDefault();
+
+            let discountData = {
+                discountCode: $("#discountCode").val(),
+                discountName: $("#discountName").val(),
+                discountPercent: $("#discountPercent").val(),
+                dateStart: $("#dateStart").val(),
+                dateFinish: $("#dateFinish").val()
+            };
+
+            $.ajax({
+                url: "/api/v1/discounts/generate",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(discountData),
+                success: function (response) {
+                    //console.log("API Response:", response);
+                    if (response.success) {
+
+                        $("#discountCode").val(response.discountCode);
+
+                        sessionStorage.setItem("generatedDiscountCode", response.discountCode);
+
+                        Toastify({
+                            text: response.message,
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                        }).showToast();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+                    }else {
+                        Toastify({
+                            text: "Tạo mã giảm giá thất bại!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Error:", xhr);
+                    Toastify({
+                        text: "Đã xảy ra lỗi trong khi tạo mã giảm giá!",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    }).showToast();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

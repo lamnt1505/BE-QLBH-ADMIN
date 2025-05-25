@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
     <link rel="icon" href="/resources/images/shopping.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/sb-admin-2.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -95,20 +96,22 @@
                  th:replace="manager/fragment/listNav::nav"></nav>
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Danh sách sản phẩm</h1>
+                    <h1 class="h3 mb-0 text-gray-800">DANH SÁCH SẢN PHẨM</h1>
                 </div>
                 <div class="row">
-                    <p class="card-description">
+                    <!--danh mục-->
+                    <p class="card-description pl-5">
                         <a class="btn btn-primary" th:href="@{/manager/addProduct}">
-                            <i class="fas fa-upload fa-sm text-white-50"></i> Thêm Sản Phẩm Mặc Định
+                            <i class="fas fa-chevron-right fa-sm text-white-50"></i> Thêm Sản Phẩm Mặc Định
                         </a>
-                        <a class="btn btn-inverse-outline-danger" href="/api/v1/product/download" download="API-PRODUCT.xlsx">
-                            <i class="fas fa-download fa-sm text-white-50"></i> File Mẫu Excel Để Thêm Sản Phẩm
+                        <a class="btn btn-primary" href="/api/v1/product/download" download="API-PRODUCT.xlsx">
+                            <i class="fas fa-download fa-sm text-white-50"></i> Tải File Mẫu
                         </a>
-                        <button type="button" id="btnOpenUploadExcelDialog" class="btn btn-secondary">
-                            <i class="fas fa-file-excel fa-sm text-white-50"></i>Tải lên Excel
+                        <button type="button" id="btnOpenUploadExcelDialog" class="btn btn-info">
+                            <i class="fas fa-cloud-upload fa-sm text-white-50"></i> Tải Lên File Excel
                         </button>
                     </p>
+                    <!--danh sách-->
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -124,6 +127,7 @@
                         <tbody id="product-table">
                         </tbody>
                     </table>
+                    <!--bản ghi || phân trang-->
                     <div class="d-flex justify-content-between align-items-center" style="margin-top: 25px;">
                         <ul class="pagination mb-0">
                             <li class="page-item" id="first-page">
@@ -157,7 +161,7 @@
 						  <div class="modal-dialog" role="document">
 						    <div class="modal-content">
 						      <div class="modal-header">
-						        <h5 class="modal-title" id="productDetailsModalLabel">Chi tiết sản phẩm</h5>
+						        <h5 class="modal-title" id="productDetailsModalLabel">CHI TIẾT SẢN PHẨM</h5>
 						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						          <span aria-hidden="true">&times;</span>
 						        </button>
@@ -188,7 +192,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Cập Nhật Sản Phẩm</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">CẬP NHẬT SẢN PHẨM</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -237,7 +241,7 @@
                                             <i class="fas fa-info-circle"></i> Đóng
                                         </button>
                                         <button onclick="saveProduct()" type="button" class="btn btn-primary">
-                                            <i class="fas fa-check"></i> Cập Nhật Sản Phẩm
+                                            <i class="fas fa-check"></i> LƯU LẠI
                                         </button>
                                     </div>
                                 </div>
@@ -302,19 +306,22 @@
     </div>
 </div>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/jquery-easing/jquery.easing.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/sb-admin-2.min.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/listproduct.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/product_crud.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/paginated.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/uploadexcel_product.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/dataTables.bootstrap4.js}"></script>
 <script type="text/javascript" th:src="@{/resources/vendor/datatables/jquery.dataTables.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/product_crud.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/list--product.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/upload--excel--product.js}"></script>
+<!--<script type="text/javascript" th:src="@{/resources/js/paginated--product.js}"></script>-->
 </body>
 </html>
+
 

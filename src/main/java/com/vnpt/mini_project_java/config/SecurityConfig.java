@@ -13,19 +13,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	
+
+
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() 
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-                .antMatchers("/api/v1/account/").authenticated()  
-                .anyRequest().permitAll()  
+                .antMatchers("/api/v1/account/").authenticated()
+                .anyRequest().permitAll()
             .and()
-            .httpBasic(); 
+            .httpBasic();
     }
 	
 	@Bean

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +49,6 @@ public class ManagerController {
 
     @Autowired
     private OrderService orderService;
-
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(AccountRestController.class);
 
     void getName(HttpServletRequest request, ModelMap modelMap) {
         Cookie[] cookies = request.getCookies();
@@ -92,17 +91,22 @@ public class ManagerController {
     }
 
     @GetMapping("/index")
-    public String getIndex(ModelMap model, @CookieValue(value = "accountName", required = true) String username) {
+    public String getIndex(ModelMap model, @CookieValue(value = "accountName", required = true) String username, RedirectAttributes redirect) {
         Optional<Account> userOptional = accountService.findByname(username);
         if (userOptional.isPresent()) {
             Account user = userOptional.get();
             String imageBase64 = user.getImageBase64();
-            List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
-            model.addAttribute("categoryList", categoryList);
-            model.addAttribute("accountName", user.getUsername());
-            model.addAttribute("accountID", user.getAccountID());
-            model.addAttribute("image", imageBase64);
-            return "manager/home/index";
+            if(user.isAdmin()){
+                List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
+                model.addAttribute("categoryList", categoryList);
+                model.addAttribute("accountName", user.getUsername());
+                model.addAttribute("accountID", user.getAccountID());
+                model.addAttribute("image", imageBase64);
+                return "manager/home/index";
+            }else {
+                redirect.addFlashAttribute("fail", "Liên hệ với admin để được ấp quyền xem dịch vụ!");
+                return "redirect:/manager/listCategory";
+            }
         } else {
             return "redirect:/login";
         }
@@ -249,9 +253,7 @@ public class ManagerController {
     }
 
     @GetMapping("/listStorage")
-    public String getStorage(ModelMap model,
-                             @CookieValue(value = "accountName", required = false) String accountName,
-                             HttpServletRequest request) {
+    public String getStorage(ModelMap model, @CookieValue(value = "accountName", required = false) String accountName) {
         if (accountName != null) {
             Optional<Account> userOptional = accountService.findByname(accountName);
             if (userOptional.isPresent()) {
@@ -272,9 +274,7 @@ public class ManagerController {
     }
 
     @GetMapping("/listTrademark")
-    public String getTrademark(ModelMap model,
-                               @CookieValue(value = "accountName", required = false) String accountName,
-                               HttpServletRequest request) {
+    public String getTrademark(ModelMap model, @CookieValue(value = "accountName", required = false) String accountName) {
         if (accountName != null) {
             Optional<Account> userOptional = accountService.findByname(accountName);
             if (userOptional.isPresent()) {
@@ -295,8 +295,7 @@ public class ManagerController {
     }
 
     @GetMapping("/addTrademark")
-    public String addTrademark(ModelMap model, HttpServletRequest request,
-                               @CookieValue(value = "accountName", required = false) String accountName) {
+    public String addTrademark(ModelMap model, HttpServletRequest request, @CookieValue(value = "accountName", required = false) String accountName) {
         Cookie[] cookies = request.getCookies();
         Optional<Account> userOptional = accountService.findByname(accountName);
         if (cookies != null) {
@@ -319,9 +318,30 @@ public class ManagerController {
         return "redirect:/login";
     }
 
+    @GetMapping("/listVote")
+    public String getVote(ModelMap model, HttpServletRequest request) {
+        String accountName = getAccountNameFromCookies(request);
+        if (accountName != null) {
+            Optional<Account> userOptional = accountService.findByname(accountName);
+            if (userOptional.isPresent()) {
+                Account account = userOptional.get();
+                String imageBase64 = account.getImageBase64();
+                List<CategoryDTO> categoryList = categoryService.getAllCategoryDTO();
+                model.addAttribute("categoryList", categoryList);
+                model.addAttribute("accountName", accountName);
+                model.addAttribute("fullname", account.getUsername());
+                model.addAttribute("image", imageBase64);
+                return "manager/vote/listVote";
+            } else {
+                return "manager/vote/listVote";
+            }
+        } else {
+            return "redirect:/login";
+        }
+    }
+
     @GetMapping("/order")
-    public String listOrder(ModelMap model, @CookieValue(value = "accountName", required = false) String username,
-                            HttpServletRequest request, HttpServletResponse response) {
+    public String listOrder(ModelMap model, @CookieValue(value = "accountName", required = false) String username, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -346,11 +366,30 @@ public class ManagerController {
         return "redirect:/login";
     }
 
+    @GetMapping("/addDiscount")
+    public String addDiscount(ModelMap model, HttpServletRequest request) {
+        String accountName = getAccountNameFromCookies(request);
+        if (accountName != null) {
+            Optional<Account> userOptional = accountService.findByname(accountName);
+            if (userOptional.isPresent()) {
+                Account account = userOptional.get();
+                String imageBase64 = account.getImageBase64();
+                model.addAttribute("accountName", accountName);
+                model.addAttribute("fullname", account.getUsername());
+                model.addAttribute("image", imageBase64);
+                model.addAttribute("storage", new StorageDTO());
+                return "manager/discount/addDiscount";
+            } else {
+                return "manager/discount/addDiscount";
+            }
+        } else {
+            return "redirect:/login";
+        }
+    }
 
     @GetMapping("/orderDetail/{id}")
     public String viewOrderdetailsForManager(@PathVariable("id") long id, ModelMap model,
-                                             @CookieValue(value = "accountName", required = false) String username, HttpServletRequest request,
-                                             HttpServletResponse response) {
+                                             @CookieValue(value = "accountName", required = false) String username, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

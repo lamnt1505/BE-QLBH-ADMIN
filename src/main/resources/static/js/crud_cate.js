@@ -29,21 +29,25 @@ function saveCategory() {
     const url = '/api/v1/category/' + id + '/update';
     doPostAjax(url, formData)
         .then(response => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Cập nhật danh mục thành công ✔️!',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => {
+            Toastify({
+                text: "Cập nhật danh mục thành công ✔️!",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #56ab2f, #a8e063)",
+            }).showToast();
+            setTimeout(() => {
                 window.location.reload();
-            });
+            }, 1500);
         })
         .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi!',
-                text: 'Đã xảy ra lỗi khi cập nhật danh mục',
-            });
+            Toastify({
+                text: "Đã xảy ra lỗi khi cập nhật danh mục!",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+            }).showToast();
         });
 }
 
@@ -53,7 +57,7 @@ function renderTable() {
         type: "GET",
         dataType: "json",
         success: function (data) {
-            var table = $("#category-table");
+            var table = $("#category-table1");
             table.empty();
             table.append("");
             $.each(data, function (index, category) {
@@ -77,6 +81,13 @@ function renderTable() {
 }
 
 function deleteCategory(id) {
+    Toastify({
+        text: "Đang xử lý yêu cầu xóa...",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+    }).showToast();
     Swal.fire({
         icon: 'warning',
         title: 'Bạn có chắc muốn xóa danh mục này không?',
@@ -90,25 +101,43 @@ function deleteCategory(id) {
             doDeleteAjax(url)
                 .then(response => {
                     if (response.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Xóa danh mục thành công ✔️!',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            renderTable();
-                        });
+                        Toastify({
+                            text: "Xóa danh mục thành công ✔️!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #56ab2f, #a8e063)",
+                        }).showToast();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi!',
-                            text: response.message
-                        });
+                        Toastify({
+                            text: "Lỗi: " + response.message,
+                            duration: 5000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
                     }
                 })
                 .catch(error => {
-                    alert(error.message);
+                    Toastify({
+                        text: "Lỗi khi xóa: " + error.message,
+                        duration: 5000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    }).showToast();
                 });
+        } else {
+            Toastify({
+                text: "Hủy thao tác xóa danh mục.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #6a11cb, #2575fc)",
+            }).showToast();
         }
     });
 }

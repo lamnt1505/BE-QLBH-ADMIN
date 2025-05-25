@@ -21,8 +21,8 @@ public class LoginMesage {
     @JsonProperty("isUser")
     private boolean isUser;
 
-    @JsonProperty("isUserVip")
-    private boolean isUserVip;
+    @JsonProperty("isEmployee")
+    private boolean isEmployee;
 
     @JsonProperty("status")
     private Boolean status;
@@ -30,15 +30,14 @@ public class LoginMesage {
     @JsonProperty("isCaptchaValid")
     private boolean isCaptchaValid;
 
-    public LoginMesage(String message, Boolean status, boolean isAdmin,boolean isUser, boolean isUserVip, boolean isCaptchaValid) {
+    public LoginMesage(String message, Boolean status, boolean isAdmin,boolean isUser, boolean isEmployee, boolean isCaptchaValid) {
         this.message = message;
         this.status = status;
         this.isAdmin = isAdmin;
         this.isUser = isUser;
-        this.isUserVip = isUserVip;
+        this.isEmployee = isEmployee;
         this.isCaptchaValid = isCaptchaValid;
     }
-
 
     public String getMessage() {
         return message;

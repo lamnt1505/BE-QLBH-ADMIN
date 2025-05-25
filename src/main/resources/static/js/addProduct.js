@@ -6,40 +6,93 @@ $(document).ready(function () {
         }
     });
     function validateProductForm() {
-        var isValid = true;
-
+        // Kiểm tra từng trường theo thứ tự ưu tiên
         if ($('#name').val().trim() === "") {
-            alert("Tên sản phẩm không được để trống.");
-            isValid = false;
-        }
-        if ($('#description').val().trim() === "") {
-            alert("Miêu tả không được để trống.");
-            isValid = false;
-        }
-        if ($('#date_product').val() === "") {
-            alert("Ngày sản xuất không được để trống.");
-            isValid = false;
-        }
-        var price = $('#price').val();
-        if (price === "" || price <= 0) {
-            alert("Giá sản phẩm phải là số dương và không được để trống.");
-            isValid = false;
-        }
-        if ($('#categorySelect').val() === "") {
-            alert("Vui lòng chọn loại sản phẩm.");
-            isValid = false;
-        }
-        if ($('#trademarkSelect').val() === "") {
-            alert("Vui lòng chọn thương hiệu.");
-            isValid = false;
+            Toastify({
+                text: "Tên sản phẩm không được để trống.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false; // Dừng kiểm tra nếu lỗi
         }
 
         if ($('#image').get(0).files.length === 0) {
-            alert("Vui lòng chọn hình ảnh sản phẩm.");
-            isValid = false;
+            Toastify({
+                text: "Vui lòng chọn hình ảnh sản phẩm.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false;
         }
 
-        return isValid;
+        if ($('#description').val().trim() === "") {
+            Toastify({
+                text: "Miêu tả không được để trống.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false;
+        }
+
+        if ($('#date_product').val() === "") {
+            Toastify({
+                text: "Ngày sản xuất không được để trống.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false;
+        }
+
+        var price = $('#price').val();
+        if (price === "" || price <= 0) {
+            Toastify({
+                text: "Giá sản phẩm phải là số dương và không được để trống.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false;
+        }
+
+        if ($('#categorySelect').val() === "") {
+            Toastify({
+                text: "Vui lòng chọn loại sản phẩm.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false;
+        }
+
+        if ($('#trademarkSelect').val() === "") {
+            Toastify({
+                text: "Vui lòng chọn thương hiệu.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            return false;
+        }
+
+        return true;
     }
     function ajaxPost() {
         var formData = new FormData();

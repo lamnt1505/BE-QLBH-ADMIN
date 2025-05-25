@@ -43,6 +43,11 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
+	public Account save(Account account) {
+		return accountRepository.save(account);
+	}
+
+	@Override
 	public List<Account> findAll() {
 		return accountRepository.findAll();
 	}
@@ -185,14 +190,14 @@ public class AccountServiceImpl implements AccountService {
 
 					boolean isAdmin = typeAccount.equals(Account.ADMIN);
 					boolean isUser = typeAccount.equals(Account.USER);
-					boolean isUserVip = typeAccount.equals(Account.USER_VIP);
+					boolean isEmployee = typeAccount.equals(Account.EMPLOYEE);
 
-					if (isAdmin) {
-						return new LoginMesage("Login Success", true, true, false, true, true); // captcha valid and admin
-					} else if (isUser || isUserVip) {
-						return new LoginMesage("Login Success", true, false, true, true, true); // captcha valid and user/vip
+					if (isAdmin || isEmployee) {
+						return new LoginMesage("Login Success", true, true, false, true, true);
+					} else if (isUser) {
+						return new LoginMesage("Login Success", true, false, true, true, true);
 					} else {
-						return new LoginMesage("Login Success", true, false, false, true, true); // captcha valid, non-admin
+						return new LoginMesage("Login Success", true, false, false, true, true);
 					}
 				} else {
 					return new LoginMesage("Đăng Nhập Không Thành Công", false, false, false, false, false);

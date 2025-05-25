@@ -11,20 +11,33 @@ $(document).ready(function() {
         }
     });
 });
+
 function renderChart(data) {
     var year = data.map(item => item.year);
     var orderCount = data.map(item => item.orderCount);
+
     Highcharts.chart('container', {
         chart: {
-            backgroundColor: '#667fff',
+            backgroundColor: '#f7f9fc',
             type: 'spline',
             borderRadius: 10,
+            style: {
+                fontFamily: "'Roboto', sans-serif"
+            }
         },
         title: {
-            text: 'Thống Kê Hàng Năm',
+            text: 'Thống Kê Đơn Hàng Hàng Năm',
             style: {
-                fontSize: '20px',
-                color: '#333'
+                fontSize: '24px',
+                color: '#333',
+                fontWeight: 'bold'
+            }
+        },
+        subtitle: {
+            text: 'Dữ liệu từ hệ thống đơn hàng',
+            style: {
+                fontSize: '14px',
+                color: '#666'
             }
         },
         xAxis: {
@@ -32,38 +45,73 @@ function renderChart(data) {
             title: {
                 text: 'Năm',
                 style: {
+                    fontSize: '16px',
+                    color: '#555'
+                }
+            },
+            lineColor: '#ccc',
+            tickColor: '#ccc',
+            labels: {
+                style: {
                     fontSize: '14px',
                     color: '#666'
                 }
-            },
-            lineColor: '#999',
-            tickColor: '#999'
+            }
         },
         yAxis: {
             title: {
                 text: 'Số Lượng Đơn Hàng',
                 style: {
+                    fontSize: '16px',
+                    color: '#555'
+                }
+            },
+            gridLineDashStyle: 'solid',
+            gridLineColor: '#e5e5e5',
+            labels: {
+                style: {
                     fontSize: '14px',
                     color: '#666'
                 }
             },
-            gridLineDashStyle: 'dash',
-            gridLineColor: '#ddd',
-            tickInterval: 10,
+            tickInterval: 10
         },
         tooltip: {
             shared: true,
-            valueSuffix: ' đơn hàng'
+            valueSuffix: ' đơn hàng',
+            backgroundColor: '#fff',
+            borderColor: '#007bff',
+            borderRadius: 10,
+            shadow: true,
+            style: {
+                fontSize: '14px',
+                color: '#333'
+            }
         },
         plotOptions: {
             spline: {
                 dataLabels: {
                     enabled: true,
                     style: {
-                        color: '#333'
+                        fontSize: '12px',
+                        color: '#333',
+                        textOutline: 'none'
                     }
                 },
                 enableMouseTracking: true
+            }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            itemStyle: {
+                fontSize: '14px',
+                fontWeight: 'normal',
+                color: '#555'
+            },
+            itemHoverStyle: {
+                color: '#000'
             }
         },
         series: [{
@@ -71,7 +119,7 @@ function renderChart(data) {
             data: orderCount,
             color: '#007bff',
             marker: {
-                radius: 5,
+                radius: 6,
                 symbol: 'circle',
                 fillColor: '#fff',
                 lineWidth: 2,

@@ -1,26 +1,57 @@
 package com.vnpt.mini_project_java.service.discount;
 
+
+import com.vnpt.mini_project_java.dto.DiscountDTO;
 import com.vnpt.mini_project_java.entity.Discount;
 import com.vnpt.mini_project_java.respository.DiscountRepository;
+import com.vnpt.mini_project_java.util.DiscountCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
-public class DiscountServiceImpl implements DiscountService{
+public class DiscountServiceImpl implements DiscountService {
+
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     @Autowired
-    public final DiscountRepository discountRepository;
+    DiscountRepository discountRepository;
 
-    public DiscountServiceImpl(DiscountRepository discountRepository) {
-        this.discountRepository = discountRepository;
+    @Override
+    public Discount createDiscountCode(DiscountDTO discountDTO) {
+        String code = DiscountCodeGenerator.generateBase64DiscountCode(20);
+        Discount discount = new Discount();
+        discount.setDiscountCode(code);
+        discount.setDiscountName(discountDTO.getDiscountName());
+        discount.setDiscountPercent(discountDTO.getDiscountPercent());
+        discount.setDateStart(LocalDate.parse(discountDTO.getDateStart(),dateTimeFormatter));
+        discount.setDateFinish(LocalDate.parse(discountDTO.getDateFinish(),dateTimeFormatter));
+
+        return discountRepository.save(discount);
     }
 
-    
-    private double calculateDiscountedAmount(Discount discount, double totalAmount) {
-        double discountPercent = discount.getDiscountPercent() / 100.0;
-        return totalAmount - (totalAmount * discountPercent);
+    @Override
+    public Optional<Discount> validateDiscountCode(String discountCode) {
+        Optional<Discount> discount = discountRepository.findByDiscountCode(discountCode);
+        if (discount.isPresent()) {
+            LocalDate today = LocalDate.now();
+            if (!discount.get().getDateFinish().isBefore(today)) {
+                return discount;
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public double applyDiscount(double price, String discountCode) {
+        Discount discount = discountRepository.findByDiscountCode(discountCode)
+                .orElseThrow(() -> new IllegalArgumentException("Discount code invalid"));
+        double discountAmount = discount.getDiscountPercent() / 100.0 * price;
+        return price - discountAmount;
     }
 }

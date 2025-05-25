@@ -10,6 +10,7 @@ async function showUpdateImportForm(idImport) {
     bindingImportToForm(importData);
     $('#update-import-dialog').modal('show');
 }
+
 function renderProduct(products, productId) {
     const select = $('#product-select');
     select.empty();
@@ -22,6 +23,7 @@ function renderProduct(products, productId) {
         select.append(option);
     });
 }
+
 function bindingImportToForm(importData) {
     if (importData) {
         $('#idImport').val(importData.idImport);
@@ -31,6 +33,7 @@ function bindingImportToForm(importData) {
         $('#updateDate').val(importData.updateDate);
     }
 }
+
 function updateImport() {
     const idImport = $('#idImport').val();
     const users = $('#users').val();
@@ -75,6 +78,7 @@ function updateImport() {
             }).showToast();
         });
 }
+
 function deleteStorage(id) {
     Swal.fire({
         icon: 'warning',
@@ -102,7 +106,7 @@ function deleteStorage(id) {
                         }, 1500);
                     } else {
                         Toastify({
-                            text: response.message ||'Đã xảy ra lỗi khi xóa sản phẩm',
+                            text: response.message || 'Đã xảy ra lỗi khi xóa sản phẩm',
                             duration: 3000,
                             gravity: 'top',
                             position: 'right',
@@ -124,6 +128,7 @@ function deleteStorage(id) {
         }
     });
 }
+
 function renderTable() {
     $.ajax({
         url: "/api/v1/storage/Listgetall",
@@ -139,12 +144,8 @@ function renderTable() {
                     "<td>" + importData.createDate + "</td>" +
                     "<td>" + importData.updateDate + "</td>" +
                     "<td>" + importData.product_name + "</td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "</tr>" +
                     "<td>" +
-                    "<button class='btn btn-info' onclick=\"showImportDetails(" + importData.idImport + ")\">Chi tiết</button>" +
+                    "<button class='btn btn-info' onclick=\"showStorageDetails(" + importData.idImport + ")\">Chi tiết</button>" +
                     "</td>" +
                     "<td>" +
                     "<button class='btn btn-primary' onclick=\"showUpdateImportForm(" + importData.idImport + ")\">Cập nhật</button>" +
@@ -152,7 +153,7 @@ function renderTable() {
                     "<td>" +
                     "<button class='btn btn-danger' onclick=\"deleteImport(" + importData.idImport + ")\">Xóa</button>" +
                     "</td>" +
-                    "</td>");
+                    "</tr>");
             });
         },
         error: function () {
@@ -160,25 +161,28 @@ function renderTable() {
         }
     });
 }
-function showImportDetails(idImport) {
+
+function showStorageDetails(idImport) {
     $.ajax({
         url: "/api/v1/storage/" + idImport + "/get",
         type: "GET",
         dataType: "json",
-        success: function(importData) {
+        success: function (importData) {
+            console.log("Received data:", importData);
             $("#import-details-users").text(importData.users || "N/A");
             $("#import-details-quantity").text(importData.quantity || "N/A");
+            $("#import-details-product").text(importData.product_name || "N/A");
             $("#import-details-createDate").text(importData.createDate ? new Date(importData.createDate).toLocaleDateString() : "N/A");
             $("#import-details-updateDate").text(importData.updateDate ? new Date(importData.updateDate).toLocaleDateString() : "N/A");
-            $("#import-details-product").text(importData.name || "N/A");
 
             $("#import-details-modal").modal("show");
         },
-        error: function() {
+        error: function () {
             alert("Lỗi khi lấy thông tin chi tiết nhập kho.");
         }
     });
 }
+
 async function doGetAjax(url, params = {}) {
     return $.ajax({
         url: url,
@@ -187,6 +191,7 @@ async function doGetAjax(url, params = {}) {
         data: params
     });
 }
+
 async function doPutAjax(url, formData) {
     return $.ajax({
         url: url,
@@ -197,6 +202,7 @@ async function doPutAjax(url, formData) {
         data: formData
     });
 }
+
 async function doDeleteAjax(url) {
     return $.ajax({
         url: url,

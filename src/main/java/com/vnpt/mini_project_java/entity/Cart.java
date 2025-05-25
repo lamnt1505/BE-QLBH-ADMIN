@@ -35,7 +35,6 @@ public class Cart {
     @Transient
     private int amount;
 
-
     @JsonManagedReference
     @OneToMany(mappedBy ="cart" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<CartDetail> cartDetails = new HashSet<>();

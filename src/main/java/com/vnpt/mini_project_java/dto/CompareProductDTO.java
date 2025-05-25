@@ -100,6 +100,7 @@ public class CompareProductDTO {
         }
 
         String imagePath = "src/main/resources/static/images/" + product.getImage();
+
         try {
             Path path = Paths.get(imagePath);
             byte[] imageBytes = Files.readAllBytes(path);
@@ -107,6 +108,7 @@ public class CompareProductDTO {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 }
