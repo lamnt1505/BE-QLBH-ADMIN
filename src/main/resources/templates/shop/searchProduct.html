@@ -97,6 +97,43 @@
         </div>
     </div>
 </div>
+<div class="maincontent-area">
+    <section class="ftco-section">
+        <div class="container">
+            <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold; color: #333;">KẾT QUẢ TÌM KIẾM</h2>
+            <div class="row">
+                <!-- Hiển thị thông báo lỗi -->
+                <div class="col-12 text-center" th:if="${errorMessage}">
+                    <p th:text="${errorMessage}" class="text-danger" style="font-size: 1.5rem;"></p>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mb-4 ftco-animate" th:each="product : ${searchProduct}">
+                    <div class="product card shadow" style="padding: 15px; border-radius: 10px;">
+                        <a th:href="@{'/index/showProductSingle/' + ${product.productID}}" class="img-prod">
+                            <img class="card-img-top img-fluid"
+                                 th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}"
+                                 alt="Product Image"
+                                 style="border-radius: 10px; height: 200px; object-fit: cover;">
+                            <span class="status"
+                                  style="position: absolute; top: 10px; left: 10px; background: red; color: white; font-size: 1rem; padding: 5px 10px; border-radius: 5px;">Giảm Giá</span>
+                        </a>
+                        <div class="text pt-3 px-3 text-center">
+                            <h3 style="font-size: 1.8rem; font-weight: bold; color: #333;">
+                                <a th:href="@{'/index/showProductSingle/' + ${product.productID}}"
+                                   th:text="${product.productName}"></a>
+                            </h3>
+                            <div class="pricing" style="margin-top: 10px;">
+                                <p style="font-size: 1.6rem; color: green;">
+                                    <span th:text="'$' + ${product.price}" class="product-price"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 <div class="slider-area">
     <div class="block-slider block-slider4">
         <ul id="bxslider-home4" class="slider-list">
@@ -181,43 +218,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="maincontent-area">
-    <section class="ftco-section">
-        <div class="container">
-            <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold; color: #333;">Kết quả tìm kiếm</h2>
-            <div class="row">
-                <!-- Hiển thị thông báo lỗi -->
-                <div class="col-12 text-center" th:if="${errorMessage}">
-                    <p th:text="${errorMessage}" class="text-danger" style="font-size: 1.5rem;"></p>
-                </div>
-
-                <div class="col-md-6 col-lg-4 mb-4 ftco-animate" th:each="product : ${searchProduct}">
-                    <div class="product card shadow" style="padding: 15px; border-radius: 10px;">
-                        <a th:href="@{'/index/showProductSingle/' + ${product.productID}}" class="img-prod">
-                            <img class="card-img-top img-fluid"
-                                 th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}"
-                                 alt="Product Image"
-                                 style="border-radius: 10px; height: 200px; object-fit: cover;">
-                            <span class="status"
-                                  style="position: absolute; top: 10px; left: 10px; background: red; color: white; font-size: 1rem; padding: 5px 10px; border-radius: 5px;">Giảm Giá</span>
-                        </a>
-                        <div class="text pt-3 px-3 text-center">
-                            <h3 style="font-size: 1.8rem; font-weight: bold; color: #333;">
-                                <a th:href="@{'/index/showProductSingle/' + ${product.productID}}"
-                                   th:text="${product.productName}"></a>
-                            </h3>
-                            <div class="pricing" style="margin-top: 10px;">
-                                <p style="font-size: 1.6rem; color: green;">
-                                    <span th:text="'$' + ${product.price}" class="product-price"></span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 </div>
 <div class="brands-area">
     <div class="zigzag-bottom"></div>

@@ -417,4 +417,17 @@ public class ManagerController {
         }
         return "redirect:/login";
     }
+
+    @GetMapping("/managerProfile/{accountID}")
+    public String updateCus(ModelMap model, @PathVariable(name = "accountID") long accountID, HttpServletRequest request) {
+        model.addAttribute("account", this.accountService.findById(accountID).orElse(null));
+        getName(request, model);
+        return "manager/uf/updateProfile";
+    }
+    @GetMapping("/managerProfile")
+    public String updateMana(ModelMap model, HttpServletRequest request) {
+        //model.addAttribute("account", this.accountService.findById(accountID).orElse(null));
+        getName(request, model);
+        return "manager/uf/updateProfile";
+    }
 }

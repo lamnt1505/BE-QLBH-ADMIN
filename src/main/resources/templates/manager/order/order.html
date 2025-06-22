@@ -46,9 +46,8 @@
                         <tbody>
                         <tr th:each="order : ${listOrder}">
                             <td><a class="btn btn-inverse-success btn-fw"
-                                   th:href="@{'/manager/orderDetail/'+${order.orderID}}"
-                                   th:text="${order.orderID}">
-
+                                   th:href="@{'/manager/orderDetail/' + ${order.orderID}}"
+                                   th:utext="'<strong>' + ${order.orderID} + '</strong>'">
                             </a></td>
                             <td th:text="${order.orderDateImport}">
                             <td th:text="${order.account != null ? order.account.accountName : 'N/A'}"></td>

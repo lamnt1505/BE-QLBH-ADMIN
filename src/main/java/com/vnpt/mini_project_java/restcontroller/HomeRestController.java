@@ -282,7 +282,7 @@ public class HomeRestController {
         }*/
     @PostMapping(value = "/dossier-statistic/orders")
     @ResponseBody
-    public String orders(HttpServletRequest request, HttpSession session, ModelMap modelMap) {
+    public String orders(HttpServletRequest request, HttpSession session) {
         Logger logger = LoggerFactory.getLogger(this.getClass());
 
         Account account = null;
@@ -349,7 +349,7 @@ public class HomeRestController {
     }
 
     @PostMapping(value ="/dossier-statistic/cancel-order")
-    public ResponseEntity<String> cancelOrder(@RequestParam(name = "orderID") Long orderID) {
+    public ResponseEntity<?> cancelOrder(@RequestParam(name = "orderID") Long orderID) {
         try {
             Order order = orderService.findById(orderID);
             if (order == null) {
@@ -358,11 +358,15 @@ public class HomeRestController {
             if (!"Chờ duyệt".equals(order.getStatus())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đơn hàng không thể hủy bỏ");
             }
-            order.setStatus("Đã Hủy");
 
+            order.setStatus("Đã Hủy");
             orderService.save(order);
 
-            return ResponseEntity.ok("Đơn hàng đã được hủy thành công");
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Đơn hàng đã được hủy thành công");
+            response.put("orderID", orderID);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi");
         }
@@ -462,7 +466,6 @@ public class HomeRestController {
                                                              HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-
             String discountCode = (String) requestData.get("discountCode");
 
             if (discountCode == null || discountCode.trim().isEmpty()) {
@@ -496,9 +499,7 @@ public class HomeRestController {
                 discountedProduct.put("quantity", quantity);
                 discountedProducts.add(discountedProduct);
             }
-
             session.setAttribute("discountedTotal", discountedTotal);
-
             response.put("success", true);
             response.put("discountedProducts", discountedProducts);
             response.put("discountedTotal", discountedTotal);

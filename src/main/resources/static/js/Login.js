@@ -15,9 +15,8 @@ function login() {
             }else if (response.success) {
                 sessionStorage.setItem("accountName", accountName);
                 sessionStorage.setItem("typeAccount", response.typeAccount);
-
                 Toastify({
-                    text: "Đăng Nhập Thành Công",
+                    text: "ĐĂNG NHẬP THÀNH CÔNG",
                     duration: 3000,
                     close: true,
                     gravity: "top",

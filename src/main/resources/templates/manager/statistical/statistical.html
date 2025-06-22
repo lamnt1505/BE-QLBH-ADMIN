@@ -28,25 +28,25 @@
                  th:replace="manager/fragment/listNav::nav"></nav>
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Thống Kê Dịch Vụ</h1>
+                    <h1 class="h3 mb-0 text-gray-800">THỐNG KÊ DỊCH VỤ</h1>
                 </div>
                 <nav>
                     <div class="row d-flex justify-content nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-home-tab"
                            data-toggle="tab" href="#nav-home" role="tab"
-                           aria-controls="nav-home" aria-selected="true">Doanh Thu Theo Tháng
+                           aria-controls="nav-home" aria-selected="true">DOANH THU THEO THÁNG
                         </a>
                         <a class="nav-item nav-link" id="nav-profile-tab"
                            data-toggle="tab" href="#nav-profile" role="tab"
-                           aria-controls="nav-profile" aria-selected="false">Doanh Thu Theo Năm
+                           aria-controls="nav-profile" aria-selected="false">DOANH THU THEO NĂM
                         </a>
                         <a class="nav-item nav-link" id="nav-profile-tab"
                            data-toggle="tab" href="#nav-check" role="tab"
-                           aria-controls="nav-profile" aria-selected="false">Doanh Thu Theo Qúy
+                           aria-controls="nav-profile" aria-selected="false">DOANH THU THEO QUÝ
                         </a>
                         <a class="nav-item nav-link"
                            id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                           role="tab" aria-controls="nav-contact" aria-selected="false">Số Lượng Sản Phẩm
+                           role="tab" aria-controls="nav-contact" aria-selected="false">SỐ LƯỢNG SẢN PHẨM ĐƯỢC BÁN RA
                         </a>
                     </div>
                 </nav>
@@ -67,7 +67,7 @@
                                 <tr th:each="month : ${months}">
                                     <td class="py-1" th:text="${month.Month + '/' + month.Year}">
                                     <td th:text="${month.orderCount}"></td>
-                                    <td th:text="${month.total}"></td>
+                                    <td th:text="${#numbers.formatDecimal(month.total, 0, 'COMMA', 3, 'POINT') + ' ₫'}"></td>
                                     <td th:text="${month.minTotal}" class="product-price"></td>
                                     <td th:text="${month.maxTotal}" class="product-price"></td>
                                 </tr>
@@ -94,7 +94,8 @@
                             <tr th:each="year : ${years}">
                                 <td class="py-1" th:text=${year.year}>
                                 <td th:text=${year.orderCount}></td>
-                                <td th:text=${year.total}></td>
+                                <td th:text="${#numbers.formatDecimal(year.total, 0, 'COMMA', 3, 'POINT') + ' ₫'}"></td>
+                                <!--<td th:text=${year.total}></td>-->
                                 <td th:text=${year.minTotal} class="product-price"></td>
                                 <td th:text=${year.maxTotal} class="product-price"></td>
                             </tr>
@@ -123,7 +124,8 @@
                                     <td class="py-1" th:text="${quarter.year}"></td>
                                     <td class="py-1" th:text="${quarter.quarter}"></td>
                                     <td th:text="${quarter.orderCount}"></td>
-                                    <td th:text="${quarter.total}"></td>
+                                    <td th:text="${#numbers.formatDecimal(quarter.total, 0, 'COMMA', 3, 'POINT') + ' ₫'}"></td>
+                                    <!--<td th:text="${quarter.total}"></td>-->
                                     <td th:text="${quarter.minTotal}" class="product-price"></td>
                                     <td th:text="${quarter.maxTotal}" class="product-price"></td>
                                 </tr>

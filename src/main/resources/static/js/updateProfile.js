@@ -87,7 +87,6 @@ $(document).ready(function() {
         for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
-
         $.ajax({
             url: `/api/v1/account/update/${accountID}`,
             type: 'PUT',

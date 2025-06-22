@@ -24,6 +24,44 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" th:src="@{/resources/js/logout.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .search-form {
+            display: flex;
+            align-items: center;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #3b82f6;
+        }
+
+        .search-btn {
+            padding: 8px 10px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .search-btn:hover {
+            background-color: #2563eb;
+        }
+
+    </style>
 </head>
 <body>
 <div th:replace="fragment/header::header"></div>
@@ -78,9 +116,9 @@
             <div class="col-md-4">
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Tìm Kiếm Sản Phẩm</h2>
-                    <form th:action="@{/index/searchProduct}" method="get">
-                        <input type="search" name="key" placeholder="Search products...">
-                        <button type="submit" class="search-btn">Tìm</button>
+                    <form th:action="@{/index/searchProduct}" method="get" class="search-form">
+                        <input type="search" name="key" class="search-input" placeholder="Search products...">
+                        <button type="submit" class="search-btn"> Tìm Kiếm </button>
                     </form>
                 </div>
                 <div class="single-sidebar">
@@ -161,8 +199,8 @@
                                     <td class="product-name">
                                         <a th:text="${product.productName}"></a>
                                     </td>
-                                    <td >
-                                        <span class="price" th:text="${product.price}"></span>
+                                    <td>
+                                        <span class="one-price" th:attr="data-price=${product.price}"></span>
                                     </td>
                                     <td class="product-quantity">
                                         <div class="quantity buttons_added">
@@ -176,8 +214,8 @@
                                         </div>
                                     </td>
                                     <td class="product-subtotal">
-                                        <span class="total"
-                                              th:text="${#numbers.formatCurrency(product.price * product.amount)}"></span>
+                                        <span class="total-price"
+                                              th:attr="data-price=${product.price * product.amount}">0</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -272,22 +310,56 @@
     });
 </script>
 <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(price);
+        };
+
+        document.querySelectorAll('.total-price').forEach(el => {
+            const price = parseFloat(el.getAttribute("data-price"));
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(price);
+        };
+
+        document.querySelectorAll('.one-price').forEach(el => {
+            const price = parseFloat(el.getAttribute("data-price"));
+            if (!isNaN(price)) {
+                el.innerText = formatPrice(price);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
     $(document).ready(function () {
         $('button[name="apply"]').on('click', function () {
-            var discountCode = $('input[placeholder="Mã phiếu giảm giá"]').val().trim();
+            const discountCode = $('input[placeholder="Mã phiếu giảm giá"]').val().trim();
 
             if (discountCode === '') {
                 alert('Vui lòng nhập mã giảm giá');
                 return;
             }
 
-            var products = [];
+            const products = [];
             $('.cart_item').each(function () {
-                var productID = $(this).find('.productID').val();
-                var price = parseFloat($(this).find('.price').text().trim());
-                var quantity = parseInt($(this).find('.quantityinput').val().trim());
+                const productID = $(this).find('.productID').val();
+                const price = parseFloat($(this).find('.one-price').attr('data-price'));
+                const quantity = parseInt($(this).find('.quantityinput').val().trim());
 
-                products.push({productID: productID, price: price, quantity: quantity});
+                products.push({ productID, price, quantity });
             });
 
             $.ajax({
@@ -296,24 +368,32 @@
                 contentType: 'application/json',
                 data: JSON.stringify({
                     discountCode: discountCode,
-                    products: products,
+                    products: products
                 }),
                 success: function (response) {
                     if (response.success) {
                         response.discountedProducts.forEach(function (item) {
-                            var row = $('.cart_item').find(`.productID[value="${item.productID}"]`).closest('.cart_item');
-                            row.find('.price').text(item.discountedPrice.toFixed(2));
-                            row.find('.total').text((item.discountedPrice * item.quantity).toFixed(2));
+                            const row = $('.cart_item').find(`.productID[value="${item.productID}"]`).closest('.cart_item');
+
+                            row.find('.one-price')
+                                .text(item.discountedPrice.toLocaleString('vi-VN') + ' ₫')
+                                .attr('data-price', item.discountedPrice);
+
+                            const total = item.discountedPrice * item.quantity;
+                            row.find('.total-price').text(total.toLocaleString('vi-VN') + ' ₫');
                         });
 
-                        alert('Áp dụng mã giảm giá thành công!');
+                        alert(response.message || 'Áp dụng mã giảm giá thành công!');
                     } else {
-                        alert(response.message);
+                        alert(response.message || 'Không thể áp dụng mã giảm giá!');
                     }
                 },
-                error: function () {
-                    alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
-                },
+                error: function (xhr) {
+                    const msg = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'Đã có lỗi xảy ra. Vui lòng thử lại.';
+                    alert(msg);
+                }
             });
         });
     });

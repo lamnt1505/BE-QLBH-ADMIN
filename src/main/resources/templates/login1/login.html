@@ -30,8 +30,8 @@
     </style>
 </head>
 <body>
-<div class="wrapper" th:style="'background-image: url(' + @{/resources/images/e-commerce-la-gi-02.png} + ');'">
-    <div class="inner" style="color: rgb(102,127,255);">
+<div class="wrapper" th:style="'background-image: url(' + @{/resources/images/ecommercejpg.jpeg} + ');'">
+    <div class="inner" style="color: rgb(255,240,102);">
         <div class="image-holder" style="margin-top: -20px;">
             <img src="/resources/images/e-commerce.jpg" alt="">
         </div>
@@ -65,18 +65,20 @@
             </div>
             <div style="width: 100%">
                 <button style="width: 50%; border-radius: 10px; background: rgb(3,40,248) " class="submit"
-                        onclick="login()">Đăng nhập
+                        onclick="login()">
+                    <i class="fa fa-lock"></i>
+                    ĐĂNG NHẬP
                 </button>
                 <a th:href="@{/registerd}"
                    style="text-align: center; color: white; font-size: 18px; text-decoration: none;">
                     <div style="width: 50%; border-radius: 10px; background: rgb(3,40,248); height: 40px; margin-top: -40px; padding-top: 10px; margin-left: 160px;">
-                        Đăng ký
+                        <i class="fa fa-registered"></i> ĐĂNG KÍ
                     </div>
                 </a>
             </div>
             <div class="link-wrapper">
-                <a th:href="@{/index}">Trở về trang chủ</a>
-                <a th:href="@{/forgot}" style="margin-right: 20px;">Quên mật khẩu</a>
+                <a th:href="@{/index}"> <i class="fa fa-backward"></i> TRỞ VỀ TRANG CHỦ</a>
+                <a th:href="@{/forgot}" style="margin-right: 20px;"> <i class="fa fa-passport"></i> QUÊN MẬT KHẨU </a>
             </div>
         </form>
     </div>

@@ -12,7 +12,7 @@ var pageTotal = 0;
 var pageCurrent = 6;
 var pageCheck = 1;
 var pageLimit = 6;
-var pageProduct = 4;
+var pageProduct= 4;
 var pageNext = 0;
 
 $('.price-sale').on('price-sale', function (e) {

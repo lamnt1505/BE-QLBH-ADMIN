@@ -26,7 +26,6 @@ public class DiscountRestController {
 
     @PostMapping("/generate")
     public ResponseEntity<Map<String, Object>> generateDiscountCode(@RequestBody DiscountDTO discountDTO, HttpSession session) {
-
         Discount discount = discountService.createDiscountCode(discountDTO);
 
         session.setAttribute("generatedDiscountCode", discount.getDiscountCode());

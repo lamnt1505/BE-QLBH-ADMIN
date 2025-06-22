@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-
 	@Autowired
 	private final AccountRepository accountRepository;
 
@@ -136,10 +135,15 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void updateAccount(long accountID,AccountDTO accountDTO, MultipartFile image) {
 		Account account = accountRepository.findById(accountDTO.getAccountID())
-				.orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với ID: " + accountDTO.getAccountID()));
+				.orElseThrow(() ->
+						new RuntimeException("Không tìm thấy tài khoản với ID: " + accountDTO.getAccountID()));
 
 		account.setAccountName(accountDTO.getAccountName());
-		account.setAccountPass(passwordEncoder.encode(accountDTO.getAccountPass()));
+
+		if(accountDTO.getAccountPass() != null && !accountDTO.getAccountPass().trim().isEmpty()) {
+			account.setAccountPass(passwordEncoder.encode(accountDTO.getAccountPass()));
+		}
+
 		account.setDateOfBirth(LocalDate.parse(accountDTO.getDateOfBirth(), DateTimeFormatter.ISO_DATE));
 		account.setEmail(accountDTO.getEmail());
 		account.setUsername(accountDTO.getUsername());
@@ -149,7 +153,6 @@ public class AccountServiceImpl implements AccountService {
 		if (image != null && !image.isEmpty()) {
 			String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
 			Path uploadDir = Paths.get("src/main/resources/static/images");
-
 			try {
 				if (!Files.exists(uploadDir)) {
 					Files.createDirectories(uploadDir);
@@ -172,15 +175,11 @@ public class AccountServiceImpl implements AccountService {
 		if (sessionCaptcha == null || !sessionCaptcha.equals(loginDTO.getCaptcha())) {
 			return new LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.", false, false, false, false, false);
 		}
-
 		Account account1 = accountRepository.findByAccountName(loginDTO.getAccountName());
-
 		if (account1 != null) {
 			String password = loginDTO.getAccountPass();
 			String encodedPassword = account1.getAccountPass();
-
 			Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-
 			if (isPwdRight) {
 				Optional<Account> acccount = accountRepository.findOneByAccountNameAndAccountPass(loginDTO.getAccountName(), encodedPassword);
 				if (acccount.isPresent()) {

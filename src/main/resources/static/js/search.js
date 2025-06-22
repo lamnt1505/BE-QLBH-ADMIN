@@ -152,3 +152,15 @@ function renderProductModal(products) {
     }
     $('#productModal').modal('show');
 }
+$(document).ready(function () {
+    $('#reset-filters').on('click', function () {
+        // 1. Bỏ chọn tất cả checkbox filter
+        $('.category-checkbox, .trademark-checkbox, .version-checkbox, .detail-checkbox').prop('checked', false);
+
+        // 2. Xoá nội dung hiển thị sản phẩm đã tìm
+        $('#productModalBody').empty().append('<tr><td colspan="5">Đã làm mới bộ lọc, chưa có sản phẩm hiển thị</td></tr>');
+
+        // 3. Ẩn modal nếu đang mở
+        $('#productModal').modal('hide');
+    });
+});
