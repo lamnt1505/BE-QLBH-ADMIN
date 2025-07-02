@@ -1,5 +1,6 @@
 package com.vnpt.mini_project_java.restcontroller;
 
+import com.vnpt.mini_project_java.config.VnpayConfig;
 import com.vnpt.mini_project_java.dto.FavoriteDTO;
 import com.vnpt.mini_project_java.dto.ProductSearchCriteriaDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
@@ -29,10 +30,15 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -316,6 +322,12 @@ public class HomeRestController {
         }
 
         Order order = new Order();
+        String vnp_TxnRef = (String) session.getAttribute("vnp_TxnRef");
+        if (vnp_TxnRef == null) {
+            logger.error("Không tìm thấy mã giao dịch trong session.");
+            return "-2";
+        }
+        order.setOrderCode(vnp_TxnRef);
         long millis = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(millis);
         LocalDate localDate = date.toLocalDate();
@@ -513,6 +525,64 @@ public class HomeRestController {
         }
         return ResponseEntity.ok(response);
     }
+    @PostMapping("/create-payment")
+    @ResponseBody
+    public String createPayment(HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
+        List<Product> list = (List<Product>) session.getAttribute("cart");
+        if (list == null || list.isEmpty()) return "Không có giỏ hàng";
+
+        double total = list.stream().mapToDouble(p -> p.getPrice() * p.getAmount()).sum();
+
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
+        String vnp_OrderInfo = "Thanh toán đơn hàng";
+        String vnp_OrderType = "other";
+        String vnp_TxnRef = String.valueOf(System.currentTimeMillis());
+        session.setAttribute("vnp_TxnRef", vnp_TxnRef);
+        String vnp_IpAddr = request.getRemoteAddr();
+        String vnp_TmnCode = VnpayConfig.vnp_TmnCode;
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_Amount", String.valueOf((long)(total * 100))); // x100 theo VNPAY
+        vnp_Params.put("vnp_CurrCode", "VND");
+        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
+        vnp_Params.put("vnp_OrderType", vnp_OrderType);
+        vnp_Params.put("vnp_Locale", "vn");
+        vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl);
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+
+        for (String fieldName : fieldNames) {
+            String value = vnp_Params.get(fieldName);
+            if (value != null && !value.isEmpty()) {
+                hashData.append(fieldName).append('=').append(URLEncoder.encode(value, "UTF-8"));
+                query.append(fieldName).append('=').append(URLEncoder.encode(value, "UTF-8"));
+                if (!fieldName.equals(fieldNames.get(fieldNames.size() - 1))) {
+                    hashData.append('&');
+                    query.append('&');
+                }
+            }
+        }
+
+        String secureHash = VnpayConfig.hmacSHA512(VnpayConfig.vnp_HashSecret, hashData.toString());
+        query.append("&vnp_SecureHash=").append(secureHash);
+        String paymentUrl = VnpayConfig.vnp_PayUrl + "?" + query.toString();
+
+        return paymentUrl;
+    }
 
     public ProductVoteDTO convertToDTO(ProductVote vote) {
         ProductVoteDTO dto = new ProductVoteDTO();
@@ -530,3 +600,4 @@ public class HomeRestController {
         return dto;
     }
 }
+

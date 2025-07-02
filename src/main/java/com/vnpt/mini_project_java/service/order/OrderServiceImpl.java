@@ -1,11 +1,11 @@
 package com.vnpt.mini_project_java.service.order;
 
 import com.vnpt.mini_project_java.entity.Order;
-import com.vnpt.mini_project_java.entity.Storage;
 import com.vnpt.mini_project_java.respository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -44,4 +44,8 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(entity);
     }
 
+    @Override
+    public Optional<Order> findByOrderCode(String code) {
+        return orderRepository.findByOrderCode(code);
+    }
 }

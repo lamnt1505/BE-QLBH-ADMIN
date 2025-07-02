@@ -36,6 +36,9 @@ public class Order {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @Column(name = "order_code", unique = true)
+    private String orderCode;
+
     @JsonManagedReference
     @OneToMany(mappedBy ="order" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();

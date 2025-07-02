@@ -424,6 +424,7 @@ public class ManagerController {
         getName(request, model);
         return "manager/uf/updateProfile";
     }
+
     @GetMapping("/managerProfile")
     public String updateMana(ModelMap model, HttpServletRequest request) {
         //model.addAttribute("account", this.accountService.findById(accountID).orElse(null));

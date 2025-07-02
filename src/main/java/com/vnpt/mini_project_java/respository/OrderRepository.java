@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {
@@ -69,4 +70,6 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @Query(value = "select * from order_info where account_id = ?", nativeQuery = true)
     List<Order> findOrderByAccount(long orderID);
+
+    Optional<Order> findByOrderCode(String orderCode);
 }

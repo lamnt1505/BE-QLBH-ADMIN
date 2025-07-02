@@ -222,9 +222,9 @@
                                     <td class="actions" colspan="6">
                                         <label>Phiếu giảm giá:</label>
                                         <input type="text" placeholder="Mã phiếu giảm giá" value="" class="input-text">
-                                        <button type="button" name="apply" class="button">Apply Coupon</button>
-                                        <button type="button" class="btn btn-primary" id="submitorders">Đặt Hàng
-                                        </button>
+                                        <button type="button" name="apply" class="btn btn-primary">Apply Coupon</button>
+                                        <button type="button" class="btn btn-primary" id="submitorders">Đặt Hàng</button>
+                                        <button type="button" class="btn btn-primary" onclick="startPayment()">Thanh toán VNPAY</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -397,6 +397,40 @@
             });
         });
     });
+</script>
+<!--<script type="text/javascript">
+    function startPayment() {
+        fetch("/create-payment", {
+            method: "POST"
+        })
+            .then(res => res.text())
+            .then(url => {
+                window.location.href = url;
+            })
+            .catch(err => alert("Lỗi tạo thanh toán: " + err));
+    }
+</script>-->
+<script type="text/javascript">
+    function startPayment() {
+        fetch("/dossier-statistic/orders", { method: "POST" })
+            .then(res => res.text())
+            .then(result => {
+                if (result === "1") {
+                    // Đơn hàng đã được lưu vào DB, tiếp tục gọi VNPAY
+                    fetch("/create-payment", { method: "POST" })
+                        .then(res => res.text())
+                        .then(url => {
+                            if (url.startsWith("http")) {
+                                window.location.href = url;
+                            } else {
+                                alert("Lỗi tạo thanh toán: " + url);
+                            }
+                        });
+                } else {
+                    alert("Không thể tạo đơn hàng. Mã lỗi: " + result);
+                }
+            });
+    }
 </script>
 </body>
 </html>
