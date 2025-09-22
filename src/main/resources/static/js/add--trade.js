@@ -25,7 +25,7 @@ $(document).ready(function () {
             }).showToast();
             setTimeout(function () {
                 window.location.href = '/manager/listTrademark';
-            }, 1500);
+            }, 3000);
         })
             .fail(function (xhr, status, error) {
                 Toastify({

@@ -33,6 +33,7 @@ public class StorageServiceImpl implements StorageService {
 		this.storageRepository = storageRepository;
 		this.productRepository = productRepository;
 	}
+
 	@Override
 	public Storage findQuatityProduct(long product_id) {
 		return storageRepository.findQuatityProduct(product_id);
@@ -52,6 +53,9 @@ public class StorageServiceImpl implements StorageService {
 		Storage storage = new Storage();
 		storage.setIdImport(storageDTO.getIdImport());
 		storage.setUsers(storageDTO.getUsers());
+		if (storageDTO.getQuantity() == null || storageDTO.getQuantity() < 0) {
+			throw new RuntimeException("Quantity cannot be null or negative");
+		}
 		storage.setQuantity(storageDTO.getQuantity());
 		storage.setCreateDate(LocalDate.parse(storageDTO.getCreateDate(), dateTimeFormatter));
 		storage.setUpdateDate(LocalDate.parse(storageDTO.getUpdateDate(), dateTimeFormatter));
@@ -75,7 +79,7 @@ public class StorageServiceImpl implements StorageService {
 
 		Storage storage = optionalStorage.get();
 		storage.setUsers(storageDTO.getUsers());
-	    storage.setQuantity(storageDTO.getQuantity());
+		storage.setQuantity(storageDTO.getQuantity() != null ? storageDTO.getQuantity() : 0);
 		if (storageDTO.getCreateDate() != null) {
 			storage.setCreateDate(LocalDate.parse(storageDTO.getCreateDate(), dateTimeFormatter));
 		}
@@ -90,6 +94,7 @@ public class StorageServiceImpl implements StorageService {
 		}
 		return storageRepository.save(storage);
 	}
+
 	@Override
 	public Storage getImportById(long idImport) {
 		Optional<Storage> result = storageRepository.findById(idImport);

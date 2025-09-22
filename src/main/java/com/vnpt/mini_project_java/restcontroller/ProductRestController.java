@@ -3,10 +3,14 @@ package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.entity.Product;
+import com.vnpt.mini_project_java.entity.ProductDetail;
+import com.vnpt.mini_project_java.entity.ProductVersion;
 import com.vnpt.mini_project_java.projections.StatisticalForMonthProjections;
 import com.vnpt.mini_project_java.projections.StatisticalForYearProjections;
 import com.vnpt.mini_project_java.projections.StatisticalProductProjections;
 import com.vnpt.mini_project_java.service.product.ProductService;
+import com.vnpt.mini_project_java.service.productDetail.ProductDetailService;
+import com.vnpt.mini_project_java.service.productVersion.ProductVersionService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import com.vnpt.mini_project_java.service.statistical.StatisticalService;
@@ -32,6 +36,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -45,10 +50,18 @@ public class ProductRestController {
 
     @Autowired
     private final StatisticalService statisticsService;
-	
-    public ProductRestController(ProductService productService, StatisticalService statisticsService) {
+
+    @Autowired
+    private final ProductDetailService productDetailService;
+
+    @Autowired
+    private final ProductVersionService productVersionService;
+
+    public ProductRestController(ProductService productService, StatisticalService statisticsService, ProductDetailService productDetailService, ProductVersionService productVersionService) {
         this.productService = productService;
         this.statisticsService = statisticsService;
+        this.productDetailService = productDetailService;
+        this.productVersionService = productVersionService;
     }
 
     @GetMapping("/getall")
@@ -172,11 +185,45 @@ public class ProductRestController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "productID,asc") String[] sort) {
-
         Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort[0]));
-
         return productService.getPaginatedProducts(pageable);
+    }
+
+    @GetMapping("/{productID}")
+    public ResponseEntity<?> getProductDetail(@PathVariable("productID") long productID) {
+        try {
+            List<ProductVersion> productVersions = productVersionService.findAllByProductId(productID);
+
+            Object productDetail = productDetailService.findByIdProduct(productID);
+
+            Optional<Product> productOptional = productService.findById(productID);
+            if (productOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy sản phẩm");
+            }
+
+            Product product = productOptional.get();
+
+            // Lấy danh sách sản phẩm cùng category
+            List<Product> relatedProducts = productService.findBycategoryId(product.getCategory().getCategoryID());
+            // Xoá sản phẩm hiện tại khỏi danh sách
+            relatedProducts.removeIf(p -> p.getProductID() == product.getProductID());
+
+            // Gói dữ liệu trả về
+            Map<String, Object> response = new HashMap<>();
+            response.put("product", product);
+            response.put("productVersions", productVersions);
+            response.put("productDetail", productDetail);
+            response.put("categoryName", product.getCategory().getCategoryName());
+            response.put("categoryID", product.getCategory().getCategoryID());
+            response.put("relatedProducts", relatedProducts);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Có lỗi xảy ra khi lấy chi tiết sản phẩm");
+        }
     }
 }
 

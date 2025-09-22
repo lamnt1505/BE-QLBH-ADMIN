@@ -40,7 +40,7 @@ public class TrademarkRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<TrademarkDTO> createTrademark(TrademarkDTO dto){
+    public ResponseEntity<TrademarkDTO> createTrademark(@RequestBody TrademarkDTO dto){
         try{
             TrademarkDTO createdTrademark = trademarkService.saveDTO(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdTrademark);

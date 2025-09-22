@@ -73,7 +73,8 @@ public class CartController {
     }
 
     @GetMapping("/orderdetails/{orderDetailID}")
-    public String viewOrderdetails(@PathVariable("orderDetailID") long orderDetailID, ModelMap model, HttpServletRequest request){
+    public String viewOrderdetails(@PathVariable("orderDetailID") long orderDetailID, ModelMap model,
+                                   HttpServletRequest request){
         long id = -1;
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {

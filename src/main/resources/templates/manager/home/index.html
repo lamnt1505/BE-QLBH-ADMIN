@@ -364,16 +364,13 @@
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     z-index: 9999;
-    padding: 10px;"
->
+    padding: 10px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
         <strong>Chat với <span id="admin-chat-name" style="color: green;"></span></strong>
         <button onclick="document.getElementById('admin-chat-box').style.display='none'"
                 style="background: none; border: none; font-size: 18px; color: red; cursor: pointer;">&times;</button>
     </div>
-
     <div id="admin-chat-messages" style="height: 200px; overflow-y: scroll; border: 1px solid #eee; padding: 5px; margin-bottom: 5px;"></div>
-
     <input type="text" id="admin-chat-input" placeholder="Nhập tin nhắn..." style="width: 75%;">
     <button onclick="sendAdminMessage()">Gửi</button>
 </div>
@@ -521,12 +518,16 @@
 <script type="text/javascript">
     const firebaseConfig = {
         apiKey: "AIzaSyCC4_5CItunwdlQF7fzLO_Ftx2hVfAAEak",
+        authDomain: "htkt-33179.firebaseapp.com",
         databaseURL: "https://htkt-33179-default-rtdb.firebaseio.com",
-        projectId: "htkt-33179"
+        projectId: "htkt-33179",
+        storageBucket: "htkt-33179.firebasestorage.app",
+        messagingSenderId: "580315399018",
+        appId: "1:580315399018:web:92c7501f676b7dfc069b13",
+        measurementId: "G-YBXKDZTY8H"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     document.addEventListener("DOMContentLoaded", function () {
         const badge = document.getElementById("messageCount");
 

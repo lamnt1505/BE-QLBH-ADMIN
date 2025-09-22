@@ -28,39 +28,31 @@
         .search-form {
             display: flex;
             align-items: center;
-            max-width: 300px;
             margin-top: 10px;
         }
 
-        .search-input {
+        .search-form input[type="search"] {
             flex: 1;
             padding: 8px 12px;
-            font-size: 14px;
+            font-size: 16px;
             border: 1px solid #ccc;
+            border-right: none;
             border-radius: 4px 0 0 4px;
             outline: none;
-            transition: border-color 0.3s;
         }
-
-        .search-input:focus {
-            border-color: #3b82f6;
-        }
-
-        .search-btn {
-            padding: 8px 10px;
-            background-color: #3b82f6;
-            color: white;
+        .search-form button {
+            padding: 8px 16px;
+            font-weight: bold;
             border: none;
+            background-color: #428bca;
+            color: white;
             border-radius: 0 4px 4px 0;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            transition: background 0.3s ease;
         }
-
-        .search-btn:hover {
-            background-color: #2563eb;
+        .search-form button:hover {
+            background-color: #3071a9;
         }
-
     </style>
 </head>
 <body>
@@ -115,10 +107,10 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="single-sidebar">
-                    <h2 class="sidebar-title">Tìm Kiếm Sản Phẩm</h2>
-                    <form th:action="@{/index/searchProduct}" method="get" class="search-form">
-                        <input type="search" name="key" class="search-input" placeholder="Search products...">
-                        <button type="submit" class="search-btn"> Tìm Kiếm </button>
+                    <h2 class="sidebar-title">TÌM KIẾM SẢN PHẨM</h2>
+                    <form th:action="@{/index/searchProduct}" method="get" class="search-form d-flex">
+                        <input type="search" name="key" class="form-control me-2" placeholder="Nhập từ khóa..." required>
+                        <button type="submit" class="btn btn-primary">TÌM KIẾM</button>
                     </form>
                 </div>
                 <div class="single-sidebar">
@@ -293,6 +285,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/addTocart.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/canceloder.js}"></script>
 <script type="text/javascript">
@@ -398,38 +391,63 @@
         });
     });
 </script>
-<!--<script type="text/javascript">
-    function startPayment() {
-        fetch("/create-payment", {
-            method: "POST"
-        })
-            .then(res => res.text())
-            .then(url => {
-                window.location.href = url;
-            })
-            .catch(err => alert("Lỗi tạo thanh toán: " + err));
-    }
-</script>-->
 <script type="text/javascript">
     function startPayment() {
-        fetch("/dossier-statistic/orders", { method: "POST" })
-            .then(res => res.text())
-            .then(result => {
-                if (result === "1") {
-                    // Đơn hàng đã được lưu vào DB, tiếp tục gọi VNPAY
-                    fetch("/create-payment", { method: "POST" })
-                        .then(res => res.text())
-                        .then(url => {
-                            if (url.startsWith("http")) {
-                                window.location.href = url;
+        // Bước 1: Gọi /create-payment để lấy txnRef
+        $.post("/create-payment", function (result) {
+            if (result.startsWith("txnRef=")) {
+                const txnRef = result.split("=")[1];
+                sessionStorage.setItem("txnRef", txnRef);
+
+                // Bước 2: Gửi đơn hàng với txnRef
+                $.ajax({
+                    url: "/dossier-statistic/orders",
+                    method: "POST",
+                    data: { txnRef: txnRef },
+                    success: function (orderRes) {
+                        if (orderRes === "1") {
+                            // Bước 3: Gọi lại /create-payment để lấy link thanh toán
+                            $.ajax({
+                                url: "/create-payment",
+                                method: "POST",
+                                data: { txnRef: txnRef },
+                                success: function (url) {
+                                    if (url.startsWith("http")) {
+                                        window.location.href = url;
+                                    } else {
+                                        alert("Lỗi tạo link thanh toán: " + url);
+                                    }
+                                },
+                                error: function () {
+                                    alert("Không thể tạo link thanh toán.");
+                                }
+                            });
+                        } else {
+                            if (orderRes === "0") {
+                                window.location.href = "/login"; // 👉 Chuyển sang login nếu chưa đăng nhập
+                            } else if (orderRes === "-1") {
+                                alert("Không có giỏ hàng.");
+                            } else if (orderRes === "-2") {
+                                alert("Thiếu mã giao dịch.");
                             } else {
-                                alert("Lỗi tạo thanh toán: " + url);
+                                alert("Tạo đơn hàng thất bại. Mã lỗi: " + orderRes);
                             }
-                        });
-                } else {
-                    alert("Không thể tạo đơn hàng. Mã lỗi: " + result);
-                }
-            });
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi đơn hàng.");
+                    }
+                });
+            } else if (result === "Bạn chưa đăng nhập") {
+                window.location.href = "/login"; // 👉 Chuyển sang login nếu chưa đăng nhập
+            } else if (result === "Không có giỏ hàng") {
+                alert("Không có sản phẩm trong giỏ hàng.");
+            } else {
+                alert("Lỗi tạo txnRef: " + result);
+            }
+        }).fail(function () {
+            alert("Không thể kết nối đến máy chủ.");
+        });
     }
 </script>
 </body>

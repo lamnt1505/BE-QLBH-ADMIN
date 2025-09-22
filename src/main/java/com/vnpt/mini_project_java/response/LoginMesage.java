@@ -27,10 +27,16 @@ public class LoginMesage {
     @JsonProperty("status")
     private Boolean status;
 
+    private String role;
+
+    private Long accountID;
+
     @JsonProperty("isCaptchaValid")
     private boolean isCaptchaValid;
 
-    public LoginMesage(String message, Boolean status, boolean isAdmin,boolean isUser, boolean isEmployee, boolean isCaptchaValid) {
+    public LoginMesage(String message, Boolean status,
+                       boolean isAdmin,boolean isUser,
+                       boolean isEmployee, boolean isCaptchaValid) {
         this.message = message;
         this.status = status;
         this.isAdmin = isAdmin;

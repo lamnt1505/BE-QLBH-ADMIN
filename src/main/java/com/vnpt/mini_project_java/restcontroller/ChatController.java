@@ -11,7 +11,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
-
     @PostMapping("/send")
     public ResponseEntity<String> sendMessage(@RequestParam String sender, @RequestParam String content) {
         try {
@@ -24,10 +23,9 @@ public class ChatController {
             message.put("timestamp", System.currentTimeMillis());
 
             ref.push().setValueAsync(message);
-            return ResponseEntity.ok("Message sent");
+            return ResponseEntity.ok("Đã gửi thành công");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Send failed");
         }
     }
-
 }

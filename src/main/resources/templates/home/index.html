@@ -209,8 +209,7 @@
             <div class="col-sm-6">
                 <div class="shopping-item">
                     <a th:href="@{/cart}">
-                        Giỏ Hàng
-                        <i class="fa fa-shopping-cart"></i>(<span id="cartQuantity">0</span>)
+                        Giỏ Hàng <i class="fa fa-shopping-cart"></i>(<span id="cartQuantity">0</span>)
                     </a>
                 </div>
             </div>
@@ -644,19 +643,21 @@
             chatBody.style.display = "block";
 
             db.ref("chat/conversations").limitToLast(100).on("child_added", function (snapshot) {
-                if (!userName) return;
-
                 const msg = snapshot.val();
+                console.log("📨 Firebase message:", msg);
+
+                if (!msg || !msg.sender || !msg.content) return;
+
                 const cleanedUser = userName.toLowerCase().trim();
+                const cleanedSender = msg.sender.toLowerCase().trim();
                 const cleanedContent = msg.content.toLowerCase().trim();
 
-                const isFromUser = msg.sender === userName;
-                const isToUser = msg.sender === "Admin" && cleanedContent.startsWith(`(${cleanedUser})`);
+                const isFromUser = cleanedSender === cleanedUser;
+                const isToUser = cleanedSender === "admin" && cleanedContent.startsWith(`(${cleanedUser})`);
 
                 if (isFromUser || isToUser) {
                     const wrapper = document.createElement("div");
-                    wrapper.classList.add("chat-row");
-                    wrapper.classList.add(isFromUser ? "chat-user" : "chat-admin");
+                    wrapper.classList.add("chat-row", isFromUser ? "chat-user" : "chat-admin");
 
                     const avatar = document.createElement("img");
                     avatar.classList.add("avatar");
@@ -665,8 +666,7 @@
                         : "https://cdn-icons-png.flaticon.com/512/4712/4712027.png";
 
                     const bubble = document.createElement("div");
-                    bubble.classList.add("chat-bubble");
-                    bubble.classList.add(isFromUser ? "user-bubble" : "admin-bubble");
+                    bubble.classList.add("chat-bubble", isFromUser ? "user-bubble" : "admin-bubble");
 
                     const content = isToUser
                         ? msg.content.replace(`(${userName})`, "").trim()

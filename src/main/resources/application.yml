@@ -26,6 +26,9 @@ spring:
           auto: update
   server:
     servlet:
+      session:
+        cookie:
+          secure: true
       context-path: /
   logging:
     level:

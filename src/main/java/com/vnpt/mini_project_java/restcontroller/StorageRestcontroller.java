@@ -44,7 +44,7 @@ public class StorageRestcontroller {
     }
 
     @PostMapping("/add")
-	public ResponseEntity<StorageDTO> createStorage(@ModelAttribute StorageDTO dto) {
+	public ResponseEntity<StorageDTO> createStorage(@RequestBody StorageDTO dto) {
 		try {
 			StorageDTO createdStorage = storageService.createStorage(dto);
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdStorage);

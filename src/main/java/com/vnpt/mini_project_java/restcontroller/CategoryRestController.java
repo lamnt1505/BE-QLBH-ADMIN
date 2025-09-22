@@ -1,9 +1,12 @@
 package com.vnpt.mini_project_java.restcontroller;
 
+import com.vnpt.mini_project_java.dto.CatalogResponseDTO;
 import com.vnpt.mini_project_java.dto.CategoryDTO;
 import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.entity.Category;
+import com.vnpt.mini_project_java.entity.Product;
 import com.vnpt.mini_project_java.service.category.CategoryService;
+import com.vnpt.mini_project_java.service.product.ProductService;
 import com.vnpt.mini_project_java.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -22,7 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/category", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,13 +38,16 @@ public class CategoryRestController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("")
     public ResponseEntity<?> listCategory(){
         return ResponseEntity.ok(this.categoryService.findAll());
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CategoryDTO> createCategory(CategoryDTO dto) {
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO dto) {
         try {
             CategoryDTO createdCategory = categoryService.saveDTO(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
@@ -60,7 +70,7 @@ public class CategoryRestController {
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable long id,CategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable long id, @RequestBody CategoryDTO categoryDTO){
         try {
             Category category = categoryService.updateCategory(id, categoryDTO);
             CategoryDTO updateDTO = new CategoryDTO(category);
@@ -119,4 +129,29 @@ public class CategoryRestController {
 
         return categoryService.getPaginatedCategorys(pageable);
     }
+    @GetMapping("/catalog/{categoryID}")
+    public ResponseEntity<List<CatalogResponseDTO>> getProductsByCategoryId(@PathVariable("categoryID") long categoryID) {
+        try {
+            List<CatalogResponseDTO> products = productService
+                    .showListCategoryByIdCategory(categoryID)
+                    .stream()
+                    .map(p -> new CatalogResponseDTO(
+                            p.getProductName(),
+                            p.getPrice(),
+                            p.getImageBase64()
+                    ))
+                    .collect(Collectors.toList());
+
+            if (products.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            return ResponseEntity.ok(products);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
 }

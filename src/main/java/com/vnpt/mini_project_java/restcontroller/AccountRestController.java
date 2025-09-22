@@ -35,7 +35,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(path = "/api/v1/account", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AccountRestController {
 
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(AccountRestController.class);
@@ -44,7 +44,7 @@ public class AccountRestController {
     private AccountService accountService;
 
     private String generateRandomText(int length) {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
         StringBuilder captchaText = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < length; i++) {
@@ -116,14 +116,12 @@ public class AccountRestController {
     }
 
     @PutMapping("/grant-role/{accountID}")
-    public ResponseEntity<?> grantRole(@PathVariable("accountID") Long accountID,
-                                       @RequestParam("role") String role,
-                                       HttpSession session) {
+    public ResponseEntity<?> grantRole(HttpServletRequest request, @PathVariable("accountID") Long accountID,
+            @RequestParam("role") String requestRole) {
 
-        Account currentAccount = (Account) session.getAttribute("account");
-
-        if (currentAccount == null || !currentAccount.isAdmin()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền thực hiện thao tác này");
+        String headerRole = request.getHeader("X-Role");
+        if (!"ADMIN".equals(headerRole)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Không có quyền");
         }
 
         Optional<Account> optionalAccount = accountService.findById(accountID);
@@ -133,11 +131,11 @@ public class AccountRestController {
         }
 
         Account user = optionalAccount.get();
-        user.setTypeAccount(role.toUpperCase());
+        user.setTypeAccount(requestRole.toUpperCase());
 
         accountService.save(user);
 
-        return ResponseEntity.ok("Phân quyền thành công! Người dùng giờ là: " + role.toUpperCase());
+        return ResponseEntity.ok("Phân quyền thành công! Người dùng giờ là: " + requestRole.toUpperCase());
     }
 
     @PostMapping("/login")
@@ -149,26 +147,34 @@ public class AccountRestController {
         String generatedCaptcha = (String) session.getAttribute("captcha");
 
         if (generatedCaptcha == null || !generatedCaptcha.equalsIgnoreCase(loginDTO.getCaptcha())) {
-            LoginMesage captchaError = new LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.", false, false, false, false, false);
+            LoginMesage captchaError = new
+                    LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.",
+                    false, false, false, false, false);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(captchaError);
         }
 
         loginResponse.setCaptchaValid(true);
 
         if (loginResponse.isSuccess()) {
+
+            Account acc = accountService.findByname(loginDTO.getAccountName()).orElse(null);
+            if (acc != null) {
+                loginResponse.setAccountID(acc.getAccountID());
+            }
+
             Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
             cookie.setPath("/");
             cookie.setHttpOnly(true);
             cookie.setMaxAge(24 * 60 * 60);
             response.addCookie(cookie);
             if (loginResponse.isAdmin()) {
-                headers.setLocation(URI.create("/admin"));
+                loginResponse.setAdmin(true);
             } else if (loginResponse.isUser()) {
-                headers.setLocation(URI.create("/user"));
+                loginResponse.setUser(true);
             } else if (loginResponse.isEmployee()) {
-                headers.setLocation(URI.create("/admin"));
+                loginResponse.setEmployee(true);
             } else {
-                headers.setLocation(URI.create("/"));
+                //
             }
             logger.info("Người dùng đã đăng nhập thành công", loginDTO.getAccountName(), java.time.LocalDateTime.now());
         } else {

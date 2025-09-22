@@ -1,3 +1,3 @@
- DỰ ÁN TÔT NGHIỆP DUY TÂN UNIVERSITY
-${AnsiColor.BRIGHT_BLUE}:: NGUYỄN  🤓 TRUNG  🤓 LAM :: Running Spring Boot ${spring-boot.version} ::
-:: ĐANG LÀM VIỆC TẠI VNPT - IT KV3 ::${AnsiColor.DEFAULT}
+DỰ ÁN TÔT NGHIỆP DUY TÂN UNIVERSITY
+${AnsiColor.BRIGHT_BLUE}:: NGUYỄN TRUNG LAM :: Running Spring Boot ${spring-boot.version} ::
+::DỰ ÁN TÔT NGHIỆP DUY TÂN UNIVERSITY:: ${AnsiColor.DEFAULT}

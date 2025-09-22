@@ -1,12 +1,10 @@
 package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.config.VnpayConfig;
-import com.vnpt.mini_project_java.dto.FavoriteDTO;
-import com.vnpt.mini_project_java.dto.ProductSearchCriteriaDTO;
-import com.vnpt.mini_project_java.dto.ProductDTO;
-import com.vnpt.mini_project_java.dto.ProductVoteDTO;
+import com.vnpt.mini_project_java.dto.*;
 import com.vnpt.mini_project_java.entity.*;
 import com.vnpt.mini_project_java.service.account.AccountService;
+import com.vnpt.mini_project_java.service.category.CategoryService;
 import com.vnpt.mini_project_java.service.discount.DiscountService;
 import com.vnpt.mini_project_java.service.favorite.FavoriteService;
 import com.vnpt.mini_project_java.service.order.OrderService;
@@ -30,8 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +37,11 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class HomeRestController {
 
     @Autowired
@@ -225,70 +223,9 @@ public class HomeRestController {
         return "0";
     }
 
-    /*    @PostMapping(value = "/dossier-statistic/orders")
-        @ResponseBody
-        public String orders(HttpServletRequest request, HttpSession session, ModelMap modelMap) {
-
-            Logger logger = LoggerFactory.getLogger(this.getClass());
-            Account account = null;
-
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("accountName")) {
-                        account = this.accountService.findByname(cookie.getValue()).orElse(null);
-                        break;
-                    }
-                }
-            }
-            if (account == null || account.getAccountID() <= 0)
-                return "0";
-            else {
-                if (session.getAttribute("cart") != null) {
-
-                    List<Product> list = (List<Product>) session.getAttribute("cart");
-
-                    Order order = new Order();
-
-                    long millis = System.currentTimeMillis();
-                    java.sql.Date date = new java.sql.Date(millis);
-                    LocalDate localDate = date.toLocalDate();
-
-                    double orderTotal = 0;
-                    Set<OrderDetail> setDetail = new HashSet<>();
-                    for (int i = 0; i < list.size(); i++) {
-                        orderTotal += list.get(i).getPrice() * list.get(i).getAmount();
-                        OrderDetail s = new OrderDetail();
-                        s.setProduct(list.get(i));
-                        setDetail.add(s);
-                    }
-                    order.setOrderDateImport(localDate);
-                    order.setStatus("Chờ duyệt");
-                    order.setOrderTotal(orderTotal);
-                    order.setVendor(account);
-                    order.setOrderDetails(setDetail);
-                    orderService.save(order);
-                    for (int i = 0; i < list.size(); i++) {
-                        orderTotal += list.get(i).getPrice() * list.get(i).getAmount();
-                        OrderDetail s = new OrderDetail();
-                        s.setProduct(list.get(i));
-                        s.setAmount(list.get(i).getAmount());
-                        s.setOrder(order);
-                        s.setPrice(list.get(i).getPrice());
-                        setDetail.add(s);
-                        orderDetailService.save(s);
-                    }
-                    logger.info("Tài Khoản '{}' đã đặt hàng với tổng giá {} và Mã đơn hàng {}.", account.getAccountName(), orderTotal, order.getOrderID());
-                    session.setAttribute("cart", new ArrayList<>());
-                } else {
-                    return "-1";
-                }
-            }
-            return "1";
-        }*/
     @PostMapping(value = "/dossier-statistic/orders")
     @ResponseBody
-    public String orders(HttpServletRequest request, HttpSession session) {
+    public String orders(HttpServletRequest request, HttpSession session, ModelMap modelMap) {
         Logger logger = LoggerFactory.getLogger(this.getClass());
 
         Account account = null;
@@ -322,12 +259,6 @@ public class HomeRestController {
         }
 
         Order order = new Order();
-        String vnp_TxnRef = (String) session.getAttribute("vnp_TxnRef");
-        if (vnp_TxnRef == null) {
-            logger.error("Không tìm thấy mã giao dịch trong session.");
-            return "-2";
-        }
-        order.setOrderCode(vnp_TxnRef);
         long millis = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(millis);
         LocalDate localDate = date.toLocalDate();
@@ -525,9 +456,18 @@ public class HomeRestController {
         }
         return ResponseEntity.ok(response);
     }
-    @PostMapping("/create-payment")
+    /*@PostMapping("/create-payment")
     @ResponseBody
-    public String createPayment(HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
+    public String createPayment(@RequestParam(value = "txnRef", required = false) String txnRef,
+                                HttpServletRequest request,
+                                HttpSession session) throws UnsupportedEncodingException {
+
+        if (txnRef == null || txnRef.isEmpty()) {
+            txnRef = String.valueOf(System.currentTimeMillis());
+            session.setAttribute("vnp_TxnRef", txnRef);
+            return "txnRef=" + txnRef;
+        }
+
         List<Product> list = (List<Product>) session.getAttribute("cart");
         if (list == null || list.isEmpty()) return "Không có giỏ hàng";
 
@@ -582,8 +522,74 @@ public class HomeRestController {
         String paymentUrl = VnpayConfig.vnp_PayUrl + "?" + query.toString();
 
         return paymentUrl;
-    }
+    }*/
+    @PostMapping("/create-payment")
+    @ResponseBody
+    public String createPayment(@RequestParam(value = "txnRef", required = false) String txnRef,
+                                HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
 
+        Account account = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accountName")) {
+                    account = this.accountService.findByname(cookie.getValue()).orElse(null);
+                    break;
+                }
+            }
+        }
+        if (account == null || account.getAccountID() <= 0) {
+            return "Bạn chưa đăng nhập";
+        }
+        if (txnRef == null || txnRef.isEmpty()) {
+            txnRef = String.valueOf(System.currentTimeMillis());
+            session.setAttribute("vnp_TxnRef", txnRef);
+            return "txnRef=" + txnRef;
+        }
+        List<Product> list = (List<Product>) session.getAttribute("cart");
+        if (list == null || list.isEmpty()) return "Không có giỏ hàng";
+
+        double total = list.stream().mapToDouble(p -> p.getPrice() * p.getAmount()).sum();
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", "2.1.0");
+        vnp_Params.put("vnp_Command", "pay");
+        vnp_Params.put("vnp_TmnCode", VnpayConfig.vnp_TmnCode);
+        vnp_Params.put("vnp_Amount", String.valueOf((long)(total * 100)));
+        vnp_Params.put("vnp_CurrCode", "VND");
+        vnp_Params.put("vnp_TxnRef", txnRef);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toán đơn hàng");
+        vnp_Params.put("vnp_OrderType", "other");
+        vnp_Params.put("vnp_Locale", "vn");
+        vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl);
+        vnp_Params.put("vnp_IpAddr", request.getRemoteAddr());
+
+        String vnp_CreateDate = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7")).getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+
+        for (String field : fieldNames) {
+            String value = vnp_Params.get(field);
+            if (value != null && !value.isEmpty()) {
+                hashData.append(field).append('=').append(URLEncoder.encode(value, "UTF-8"));
+                query.append(field).append('=').append(URLEncoder.encode(value, "UTF-8"));
+                if (!field.equals(fieldNames.get(fieldNames.size() - 1))) {
+                    hashData.append('&');
+                    query.append('&');
+                }
+            }
+        }
+
+        String secureHash = VnpayConfig.hmacSHA512(VnpayConfig.vnp_HashSecret, hashData.toString());
+        query.append("&vnp_SecureHash=").append(secureHash);
+
+        String paymentUrl = VnpayConfig.vnp_PayUrl + "?" + query.toString();
+        return paymentUrl;
+    }
     public ProductVoteDTO convertToDTO(ProductVote vote) {
         ProductVoteDTO dto = new ProductVoteDTO();
         dto.setProductVoteID(vote.getProductVoteID());
@@ -598,6 +604,98 @@ public class HomeRestController {
         dto.setCreatedAt(vote.getCreatedAt());
         dto.setUpdatedAt(vote.getUpdatedAt());
         return dto;
+    }
+
+    @GetMapping("/dossier-statistic/summary")
+    public ResponseEntity<List<OrderSummaryDTO>> listOrderSummary() {
+        List<Order> orders = orderService.listOrder();
+
+        List<OrderSummaryDTO> summaries = orders.stream()
+                .map(o -> new OrderSummaryDTO(
+                        o.getOrderID(),
+                        o.getOrderDateImport(),
+                        o.getAccount().getAccountName(),
+                        o.getAccount().getPhoneNumber(),
+                        o.getOrderTotal(),
+                        o.getStatus()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(summaries);
+    }
+
+    @GetMapping("/orders/account/{accountId}")
+    public ResponseEntity<?> getOrdersByAccount(@PathVariable("accountId") long accountID) {
+        List<Order> orders = orderService.listInvoiceByAccount(accountID);
+        if (orders.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("error", "No orders found for this account"));
+        }
+        List<Map<String, Object>> orderList = new ArrayList<>();
+        for (Order order : orders) {
+            Map<String, Object> orderMap = new HashMap<>();
+            orderMap.put("orderId", order.getOrderID());
+            orderMap.put("orderDate", order.getOrderDateImport());
+            orderMap.put("status", order.getStatus());
+            orderMap.put("orderTotal", order.getOrderTotal());
+            List<Map<String, Object>> productOrderList = new ArrayList<>();
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
+                Map<String, Object> productMap = new HashMap<>();
+                productMap.put("productId", orderDetail.getProduct().getProductID());
+                productMap.put("productName", orderDetail.getProduct().getProductName());
+                productMap.put("price", orderDetail.getPrice());
+                productMap.put("amount", orderDetail.getAmount());
+                productOrderList.add(productMap);
+            }
+            orderMap.put("orderDetails", productOrderList);
+            orderList.add(orderMap);
+        }
+        return ResponseEntity.ok(orderList);
+    }
+
+    @GetMapping("/product-cart")
+    public ResponseEntity<?> getCart(HttpSession session) {
+        List<Product> cart = (List<Product>) session.getAttribute("cart");
+        if (cart == null) cart = new ArrayList<>();
+
+        List<CartItemDTO> cartDTOs = cart.stream()
+                .map(CartItemDTO::new)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("cart", cartDTOs);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/orders/{orderDetailID}")
+    public ResponseEntity<?> viewOrderDetails(@PathVariable("orderDetailID") long orderDetailID,
+                                              HttpServletRequest request) {
+        try {
+            Map<String, Object> response = new HashMap<>();
+
+            List<OrderDetail> list = orderDetailService.findDetailByInvoiceId(orderDetailID);
+
+            List<Map<String, Object>> productOrders = new ArrayList<>();
+            for (OrderDetail od : list) {
+                Product odrProduct = productService.findByIdProduct(od.getProduct().getProductID());
+
+                Map<String, Object> productMap = new HashMap<>();
+                productMap.put("productId", odrProduct.getProductID());
+                productMap.put("productName", odrProduct.getProductName());
+                productMap.put("price", od.getPrice());
+                productMap.put("amount", od.getAmount());
+                productOrders.add(productMap);
+            }
+
+            response.put("oldOrders", productOrders);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 }
 

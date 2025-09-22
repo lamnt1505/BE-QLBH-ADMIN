@@ -31,6 +31,9 @@ public class Order {
     @Column(name = "order_total")
     private double orderTotal;
 
+    @Column(name = "txn_ref")
+    private String txnRef;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")

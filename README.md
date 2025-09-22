@@ -19,7 +19,7 @@ Lập trình 1 website thương mại điện tử chuyên bán Thiết bị đi
 - https://phongvu.vn/
 
 # Yêu cầu cơ bản
-- Chức năng đăng ký, đăng nhập, đăng xuất, phân quyền - **đã làm** còn phân quyền
+- Chức năng đăng ký, đăng nhập, đăng xuất, phân quyền - **đã làm**
 - Chức năng quản lý các danh mục: Loại sản phẩm, Sản phẩm - **đã làm**
 - Màn hình chính: Liệt kê các sản phẩm nỗi bật, tìm kiếm sản phẩm, filter theo loại, giá, tính năng… - **đã làm**
 - Chức năng xem chi tiết sản phẩm - **đã làm**
@@ -35,9 +35,10 @@ Lập trình 1 website thương mại điện tử chuyên bán Thiết bị đi
 - Chức năng cho khách hàng tự build PC -> Xuất báo giá
 - Chức năng tích điểm thưởng khi mua hàng
 - Chức năng thống kê: sản phẩm bán được, doanh thu theo từng tháng, quý, năm..!**đã làm**
-- Chức năng kiểm tra hàng còn hàng hay hết hàng tại chi nhánh bất kì.
+- Chức năng kiểm tra hàng còn hàng hay hết hàng tại 
+- chi nhánh bất kì.**đã làm** Branch (Chi nhánh) Product (Sản phẩm), Product (Sản phẩm), **đã làm**
 - Đặt hàng sản phẩm chuẩn bị về nước: Ví dụ đặt gạch cho Iphone15.
-- Chat với nhân viên
+- Chat với nhân viên - **đã làm**
 - Trả góp
 - Dashboard cho admin **đã làm**
 
