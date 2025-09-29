@@ -76,11 +76,9 @@ public class ProductServiceImpl implements ProductService {
 
         Long categoryId = dto.getCategoryID();
 
-        System.out.println("CategoryId: " + categoryId);
-
         Category category = categoryRepository.findById(categoryId).
                 orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
-        System.out.println(category + "không thể lấy ID");
+
 
 
         Long tradeId = dto.getTradeID();

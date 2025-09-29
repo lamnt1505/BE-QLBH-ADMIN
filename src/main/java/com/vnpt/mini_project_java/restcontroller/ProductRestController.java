@@ -204,12 +204,9 @@ public class ProductRestController {
 
             Product product = productOptional.get();
 
-            // Lấy danh sách sản phẩm cùng category
             List<Product> relatedProducts = productService.findBycategoryId(product.getCategory().getCategoryID());
-            // Xoá sản phẩm hiện tại khỏi danh sách
             relatedProducts.removeIf(p -> p.getProductID() == product.getProductID());
 
-            // Gói dữ liệu trả về
             Map<String, Object> response = new HashMap<>();
             response.put("product", product);
             response.put("productVersions", productVersions);

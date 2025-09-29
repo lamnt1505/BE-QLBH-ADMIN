@@ -34,7 +34,6 @@ function displayComparedProducts() {
         </div>
     `;
     container.append(closeBtn);
-    // khung so sánh
     var wrapper = '<div class="products-row" style="display: flex; justify-content: space-between; gap: 16px;"></div>';
     container.append(wrapper);
 

@@ -6,7 +6,6 @@ $(document).ready(function () {
         }
     });
     function validateProductForm() {
-        // Kiểm tra từng trường theo thứ tự ưu tiên
         if ($('#name').val().trim() === "") {
             Toastify({
                 text: "Tên sản phẩm không được để trống.",
@@ -16,7 +15,7 @@ $(document).ready(function () {
                 backgroundColor: "red",
                 stopOnFocus: true,
             }).showToast();
-            return false; // Dừng kiểm tra nếu lỗi
+            return false;
         }
 
         if ($('#image').get(0).files.length === 0) {

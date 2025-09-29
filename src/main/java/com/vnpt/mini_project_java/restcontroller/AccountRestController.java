@@ -137,33 +137,28 @@ public class AccountRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO,
-                                             HttpServletResponse response,
+    public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO,HttpServletResponse response,
                                              HttpSession session) {
 
         LoginMesage loginResponse = accountService.loginAccount(loginDTO, session);
         HttpHeaders headers = new HttpHeaders();
 
-        // Nếu captcha không hợp lệ hoặc login thất bại
         if (!loginResponse.isCaptchaValid() || !loginResponse.getStatus()) {
             logger.warn("Đăng nhập thất bại cho tài khoản: {}", loginDTO.getAccountName());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(loginResponse);
         }
 
-        // Nếu đăng nhập thành công
         Account acc = accountService.findByname(loginDTO.getAccountName()).orElse(null);
         if (acc != null) {
             loginResponse.setAccountID(acc.getAccountID());
         }
 
-        // Set cookie
         Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(24 * 60 * 60); // 1 ngày
         response.addCookie(cookie);
 
-        // Set role rõ ràng
         if (loginResponse.isAdmin()) {
             loginResponse.setRole("ADMIN");
         } else if (loginResponse.isEmployee()) {
@@ -179,53 +174,6 @@ public class AccountRestController {
 
         return new ResponseEntity<>(loginResponse, headers, HttpStatus.OK);
     }
-    /*    @PostMapping("/login")
-        public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) {
-
-            LoginMesage loginResponse = accountService.loginAccount(loginDTO, session);
-            HttpHeaders headers = new HttpHeaders();
-
-            String generatedCaptcha = (String) session.getAttribute("captcha");
-
-            if (generatedCaptcha == null || !generatedCaptcha.equalsIgnoreCase(loginDTO.getCaptcha())) {
-                LoginMesage captchaError = new
-                        LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.",
-                        false, false, false, false, false);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(captchaError);
-            }
-
-            loginResponse.setCaptchaValid(true);
-
-            if (loginResponse.isSuccess()) {
-
-                Account acc = accountService.findByname(loginDTO.getAccountName()).orElse(null);
-                if (acc != null) {
-                    loginResponse.setAccountID(acc.getAccountID());
-                }
-
-                Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
-                cookie.setPath("/");
-                cookie.setHttpOnly(true);
-                cookie.setMaxAge(24 * 60 * 60);
-                response.addCookie(cookie);
-                if (loginResponse.isAdmin()) {
-                    loginResponse.setAdmin(true);
-                    loginResponse.setRole("ADMIN");
-                } else if (loginResponse.isUser()) {
-                    loginResponse.setUser(true);
-                    loginResponse.setRole("USER");
-                } else if (loginResponse.isEmployee()) {
-                    loginResponse.setRole("EMPLOYEE");
-                } else {
-                    //
-                }
-                logger.info("Người dùng đã đăng nhập thành công", loginDTO.getAccountName(), java.time.LocalDateTime.now());
-            } else {
-                logger.warn("Lần đăng nhập không thành công của người dùng", loginDTO.getAccountName(), java.time.LocalDateTime.now());
-            }
-            ResponseEntity<LoginMesage> entity = new ResponseEntity<>(loginResponse, headers, HttpStatus.OK);
-            return entity;
-        }*/
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {

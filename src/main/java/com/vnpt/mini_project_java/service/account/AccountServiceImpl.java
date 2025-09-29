@@ -169,21 +169,18 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session) {
-		// Check captcha
 		String sessionCaptcha = (String) session.getAttribute("captcha");
 		if (sessionCaptcha == null || !sessionCaptcha.equals(loginDTO.getCaptcha())) {
 			return new LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.",
 					false, false, false, false, false, null);
 		}
 
-		// Tìm account theo tên đăng nhập
 		Account account = accountRepository.findByAccountName(loginDTO.getAccountName());
 		if (account == null) {
 			return new LoginMesage("Email hoặc tài khoản đăng nhập không chính xác",
 					false, false, false, false, false, null);
 		}
 
-		// Check password
 		String rawPassword = loginDTO.getAccountPass();
 		String encodedPassword = account.getAccountPass();
 		boolean isPwdRight = passwordEncoder.matches(rawPassword, encodedPassword);
@@ -193,7 +190,6 @@ public class AccountServiceImpl implements AccountService {
 					false, false, false, false, false, null);
 		}
 
-		// Xác định role
 		String typeAccount = account.getTypeAccount();
 		boolean isAdmin = typeAccount.equals(Account.ADMIN);
 		boolean isUser = typeAccount.equals(Account.USER);
@@ -226,46 +222,4 @@ public class AccountServiceImpl implements AccountService {
 		account.setAccountPass(passwordEncoder.encode(newPassword));
 		accountRepository.save(account);
 	}
-
-	/*	@Override
-		public LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session) {
-			String msg = "";
-
-			String sessionCaptcha = (String) session.getAttribute("captcha");
-			if (sessionCaptcha == null || !sessionCaptcha.equals(loginDTO.getCaptcha())) {
-				return new LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.", false, false, false, false, false);
-			}
-			Account account1 = accountRepository.findByAccountName(loginDTO.getAccountName());
-			if (account1 != null) {
-				String password = loginDTO.getAccountPass();
-				String encodedPassword = account1.getAccountPass();
-				Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-				if (isPwdRight) {
-					Optional<Account> acccount = accountRepository.findOneByAccountNameAndAccountPass(loginDTO.getAccountName(), encodedPassword);
-					if (acccount.isPresent()) {
-						Account acc = acccount.get();
-
-						String typeAccount = acc.getTypeAccount();
-
-						boolean isAdmin = typeAccount.equals(Account.ADMIN);
-						boolean isUser = typeAccount.equals(Account.USER);
-						boolean isEmployee = typeAccount.equals(Account.EMPLOYEE);
-
-						if (isAdmin || isEmployee) {
-							return new LoginMesage("Login Success", true, true, false, true, true);
-						} else if (isUser) {
-							return new LoginMesage("Login Success", true, false, true, true, true);
-						} else {
-							return new LoginMesage("Login Success", true, false, false, true, true);
-						}
-					} else {
-						return new LoginMesage("Đăng Nhập Không Thành Công", false, false, false, false, false);
-					}
-				} else {
-					return new LoginMesage("Mật Khẩu Không Chính Xác.Vui Lòng Thử Lại!", false, false, false, false, false);
-				}
-			} else {
-				return new LoginMesage("Email hoặc tài khoản đăng nhập không chính xác", false, false, false, false, false);
-			}
-		}*/
 }

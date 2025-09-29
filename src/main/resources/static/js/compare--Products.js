@@ -12,7 +12,6 @@ function compareProducts() {
 
     var compareHtml = `
         <div class="compare-result" style="position: relative;">
-            <!-- Nút Đóng -->
             <button id="closeCompareModal" style="
                 position: absolute;
                 top: 10px;
@@ -64,9 +63,8 @@ function compareProducts() {
     $('#compareModal .modal-content').html(compareHtml);
     $('#compareModal').modal('show');
 
-    // Gắn sự kiện nút đóng
     $(document).on('click', '#closeCompareModal', function () {
         $('#compareModal').modal('hide');
-        comparedProducts = []; // Xoá danh sách so sánh nếu muốn reset
+        comparedProducts = [];
     });
 }
