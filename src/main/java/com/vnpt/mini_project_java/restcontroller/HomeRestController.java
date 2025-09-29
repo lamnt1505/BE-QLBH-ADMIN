@@ -225,7 +225,7 @@ public class HomeRestController {
 
     @PostMapping(value = "/dossier-statistic/orders")
     @ResponseBody
-    public String orders(HttpServletRequest request, HttpSession session, ModelMap modelMap) {
+    public String orders(HttpServletRequest request, HttpSession session, @RequestBody OrderRequestDTO orderRequest) {
         Logger logger = LoggerFactory.getLogger(this.getClass());
 
         Account account = null;
@@ -263,6 +263,18 @@ public class HomeRestController {
         java.sql.Date date = new java.sql.Date(millis);
         LocalDate localDate = date.toLocalDate();
 
+        order.setOrderDateImport(localDate);
+        order.setStatus("Chờ duyệt");
+        order.setOrderTotal(discountedTotal);
+        order.setVendor(account);
+
+        order.setReceiverName(orderRequest.getReceiverName());
+        order.setReceiverPhone(orderRequest.getReceiverPhone());
+        order.setShippingAddress(orderRequest.getShippingAddress());
+        order.setNote(orderRequest.getNote());
+
+        orderService.save(order);
+
         Set<OrderDetail> setDetail = new HashSet<>();
         for (Product product : list) {
             OrderDetail s = new OrderDetail();
@@ -274,16 +286,10 @@ public class HomeRestController {
 
             orderDetailService.save(s);
         }
-
-        order.setOrderDateImport(localDate);
-        order.setStatus("Chờ duyệt");
-        order.setOrderTotal(discountedTotal);
-        order.setVendor(account);
         order.setOrderDetails(setDetail);
 
-        orderService.save(order);
-
-        logger.info("Account '{}' placed an order with total {} and Order ID {}.", account.getAccountName(), discountedTotal, order.getOrderID());
+        logger.info("Account '{}' placed an order with total {} and Order ID {}.",
+                account.getAccountName(), discountedTotal, order.getOrderID());
 
         session.setAttribute("cart", new ArrayList<>());
         session.removeAttribute("discountedTotal");

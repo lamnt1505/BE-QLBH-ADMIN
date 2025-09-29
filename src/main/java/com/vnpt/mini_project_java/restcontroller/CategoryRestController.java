@@ -138,7 +138,8 @@ public class CategoryRestController {
                     .map(p -> new CatalogResponseDTO(
                             p.getProductName(),
                             p.getPrice(),
-                            p.getImageBase64()
+                            p.getImageBase64(),
+                            p.getProductID()
                     ))
                     .collect(Collectors.toList());
 
@@ -153,5 +154,4 @@ public class CategoryRestController {
                     .build();
         }
     }
-
 }

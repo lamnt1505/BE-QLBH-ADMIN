@@ -34,9 +34,21 @@ public class Order {
     @Column(name = "txn_ref")
     private String txnRef;
 
+    @Column(name = "receiver_name", nullable = false)
+    private String receiverName;
+
+    @Column(name = "receiver_phone", nullable = false)
+    private String receiverPhone;
+
+    @Column(name = "shipping_address", columnDefinition = "nvarchar(255)", nullable = false)
+    private String shippingAddress;
+
+    @Column(name = "note", columnDefinition = "nvarchar(500)")
+    private String note;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @Column(name = "order_code", unique = true)
@@ -71,5 +83,4 @@ public class Order {
         INSUFFICIENT_QUANTITY,
         STORAGE_NOT_FOUND
     }
-
 }

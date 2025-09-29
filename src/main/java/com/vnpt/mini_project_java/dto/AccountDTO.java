@@ -1,25 +1,23 @@
 package com.vnpt.mini_project_java.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.vnpt.mini_project_java.entity.Account;
-import com.vnpt.mini_project_java.entity.Cart;
-import com.vnpt.mini_project_java.entity.Order;
-import com.vnpt.mini_project_java.entity.ProductVote;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Set;
 
 @Data
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountDTO {
 	
     private Long accountID;
@@ -43,7 +41,8 @@ public class AccountDTO {
     private boolean isAdmin;
 
 
-    public AccountDTO() {
+    public AccountDTO(Long accountID, String accountName, Object o, String username, String phoneNumber,
+                      LocalDate dateOfBirth, String imageBase64, String local, String email) {
     }
 
     public AccountDTO(Account account) {

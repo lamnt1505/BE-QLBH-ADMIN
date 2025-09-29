@@ -27,8 +27,10 @@ public class LoginMesage {
     @JsonProperty("status")
     private Boolean status;
 
+    @JsonProperty("role")
     private String role;
 
+    @JsonProperty("accountID")
     private Long accountID;
 
     @JsonProperty("isCaptchaValid")
@@ -36,13 +38,14 @@ public class LoginMesage {
 
     public LoginMesage(String message, Boolean status,
                        boolean isAdmin,boolean isUser,
-                       boolean isEmployee, boolean isCaptchaValid) {
+                       boolean isEmployee, boolean isCaptchaValid,String role) {
         this.message = message;
         this.status = status;
         this.isAdmin = isAdmin;
         this.isUser = isUser;
         this.isEmployee = isEmployee;
         this.isCaptchaValid = isCaptchaValid;
+        this.role = role;
     }
 
     public String getMessage() {

@@ -406,7 +406,6 @@
                     data: { txnRef: txnRef },
                     success: function (orderRes) {
                         if (orderRes === "1") {
-                            // Bước 3: Gọi lại /create-payment để lấy link thanh toán
                             $.ajax({
                                 url: "/create-payment",
                                 method: "POST",
@@ -424,7 +423,7 @@
                             });
                         } else {
                             if (orderRes === "0") {
-                                window.location.href = "/login"; // 👉 Chuyển sang login nếu chưa đăng nhập
+                                window.location.href = "/login";
                             } else if (orderRes === "-1") {
                                 alert("Không có giỏ hàng.");
                             } else if (orderRes === "-2") {
@@ -439,7 +438,7 @@
                     }
                 });
             } else if (result === "Bạn chưa đăng nhập") {
-                window.location.href = "/login"; // 👉 Chuyển sang login nếu chưa đăng nhập
+                window.location.href = "/login";
             } else if (result === "Không có giỏ hàng") {
                 alert("Không có sản phẩm trong giỏ hàng.");
             } else {

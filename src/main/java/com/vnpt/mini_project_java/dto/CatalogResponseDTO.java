@@ -4,13 +4,15 @@ public class CatalogResponseDTO {
     private String productName;
     private Double price;
     private String imageBase64;
+    private Long productID;
 
     public CatalogResponseDTO() {}
 
-    public CatalogResponseDTO(String productName, Double price, String imageBase64) {
+    public CatalogResponseDTO(String productName, Double price, String imageBase64,Long productID) {
         this.productName = productName;
         this.price = price;
         this.imageBase64 = imageBase64;
+        this.productID = productID;
     }
 
     public String getProductName() {
@@ -35,5 +37,13 @@ public class CatalogResponseDTO {
 
     public void setImageBase64(String imageBase64) {
         this.imageBase64 = imageBase64;
+    }
+
+    public Long getProductID() {
+        return productID;
+    }
+
+    public void setProductID(Long productID) {
+        this.productID = productID;
     }
 }

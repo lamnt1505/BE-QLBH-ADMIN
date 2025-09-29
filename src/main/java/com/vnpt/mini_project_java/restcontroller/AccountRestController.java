@@ -2,9 +2,7 @@ package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.dto.AccountDTO;
 import com.vnpt.mini_project_java.dto.LoginDTO;
-import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.entity.Account;
-import com.vnpt.mini_project_java.entity.Product;
 import com.vnpt.mini_project_java.response.LoginMesage;
 import com.vnpt.mini_project_java.service.account.AccountService;
 
@@ -22,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URI;
+
 import java.util.*;
 import java.util.List;
 
@@ -139,50 +137,95 @@ public class AccountRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) {
+    public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO,
+                                             HttpServletResponse response,
+                                             HttpSession session) {
 
         LoginMesage loginResponse = accountService.loginAccount(loginDTO, session);
         HttpHeaders headers = new HttpHeaders();
 
-        String generatedCaptcha = (String) session.getAttribute("captcha");
-
-        if (generatedCaptcha == null || !generatedCaptcha.equalsIgnoreCase(loginDTO.getCaptcha())) {
-            LoginMesage captchaError = new
-                    LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.",
-                    false, false, false, false, false);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(captchaError);
+        // Nếu captcha không hợp lệ hoặc login thất bại
+        if (!loginResponse.isCaptchaValid() || !loginResponse.getStatus()) {
+            logger.warn("Đăng nhập thất bại cho tài khoản: {}", loginDTO.getAccountName());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(loginResponse);
         }
 
-        loginResponse.setCaptchaValid(true);
+        // Nếu đăng nhập thành công
+        Account acc = accountService.findByname(loginDTO.getAccountName()).orElse(null);
+        if (acc != null) {
+            loginResponse.setAccountID(acc.getAccountID());
+        }
 
-        if (loginResponse.isSuccess()) {
+        // Set cookie
+        Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(24 * 60 * 60); // 1 ngày
+        response.addCookie(cookie);
 
-            Account acc = accountService.findByname(loginDTO.getAccountName()).orElse(null);
-            if (acc != null) {
-                loginResponse.setAccountID(acc.getAccountID());
-            }
-
-            Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
-            cookie.setPath("/");
-            cookie.setHttpOnly(true);
-            cookie.setMaxAge(24 * 60 * 60);
-            response.addCookie(cookie);
-            if (loginResponse.isAdmin()) {
-                loginResponse.setAdmin(true);
-            } else if (loginResponse.isUser()) {
-                loginResponse.setUser(true);
-            } else if (loginResponse.isEmployee()) {
-                loginResponse.setEmployee(true);
-            } else {
-                //
-            }
-            logger.info("Người dùng đã đăng nhập thành công", loginDTO.getAccountName(), java.time.LocalDateTime.now());
+        // Set role rõ ràng
+        if (loginResponse.isAdmin()) {
+            loginResponse.setRole("ADMIN");
+        } else if (loginResponse.isEmployee()) {
+            loginResponse.setRole("EMPLOYEE");
+        } else if (loginResponse.isUser()) {
+            loginResponse.setRole("USER");
         } else {
-            logger.warn("Lần đăng nhập không thành công của người dùng", loginDTO.getAccountName(), java.time.LocalDateTime.now());
+            loginResponse.setRole("GUEST");
         }
-        ResponseEntity<LoginMesage> entity = new ResponseEntity<>(loginResponse, headers, HttpStatus.OK);
-        return entity;
+
+        logger.info("Người dùng [{}] đã đăng nhập thành công lúc {}",
+                loginDTO.getAccountName(), java.time.LocalDateTime.now());
+
+        return new ResponseEntity<>(loginResponse, headers, HttpStatus.OK);
     }
+    /*    @PostMapping("/login")
+        public ResponseEntity<LoginMesage> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) {
+
+            LoginMesage loginResponse = accountService.loginAccount(loginDTO, session);
+            HttpHeaders headers = new HttpHeaders();
+
+            String generatedCaptcha = (String) session.getAttribute("captcha");
+
+            if (generatedCaptcha == null || !generatedCaptcha.equalsIgnoreCase(loginDTO.getCaptcha())) {
+                LoginMesage captchaError = new
+                        LoginMesage("Captcha không hợp lệ. Vui lòng thử lại.",
+                        false, false, false, false, false);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(captchaError);
+            }
+
+            loginResponse.setCaptchaValid(true);
+
+            if (loginResponse.isSuccess()) {
+
+                Account acc = accountService.findByname(loginDTO.getAccountName()).orElse(null);
+                if (acc != null) {
+                    loginResponse.setAccountID(acc.getAccountID());
+                }
+
+                Cookie cookie = new Cookie("accountName", loginDTO.getAccountName());
+                cookie.setPath("/");
+                cookie.setHttpOnly(true);
+                cookie.setMaxAge(24 * 60 * 60);
+                response.addCookie(cookie);
+                if (loginResponse.isAdmin()) {
+                    loginResponse.setAdmin(true);
+                    loginResponse.setRole("ADMIN");
+                } else if (loginResponse.isUser()) {
+                    loginResponse.setUser(true);
+                    loginResponse.setRole("USER");
+                } else if (loginResponse.isEmployee()) {
+                    loginResponse.setRole("EMPLOYEE");
+                } else {
+                    //
+                }
+                logger.info("Người dùng đã đăng nhập thành công", loginDTO.getAccountName(), java.time.LocalDateTime.now());
+            } else {
+                logger.warn("Lần đăng nhập không thành công của người dùng", loginDTO.getAccountName(), java.time.LocalDateTime.now());
+            }
+            ResponseEntity<LoginMesage> entity = new ResponseEntity<>(loginResponse, headers, HttpStatus.OK);
+            return entity;
+        }*/
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -204,5 +247,48 @@ public class AccountRestController {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "Đăng xuất thành công");
         return ResponseEntity.ok(responseBody);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<AccountDTO> getCurrentAccount(
+            @CookieValue(value = "accountName", required = false) String accountName) {
+
+        if (accountName == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return accountService.findByname(accountName)
+                .map(acc -> new AccountDTO(
+                        acc.getAccountID(),
+                        acc.getAccountName(),
+                        null,
+                        acc.getUsername(),
+                        acc.getPhoneNumber(),
+                        acc.getDateOfBirth(),
+                        acc.getImageBase64(),
+                        acc.getLocal(),
+                        acc.getEmail()
+                ))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    @PutMapping("/changer-password/{id}")
+    public ResponseEntity<String> changePassword(
+            @PathVariable("id") Long accountID,
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
+        try {
+            if (!newPassword.equals(confirmPassword)) {
+                return ResponseEntity.badRequest().body("Mật khẩu xác nhận không khớp");
+            }
+            accountService.changePassword(accountID, oldPassword, newPassword);
+            return ResponseEntity.ok("Đổi mật khẩu thành công");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi đổi mật khẩu");
+        }
     }
 }

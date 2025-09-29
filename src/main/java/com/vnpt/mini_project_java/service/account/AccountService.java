@@ -35,4 +35,6 @@ public interface AccountService {
     void updateAccount(long accountID, AccountDTO accountDTO, MultipartFile image);
 
     LoginMesage loginAccount(LoginDTO loginDTO, HttpSession session);
+
+    void changePassword(Long accountID, String oldPassword, String newPassword);
 }
