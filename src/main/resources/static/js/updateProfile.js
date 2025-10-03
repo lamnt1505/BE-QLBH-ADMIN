@@ -103,9 +103,7 @@ $(document).ready(function() {
                     position: "right",
                     backgroundColor: "#4caf50",
                 }).showToast();
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
+
             },
             error: function(xhr) {
                 console.error("Lỗi cập nhật:", {

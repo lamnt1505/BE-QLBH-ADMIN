@@ -16,9 +16,6 @@ function registerAccount() {
                 backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
                 stopOnFocus: true,
             }).showToast();
-            setTimeout(function() {
-                window.location.href = "/login";
-            }, 3000);
         },
         error: function(xhr, status, error) {
             console.log("Status: " + status);

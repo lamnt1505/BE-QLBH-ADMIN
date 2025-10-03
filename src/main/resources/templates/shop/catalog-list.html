@@ -125,35 +125,6 @@
 </div>
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
-    <!--<div class="container mt-4">
-        <div class="row">
-            <div class="col-md-3 col-sm-6 mb-4" th:each="product : ${showProductByIdCategory}">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="product-upper">
-                        <img class="card-img-top img-fluid"
-                             th:src="@{'data:image/png;base64,'+ ${product.getImageBase64()}}" alt="Product Image"
-                             style="border-radius: 8px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title">
-                            <a th:href="@{'/index/showProductSingle/'+${product.productID}}"
-                               th:text="${product.productName}" class="text-dark"></a>
-                        </h5>
-                        <p class="product-carousel-price">
-                            <ins th:text="${product.price}" class="text-primary font-weight-bold product-price"></ins>
-                            <del class="text-muted ml-2">$999.00</del>
-                        </p>
-                        <div class="product-option-shop d-flex justify-content-center mt-3">
-                            <a class="add_to_cart_button procart" th:attr="data-productid=${product.productID}">Thêm Vào
-                                Giỏ Hàng</a>
-                            <a class="btn btn-outline-secondary compare-btn addToCompare"
-                               th:attr="data-productid=${product.productID}"> + </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-3 col-sm-6 mb-4" th:each="product : ${showProductByIdCategory}">

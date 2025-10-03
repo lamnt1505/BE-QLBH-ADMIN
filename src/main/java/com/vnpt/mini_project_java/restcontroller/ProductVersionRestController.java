@@ -1,8 +1,6 @@
 package com.vnpt.mini_project_java.restcontroller;
 
-import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.dto.ProductVersionDTO;
-import com.vnpt.mini_project_java.entity.Product;
 import com.vnpt.mini_project_java.entity.ProductVersion;
 import com.vnpt.mini_project_java.service.productVersion.ProductVersionService;
 import org.springframework.beans.factory.annotation.Autowired;

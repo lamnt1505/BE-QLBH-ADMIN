@@ -1,8 +1,6 @@
 package com.vnpt.mini_project_java.restcontroller;
 
-import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.dto.ProductVoteDTO;
-import com.vnpt.mini_project_java.entity.ProductVote;
 import com.vnpt.mini_project_java.service.productvotes.ProductVotesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

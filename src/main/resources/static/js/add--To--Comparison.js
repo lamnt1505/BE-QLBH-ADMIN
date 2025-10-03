@@ -61,7 +61,6 @@ function displayComparedProducts() {
         container.append(compareDiv);
     }
 
-    // Xử lý sự kiện nút đóng
     $('#closeCompareBtn').on('click', function () {
         $('#compareModal').modal('hide');
         comparedProducts = []; // Optionally clear the list

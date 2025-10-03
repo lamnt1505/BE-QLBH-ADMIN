@@ -4,7 +4,6 @@ import com.vnpt.mini_project_java.config.VnpayConfig;
 import com.vnpt.mini_project_java.dto.*;
 import com.vnpt.mini_project_java.entity.*;
 import com.vnpt.mini_project_java.service.account.AccountService;
-import com.vnpt.mini_project_java.service.category.CategoryService;
 import com.vnpt.mini_project_java.service.discount.DiscountService;
 import com.vnpt.mini_project_java.service.favorite.FavoriteService;
 import com.vnpt.mini_project_java.service.order.OrderService;
@@ -22,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
@@ -702,6 +700,11 @@ public class HomeRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/orders/address/{orderID}")
+    public OrderaddressDTO getOrderDetail(@PathVariable Long orderID) {
+        return orderService.getOrderaddressById(orderID);
     }
 }
 

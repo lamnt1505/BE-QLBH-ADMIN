@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,25 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
             "JOIN order_detail ON order_info.order_id = order_detail.order_id " +
             "GROUP BY YEAR(order_import), QUARTER(order_import)";
 
+    @Query(value = "SELECT DATE_FORMAT(order_import, '%Y-%m') as month, " +
+                    "SUM(order_total) as revenue " +
+                    "FROM order_info " +
+                    "WHERE status = 'Hoàn thành' " +
+                    "GROUP BY DATE_FORMAT(order_import, '%Y-%m') " +
+                    "ORDER BY month ASC",
+            nativeQuery = true
+    )
+    List<Object[]> getRevenueByMonthNative();
+
+    @Query(value = "SELECT DATE_FORMAT(order_import, '%Y-%m-%d') AS day,\n" +
+            "       status,\n" +
+            "       SUM(order_total) AS revenue\n" +
+            "FROM order_info\n" +
+            "WHERE status IN ('Chờ duyệt', 'Hoàn thành')\n" +
+            "GROUP BY DATE_FORMAT(order_import, '%Y-%m-%d'), status\n" +
+            "ORDER BY day ASC;", nativeQuery = true)
+    List<Object[]> getRevenueByDayAndStatus();
+
     @Query(value = STATICTICAL_FOR_PRODUCT_QUERY, nativeQuery = true)
     List<StatisticalProductProjections> statisticalForProduct();
 
@@ -72,4 +92,8 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findOrderByAccount(long orderID);
 
     Optional<Order> findByOrderCode(String orderCode);
+
+    List<Order> findByOrderDateImportBetween(LocalDate start, LocalDate end);
+
+    List<Order> findTop5ByOrderByOrderDateImportDesc();
 }

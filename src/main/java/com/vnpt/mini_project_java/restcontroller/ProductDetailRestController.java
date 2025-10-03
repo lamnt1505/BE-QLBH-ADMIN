@@ -3,7 +3,6 @@ package com.vnpt.mini_project_java.restcontroller;
 import com.vnpt.mini_project_java.dto.ProductDetailDTO;
 import com.vnpt.mini_project_java.entity.ProductDetail;
 import com.vnpt.mini_project_java.service.productDetail.ProductDetailService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,8 +1,11 @@
 package com.vnpt.mini_project_java.restcontroller;
 
+import com.vnpt.mini_project_java.dto.DailyRevenueStatusDTO;
+import com.vnpt.mini_project_java.dto.RevenueDTO;
 import com.vnpt.mini_project_java.projections.StatisticalForMonthProjections;
 import com.vnpt.mini_project_java.projections.StatisticalForYearProjections;
 import com.vnpt.mini_project_java.projections.StatisticalProductProjections;
+import com.vnpt.mini_project_java.service.order.OrderService;
 import com.vnpt.mini_project_java.service.statistical.StatisticalService;
 import com.vnpt.mini_project_java.util.ExcelUtil;
 import org.springframework.core.io.ByteArrayResource;
@@ -13,8 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/export")
@@ -22,8 +25,11 @@ public class StatisticalRestController {
 
     private final StatisticalService statisticsService;
 
-    public StatisticalRestController(StatisticalService statisticsService) {
+    private final OrderService orderService;
+
+    public StatisticalRestController(StatisticalService statisticsService, OrderService orderService) {
         this.statisticsService = statisticsService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/product")
@@ -69,5 +75,20 @@ public class StatisticalRestController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(resource.contentLength())
                 .body(resource);
+    }
+
+    @GetMapping("/revenue")
+    public Map<String, Object> getRevenue() {
+        return orderService.getRevenue();
+    }
+
+    @GetMapping("/revenue-by-month")
+    public ResponseEntity<List<RevenueDTO>> getRevenueByMonth() {
+        return ResponseEntity.ok(orderService.getRevenueByMonth());
+    }
+
+    @GetMapping("/revenue-by-day-status")
+    public ResponseEntity<List<DailyRevenueStatusDTO>> getRevenueByDayAndStatus() {
+        return ResponseEntity.ok(orderService.getRevenueByDayAndStatus());
     }
 }

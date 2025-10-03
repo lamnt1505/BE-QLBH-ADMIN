@@ -130,9 +130,6 @@ public class ProductRestController {
     @GetMapping("/sales")
     public ResponseEntity<List<StatisticalProductProjections>> getSalesData(){
         List<StatisticalProductProjections> salesData = statisticsService.statisticalForProduct();
-        salesData.forEach(data -> {
-            //System.out.println("Product: " + data.getName() + ", Sold: " + data.getQuantitysold() + ", Total: " + data.getTotal());
-        });
         return ResponseEntity.ok(salesData);
     }
 

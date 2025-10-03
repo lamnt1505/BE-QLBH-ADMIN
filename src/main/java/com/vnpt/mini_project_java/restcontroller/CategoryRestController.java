@@ -2,9 +2,7 @@ package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.dto.CatalogResponseDTO;
 import com.vnpt.mini_project_java.dto.CategoryDTO;
-import com.vnpt.mini_project_java.dto.ProductDTO;
 import com.vnpt.mini_project_java.entity.Category;
-import com.vnpt.mini_project_java.entity.Product;
 import com.vnpt.mini_project_java.service.category.CategoryService;
 import com.vnpt.mini_project_java.service.product.ProductService;
 import com.vnpt.mini_project_java.util.ExcelUtil;
@@ -25,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController

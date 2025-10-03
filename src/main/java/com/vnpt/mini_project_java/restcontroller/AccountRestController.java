@@ -5,10 +5,7 @@ import com.vnpt.mini_project_java.dto.LoginDTO;
 import com.vnpt.mini_project_java.entity.Account;
 import com.vnpt.mini_project_java.response.LoginMesage;
 import com.vnpt.mini_project_java.service.account.AccountService;
-
-
 import org.slf4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +20,6 @@ import java.io.IOException;
 
 import java.util.*;
 import java.util.List;
-
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
