@@ -429,11 +429,10 @@ public class HomeRestController {
             }
 
             List<Map<String, Object>> discountedProducts = new ArrayList<>();
-
             double discountedTotal = 0.0;
 
             for (Map<String, Object> product : products) {
-                String productID = (String) product.get("productID");
+                String productID = product.get("productID").toString();
                 double price = Double.parseDouble(product.get("price").toString());
                 int quantity = Integer.parseInt(product.get("quantity").toString());
 
@@ -445,16 +444,20 @@ public class HomeRestController {
                 discountedProduct.put("discountedPrice", discountedPrice);
                 discountedProduct.put("quantity", quantity);
                 discountedProducts.add(discountedProduct);
+
             }
+
             session.setAttribute("discountedTotal", discountedTotal);
             response.put("success", true);
             response.put("discountedProducts", discountedProducts);
             response.put("discountedTotal", discountedTotal);
             response.put("message", "Mã giảm giá hợp lệ!");
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             response.put("success", false);
             response.put("message", e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             response.put("success", false);
             response.put("message", "Đã xảy ra lỗi trong quá trình xử lý.");
         }
@@ -594,6 +597,7 @@ public class HomeRestController {
         String paymentUrl = VnpayConfig.vnp_PayUrl + "?" + query.toString();
         return paymentUrl;
     }
+
     public ProductVoteDTO convertToDTO(ProductVote vote) {
         ProductVoteDTO dto = new ProductVoteDTO();
         dto.setProductVoteID(vote.getProductVoteID());
@@ -705,6 +709,27 @@ public class HomeRestController {
     @GetMapping("/orders/address/{orderID}")
     public OrderaddressDTO getOrderDetail(@PathVariable Long orderID) {
         return orderService.getOrderaddressById(orderID);
+    }
+
+    @GetMapping("/address/account/{accountID}")
+    public ResponseEntity<OrderaddressDTO> getAddressByAccount(@PathVariable Long accountID) {
+        Account account = accountService.getAccountById(accountID);
+        if (account == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        OrderaddressDTO dto = new OrderaddressDTO();
+        dto.setAccountID(account.getAccountID());
+        dto.setUsername(account.getUsername());
+        dto.setEmail(account.getEmail());
+        dto.setPhoneNumber(account.getPhoneNumber());
+        dto.setLocal(account.getLocal());
+
+        dto.setReceiverName(account.getUsername());
+        dto.setReceiverPhone(account.getPhoneNumber());
+        dto.setShippingAddress(account.getLocal());
+
+        return ResponseEntity.ok(dto);
     }
 }
 

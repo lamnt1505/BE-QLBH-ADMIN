@@ -40,7 +40,6 @@ public class AccountDTO {
 
     private boolean isAdmin;
 
-
     public AccountDTO(Long accountID, String accountName, Object o, String username, String phoneNumber,
                       LocalDate dateOfBirth, String imageBase64, String local, String email) {
     }
@@ -55,7 +54,6 @@ public class AccountDTO {
         this.phoneNumber = account.getPhoneNumber();
         this.local = account.getLocal();
         this.isAdmin = account.isAdmin();
-
         String imagePath = "src/main/resources/static/images/" + account.getImage();
 
         try {

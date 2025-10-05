@@ -50,16 +50,18 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     public double applyDiscount(double price, String discountCode) {
         Discount discount = discountRepository.findByDiscountCode(discountCode)
-                .orElseThrow(() -> new IllegalArgumentException("Discount code invalid"));
+                .orElseThrow(() -> new IllegalArgumentException("❌ Mã giảm giá không tồn tại: " + discountCode));
+
         LocalDate today = LocalDate.now();
 
         if (discount.getDateStart() != null && today.isBefore(discount.getDateStart())) {
-            throw new IllegalArgumentException("Mã giảm giá chưa được áp dụng.");
+            throw new IllegalArgumentException("⚠ Mã giảm giá chưa được áp dụng.");
         }
 
         if (discount.getDateFinish() != null && today.isAfter(discount.getDateFinish())) {
-            throw new IllegalArgumentException("Mã giảm giá đã hết hạn.");
+            throw new IllegalArgumentException("⚠ Mã giảm giá đã hết hạn.");
         }
+
         double discountAmount = (discount.getDiscountPercent() / 100.0) * price;
         return price - discountAmount;
     }
