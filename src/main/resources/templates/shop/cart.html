@@ -393,7 +393,6 @@
 </script>
 <script type="text/javascript">
     function startPayment() {
-        // Bước 1: Gọi /create-payment để lấy txnRef
         $.post("/create-payment", function (result) {
             if (result.startsWith("txnRef=")) {
                 const txnRef = result.split("=")[1];

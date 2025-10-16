@@ -21,6 +21,8 @@ public class OrderDetail {
     
     private Double price;
 
+    private double totalPrice;
+
     @OneToOne
     @JoinColumn(name = "productID", insertable = true, updatable = true)
     private Product product;

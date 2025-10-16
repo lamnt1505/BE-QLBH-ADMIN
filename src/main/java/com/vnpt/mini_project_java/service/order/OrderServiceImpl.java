@@ -7,11 +7,13 @@ import com.vnpt.mini_project_java.entity.Order;
 import com.vnpt.mini_project_java.respository.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
     public final OrderRepository orderRepository;
@@ -119,5 +121,11 @@ public class OrderServiceImpl implements OrderService {
         dto.setUsername(order.getAccount().getUsername());
         dto.setEmail(order.getAccount().getEmail());
         return dto;
+    }
+
+    @Override
+    public Order findByTxnRef(String txnRef) {
+        return orderRepository.findByTxnRef(txnRef).orElse(null);
+
     }
 }

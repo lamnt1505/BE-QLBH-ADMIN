@@ -28,6 +28,9 @@ public class Order {
     @Column(name = "status", columnDefinition = "nvarchar(50)")
     private String status;
 
+    @Column(name = "payment_method", length = 50)
+    private String paymentMethod; // "COD", "VNPAY", "MOMO"...
+
     @Column(name = "order_total")
     private double orderTotal;
 

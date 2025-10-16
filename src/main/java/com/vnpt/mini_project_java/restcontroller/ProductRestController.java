@@ -33,10 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -57,7 +55,9 @@ public class ProductRestController {
     @Autowired
     private final ProductVersionService productVersionService;
 
-    public ProductRestController(ProductService productService, StatisticalService statisticsService, ProductDetailService productDetailService, ProductVersionService productVersionService) {
+    public ProductRestController(ProductService productService, StatisticalService statisticsService,
+                                 ProductDetailService productDetailService,
+                                 ProductVersionService productVersionService) {
         this.productService = productService;
         this.statisticsService = statisticsService;
         this.productDetailService = productDetailService;
@@ -178,9 +178,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/paginated")
-    public Page<ProductDTO> getProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
+    public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "productID,asc") String[] sort) {
         Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort[0]));
@@ -218,6 +216,24 @@ public class ProductRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Có lỗi xảy ra khi lấy chi tiết sản phẩm");
         }
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchProducts(@RequestBody Map<String, String> body) {
+        String key = body.get("key");
+
+        List<Product> products = productService.searchListProductByIdCategory(key);
+
+        if (products == null || products.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Không tìm thấy sản phẩm phù hợp với từ khóa: " + key));
+        }
+
+        List<ProductDTO> productDTOs = products.stream()
+                .map(ProductDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(productDTOs);
     }
 }
 

@@ -96,4 +96,6 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findByOrderDateImportBetween(LocalDate start, LocalDate end);
 
     List<Order> findTop5ByOrderByOrderDateImportDesc();
+
+    Optional<Order> findByTxnRef(String txnRef);
 }

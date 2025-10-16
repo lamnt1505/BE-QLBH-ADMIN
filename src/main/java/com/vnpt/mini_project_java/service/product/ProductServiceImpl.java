@@ -282,4 +282,10 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> searchListProductByIdCategory(String productName) {
         return productRepository.searchListProductByIdCategory(productName);
     }
+
+    @Override
+    public Page<ProductDTO> getPaginatedProduct(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(ProductDTO::new);
+    }
 }

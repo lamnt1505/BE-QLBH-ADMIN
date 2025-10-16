@@ -12,13 +12,16 @@ public class OrderSummaryDTO {
     private String phoneNumber;
     private Double totalAmount;
     private String status;
+    private String paymentMethod;
 
-    public OrderSummaryDTO(Long orderId, LocalDate orderDate, String customerName, String phoneNumber, Double totalAmount, String status) {
+    public OrderSummaryDTO(Long orderId, LocalDate orderDate, String customerName,
+                           String phoneNumber, Double totalAmount, String status, String paymentMethod) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.customerName = customerName;
         this.phoneNumber = phoneNumber;
         this.totalAmount = totalAmount;
         this.status = status;
+        this.paymentMethod = paymentMethod;
     }
 }

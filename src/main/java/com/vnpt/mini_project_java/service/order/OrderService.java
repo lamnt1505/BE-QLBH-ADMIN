@@ -33,4 +33,6 @@ public interface OrderService {
     List<DailyRevenueStatusDTO> getRevenueByDayAndStatus();
 
     OrderaddressDTO getOrderaddressById(Long orderId);
+
+    Order findByTxnRef(String txnRef);
 }

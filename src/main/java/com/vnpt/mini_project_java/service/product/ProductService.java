@@ -63,4 +63,6 @@ public interface ProductService {
 	Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     List<Product> searchListProductByIdCategory(String productName);
+
+    Page<ProductDTO> getPaginatedProduct(Pageable pageable);
 }
