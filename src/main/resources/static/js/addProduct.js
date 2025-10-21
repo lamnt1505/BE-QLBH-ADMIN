@@ -127,7 +127,7 @@ $(document).ready(function () {
 
                 setTimeout(function () {
                     window.location.href = '/manager/listProduct';
-                }, 1500);
+                }, 1500000);
             })
             .fail(function (xhr, status, error) {
                 Toastify({

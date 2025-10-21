@@ -1,6 +1,7 @@
 package com.vnpt.mini_project_java.restcontroller;
 
 import com.vnpt.mini_project_java.projections.StatisticalForMonthProjections;
+import com.vnpt.mini_project_java.projections.StatisticalForQuarterProjections;
 import com.vnpt.mini_project_java.projections.StatisticalForYearProjections;
 import com.vnpt.mini_project_java.projections.StatisticalProductProjections;
 import com.vnpt.mini_project_java.service.statistical.StatisticalService;
@@ -102,6 +103,35 @@ public class ReportsRestcontroller {
 
             return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
         } catch (JRException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/reports/quarter")
+    public ResponseEntity<byte[]> generateQuarterStatisticsReport() {
+
+        List<StatisticalForQuarterProjections> quarterStatistics = statisticalService.statisticalForQuarter();
+
+        try {
+            InputStream reportTemplate = getClass().getResourceAsStream("/reports/quarterReports.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplate);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(quarterStatistics);
+
+            Map<String, Object> parameters = new HashMap<>();
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            byte[] reportBytes = JasperExportManager.exportReportToPdf(jasperPrint);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "quarter-statistics.pdf");
+
+            return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

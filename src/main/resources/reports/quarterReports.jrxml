@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quarter_Report" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="20" uuid="aabbccdd-eeff-0011-2233-445566778899">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="mini-project"/>
+    <queryString language="SQL">
+        <![CDATA[SELECT
+            YEAR(o.order_import) AS year,
+            QUARTER(o.order_import) AS quarter,
+            COUNT(o.order_id) AS orderCount,
+            SUM(o.order_total) AS total,
+            MIN(o.order_total) AS minTotal,
+            MAX(o.order_total) AS maxTotal
+        FROM order_info o
+        GROUP BY YEAR(o.order_import), QUARTER(o.order_import)
+        ORDER BY YEAR(o.order_import), QUARTER(o.order_import);]]>
+    </queryString>
+    <field name="year" class="java.lang.Integer"/>
+    <field name="quarter" class="java.lang.Integer"/>
+    <field name="orderCount" class="java.lang.Integer"/>
+    <field name="total" class="java.lang.Double"/>
+    <field name="minTotal" class="java.lang.Double"/>
+    <field name="maxTotal" class="java.lang.Double"/>
+    <title>
+        <band height="70">
+            <staticText>
+                <reportElement x="0" y="10" width="782" height="40" uuid="476507c7-f293-4dad-96e7-b1f839e59ca9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="22" isBold="true"/>
+                </textElement>
+                <text><![CDATA[BÁO CÁO THỐNG KÊ DOANH THU THEO QUÝ]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="25">
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="100" height="25" backcolor="#1976D2" uuid="35a126cc-2d40-4ca9-931e-9fb4a18845c0"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[NĂM]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="100" y="0" width="100" height="25" backcolor="#1976D2" uuid="f53be6cf-3555-4e9f-9d85-65431817d3cc"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[QUÝ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="200" y="0" width="150" height="25" backcolor="#1976D2" uuid="b0e0027f-4f9a-4206-8bf6-439cb43b9f15"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[ĐƠN HÀNG]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="350" y="0" width="150" height="25" backcolor="#1976D2" uuid="6bfce265-8cd0-4771-a805-d6e90a043cd9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[TỔNG DOANH THU (₫)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="500" y="0" width="130" height="25" backcolor="#1976D2" uuid="6f7a5e2e-8e61-4ca5-861e-8b73fa8442a1"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[MIN (₫)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="630" y="0" width="152" height="25" backcolor="#1976D2" uuid="8e0e638b-6e6d-46c1-93e5-1c15f027c143"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[MAX (₫)]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="100" height="20" uuid="63b6eebc-fb35-41bb-9da7-4d36278ae985"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{year}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="100" height="20" uuid="4efaf348-9e7b-4c42-a852-655ebd922699"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA["Quý " + $F{quarter}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0">
+                <reportElement x="200" y="0" width="150" height="20" uuid="540508fd-00ac-4569-aa70-4d547515456c"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{orderCount}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0 ₫">
+                <reportElement x="350" y="0" width="150" height="20" uuid="0c8e73b9-5653-40a2-83f5-8203f037b264"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0 ₫">
+                <reportElement x="500" y="0" width="130" height="20" uuid="c2834018-43a9-4b19-9e8e-3eada7ecacf9"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{minTotal}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0 ₫">
+                <reportElement x="630" y="0" width="152" height="20" uuid="1ab7ba7b-b6f0-48ba-be01-e1390609cdf1"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{maxTotal}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="25">
+            <textField>
+                <reportElement x="630" y="0" width="150" height="20" uuid="8b83e2c6-c7e6-444e-b5a3-f5da9625e63a"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA["Trang " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>

@@ -83,7 +83,7 @@ public class ProductRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ProductDTO> createProduct(ProductDTO dto, MultipartFile image) {
+    public ResponseEntity<ProductDTO> createProduct(@ModelAttribute ProductDTO dto, MultipartFile image) {
         try {
             ProductDTO createProduct = productService.createProduct(dto, image);
             logger.info("Người dùng đã thêm một sản phẩm mới. ID sản phẩm: {}, Tên sản phẩm: {}", createProduct.getId(), createProduct.getName());

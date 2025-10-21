@@ -79,8 +79,6 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(categoryId).
                 orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
 
-
-
         Long tradeId = dto.getTradeID();
         if (tradeId == null) {
             throw new RuntimeException("");

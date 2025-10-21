@@ -1,5 +1,6 @@
 package com.vnpt.mini_project_java.respository;
 
+import com.vnpt.mini_project_java.dto.PaymentStatisticDTO;
 import com.vnpt.mini_project_java.entity.Order;
 import com.vnpt.mini_project_java.projections.StatisticalForMonthProjections;
 import com.vnpt.mini_project_java.projections.StatisticalForQuarterProjections;
@@ -75,6 +76,12 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
             "GROUP BY DATE_FORMAT(order_import, '%Y-%m-%d'), status\n" +
             "ORDER BY day ASC;", nativeQuery = true)
     List<Object[]> getRevenueByDayAndStatus();
+
+
+    @Query("SELECT new com.vnpt.mini_project_java.dto.PaymentStatisticDTO(o.paymentMethod, COUNT(o)) " +
+            "FROM Order o " +
+            "GROUP BY o.paymentMethod")
+    List<PaymentStatisticDTO> getPaymentStatistics();
 
     @Query(value = STATICTICAL_FOR_PRODUCT_QUERY, nativeQuery = true)
     List<StatisticalProductProjections> statisticalForProduct();

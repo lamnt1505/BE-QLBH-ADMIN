@@ -2,6 +2,7 @@ package com.vnpt.mini_project_java.service.order;
 
 import com.vnpt.mini_project_java.dto.DailyRevenueStatusDTO;
 import com.vnpt.mini_project_java.dto.OrderaddressDTO;
+import com.vnpt.mini_project_java.dto.PaymentStatisticDTO;
 import com.vnpt.mini_project_java.dto.RevenueDTO;
 import com.vnpt.mini_project_java.entity.Order;
 import com.vnpt.mini_project_java.respository.OrderRepository;
@@ -127,5 +128,10 @@ public class OrderServiceImpl implements OrderService {
     public Order findByTxnRef(String txnRef) {
         return orderRepository.findByTxnRef(txnRef).orElse(null);
 
+    }
+
+    @Override
+    public List<PaymentStatisticDTO> getPaymentStatistics() {
+        return orderRepository.getPaymentStatistics();
     }
 }

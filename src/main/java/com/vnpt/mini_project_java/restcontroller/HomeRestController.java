@@ -842,5 +842,10 @@ public class HomeRestController {
         Page<ProductDTO> products = productService.getPaginatedProducts(pageable);
         return ResponseEntity.ok(products);
     }
+
+    @GetMapping("/payment-method")
+    public List<PaymentStatisticDTO> getPaymentStatistics() {
+        return orderService.getPaymentStatistics();
+    }
 }
 
