@@ -74,6 +74,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(ProductDTO dto, MultipartFile image) {
 
+        if (productRepository.existsByproductNameIgnoreCase(dto.getName().trim())) {
+            throw new IllegalArgumentException("Tên sản phẩm '" + dto.getName() + "' đã tồn tại!");
+        }
         Long categoryId = dto.getCategoryID();
 
         Category category = categoryRepository.findById(categoryId).

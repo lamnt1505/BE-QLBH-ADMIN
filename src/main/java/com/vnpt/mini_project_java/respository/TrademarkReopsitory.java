@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TrademarkReopsitory extends JpaRepository<Trademark, Long> {
+    boolean existsByTradeNameIgnoreCase(String tradeName);
 }

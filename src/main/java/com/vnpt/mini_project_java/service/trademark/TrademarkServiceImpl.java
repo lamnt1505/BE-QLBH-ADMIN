@@ -26,6 +26,9 @@ public class TrademarkServiceImpl implements TrademarkService{
 
     @Override
     public TrademarkDTO saveDTO(TrademarkDTO dto){
+        if (trademarkReopsitory.existsByTradeNameIgnoreCase(dto.getTradeName())) {
+            throw new IllegalArgumentException("Tên thương hiệu đã tồn tại!");
+        }
         Trademark trademark = new Trademark();
         trademark.setTradeName(dto.getTradeName());
 

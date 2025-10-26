@@ -74,6 +74,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO saveDTO(CategoryDTO dto) {
+        if(categoryRepository.existsByCategoryNameIgnoreCase(dto.getName())){
+            throw new IllegalArgumentException("Loại sản phẩm đã tồn tại!");
+        }
         Category category = new Category();
         category.setCategoryName(dto.getName());
 

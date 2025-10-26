@@ -418,11 +418,16 @@ public class HomeRestController {
                                                              HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String discountCode = (String) requestData.get("discountCode");
 
+            String discountCode = (String) requestData.get("discountCode");
             if (discountCode == null || discountCode.trim().isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Mã giảm giá không được để trống.");
+                return ResponseEntity.badRequest().body(response);
+            }
+            if (!discountService.existsByCode(discountCode)) {
+                response.put("success", false);
+                response.put("message", "Mã giảm giá không hợp lệ hoặc đã hết hạn!");
                 return ResponseEntity.badRequest().body(response);
             }
 
@@ -446,13 +451,13 @@ public class HomeRestController {
 
                 Map<String, Object> discountedProduct = new HashMap<>();
                 discountedProduct.put("productID", productID);
+                discountedProduct.put("originalPrice", price);
                 discountedProduct.put("discountedPrice", discountedPrice);
                 discountedProduct.put("quantity", quantity);
                 discountedProducts.add(discountedProduct);
-
             }
-
             session.setAttribute("discountedTotal", discountedTotal);
+
             response.put("success", true);
             response.put("discountedProducts", discountedProducts);
             response.put("discountedTotal", discountedTotal);

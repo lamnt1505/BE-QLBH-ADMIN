@@ -23,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,12 +44,17 @@ public class CategoryRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO dto) {
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDTO dto) {
         try {
             CategoryDTO createdCategory = categoryService.saveDTO(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.badRequest().build();
+        } catch (IllegalArgumentException ex) {
+            Map<String, String> error = new HashMap<>();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }catch (EntityNotFoundException exception){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Không tìm thấy dữ liệu hợp lệ");
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

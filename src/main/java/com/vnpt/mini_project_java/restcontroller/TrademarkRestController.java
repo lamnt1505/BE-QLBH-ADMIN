@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/trademark", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,12 +42,18 @@ public class TrademarkRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<TrademarkDTO> createTrademark(@RequestBody TrademarkDTO dto){
+    public ResponseEntity<?> createTrademark(@RequestBody TrademarkDTO dto){
         try{
             TrademarkDTO createdTrademark = trademarkService.saveDTO(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdTrademark);
+        }catch (IllegalArgumentException ex){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }catch (EntityNotFoundException ex){
-            return ResponseEntity.badRequest().build();
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Không tìm thấy dữ liệu hợp lệ");
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

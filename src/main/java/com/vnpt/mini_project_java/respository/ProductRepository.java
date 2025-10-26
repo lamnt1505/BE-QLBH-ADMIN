@@ -35,4 +35,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @EntityGraph(attributePaths = {"productVersions"})
     List<Product> findAll(Specification<Product> spec);
+
+    boolean existsByproductNameIgnoreCase(String productName);
 }

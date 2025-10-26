@@ -19,4 +19,8 @@ public class Branch {
     private String branchName;
 
     private String address;
+
+    private String city;
+
+    private String district;
 }

@@ -10,5 +10,9 @@ public interface DiscountService {
 
     Optional<Discount> validateDiscountCode(String discountCode);
 
+    boolean existsByCode(String code);
+
     double applyDiscount(double totalPrice, String discountCode);
+
+    Optional<Discount> getLatestDiscount();
 }

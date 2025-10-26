@@ -4,7 +4,6 @@ package com.vnpt.mini_project_java.service.discount;
 import com.vnpt.mini_project_java.dto.DiscountDTO;
 import com.vnpt.mini_project_java.entity.Discount;
 import com.vnpt.mini_project_java.respository.DiscountRepository;
-import com.vnpt.mini_project_java.util.DiscountCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,12 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount createDiscountCode(DiscountDTO discountDTO) {
-        String code = DiscountCodeGenerator.generateBase64DiscountCode(20);
+        if (discountRepository.existsByDiscountCodeIgnoreCase(discountDTO.getDiscountName())) {
+            throw new IllegalArgumentException("⚠ Mã giảm giá đã tồn tại!");
+        }
+
+        String code = generateReadableCode(discountDTO.getDiscountName());
+
         Discount discount = new Discount();
         discount.setDiscountCode(code);
         discount.setDiscountName(discountDTO.getDiscountName());
@@ -33,6 +37,15 @@ public class DiscountServiceImpl implements DiscountService {
         discount.setDateFinish(LocalDate.parse(discountDTO.getDateFinish(),dateTimeFormatter));
 
         return discountRepository.save(discount);
+    }
+
+    private String generateReadableCode(String name) {
+        String prefix = (name != null && !name.isEmpty())
+                ? name.toUpperCase().replaceAll("\\s+", "")
+                : "SALE";
+        String year = String.valueOf(LocalDate.now().getYear());
+        int random = (int) (Math.random() * 90 + 10);
+        return prefix + year + random;
     }
 
     @Override
@@ -48,9 +61,14 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
+    public boolean existsByCode(String code) {
+        return discountRepository.existsByDiscountCodeIgnoreCase(code);
+    }
+
+    @Override
     public double applyDiscount(double price, String discountCode) {
         Discount discount = discountRepository.findByDiscountCode(discountCode)
-                .orElseThrow(() -> new IllegalArgumentException("❌ Mã giảm giá không tồn tại: " + discountCode));
+                .orElseThrow(() -> new IllegalArgumentException("Mã giảm giá không tồn tại: " + discountCode));
 
         LocalDate today = LocalDate.now();
 
@@ -62,7 +80,12 @@ public class DiscountServiceImpl implements DiscountService {
             throw new IllegalArgumentException("⚠ Mã giảm giá đã hết hạn.");
         }
 
-        double discountAmount = (discount.getDiscountPercent() / 100.0) * price;
-        return price - discountAmount;
+        double discountAmount = (discount.getDiscountPercent());
+        return price * (1 - discountAmount / 100);
+    }
+
+    @Override
+    public Optional<Discount> getLatestDiscount() {
+        return discountRepository.findTopByOrderByDateStartDesc();
     }
 }

@@ -83,13 +83,23 @@ public class ProductRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ProductDTO> createProduct(@ModelAttribute ProductDTO dto, MultipartFile image) {
+    public ResponseEntity<?> createProduct(@ModelAttribute ProductDTO dto, MultipartFile image) {
         try {
             ProductDTO createProduct = productService.createProduct(dto, image);
             logger.info("Người dùng đã thêm một sản phẩm mới. ID sản phẩm: {}, Tên sản phẩm: {}", createProduct.getId(), createProduct.getName());
             return ResponseEntity.status(HttpStatus.CREATED).body(createProduct);
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.badRequest().build();
+        } catch (IllegalArgumentException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }catch (EntityNotFoundException ex){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Không tìm thấy danh mục hoặc thương hiệu hợp lệ!");
+            return ResponseEntity.badRequest().body(error);
+        }catch (RuntimeException ex){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return ResponseEntity.internalServerError().body(error);
         }
     }
 

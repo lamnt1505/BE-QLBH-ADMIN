@@ -14,6 +14,8 @@ public class InventoryDTO {
     private Long productID;
     private String productName;
     private int quantity;
+    private String city;
+    private String district;
 
     public InventoryDTO(Inventory inventory) {
         this.branchID = inventory.getBranch().getBranchID();
@@ -21,5 +23,7 @@ public class InventoryDTO {
         this.productID = inventory.getProduct().getProductID();
         this.productName = inventory.getProduct().getProductName();
         this.quantity = inventory.getQuantity();
+        this.city = inventory.getBranch().getCity();
+        this.district = inventory.getBranch().getDistrict();
     }
 }

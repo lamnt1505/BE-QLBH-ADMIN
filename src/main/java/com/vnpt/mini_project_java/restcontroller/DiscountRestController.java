@@ -5,6 +5,7 @@ import com.vnpt.mini_project_java.dto.DiscountDTO;
 import com.vnpt.mini_project_java.entity.Discount;
 import com.vnpt.mini_project_java.service.discount.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/discounts", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:3000,http://localhost:3005", allowCredentials = "true")
 @Component
 public class DiscountRestController {
 
@@ -26,16 +28,22 @@ public class DiscountRestController {
 
     @PostMapping("/generate")
     public ResponseEntity<Map<String, Object>> generateDiscountCode(@RequestBody DiscountDTO discountDTO, HttpSession session) {
-        Discount discount = discountService.createDiscountCode(discountDTO);
+        try {
+            Discount discount = discountService.createDiscountCode(discountDTO);
 
-        session.setAttribute("generatedDiscountCode", discount.getDiscountCode());
+            session.setAttribute("generatedDiscountCode", discount.getDiscountCode());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("discountCode", discount.getDiscountCode());
-        response.put("message", "Tạo mã giảm giá thành công!");
-
-        return ResponseEntity.ok(response);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("discountCode", discount.getDiscountCode());
+            response.put("message", "Tạo mã giảm giá thành công!");
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException ex) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
     }
 
     @GetMapping("/getDiscountCode")
@@ -49,6 +57,28 @@ public class DiscountRestController {
             response.put("success", false);
             response.put("message", "Không có mã giảm giá nào trong phiên hiện tại.");
         }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/latest")
+    public ResponseEntity<Map<String, Object>> getLatestDiscount() {
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Discount> latestOpt = discountService.getLatestDiscount();
+
+        if (latestOpt.isPresent()) {
+            Discount latest = latestOpt.get();
+            response.put("success", true);
+            response.put("discountCode", latest.getDiscountCode());
+            response.put("discountName", latest.getDiscountName());
+            response.put("discountPercent", latest.getDiscountPercent());
+            response.put("dateStart", latest.getDateStart());
+            response.put("dateFinish", latest.getDateFinish());
+        } else {
+            response.put("success", false);
+            response.put("message", "Không có mã giảm giá nào hiện tại.");
+        }
+
         return ResponseEntity.ok(response);
     }
 }
